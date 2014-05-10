@@ -8,7 +8,7 @@ import android.net.Uri;
  */
 public abstract class Binding {
 
-    public abstract void onBind(Uri uri, Cursor cursor);
+    public abstract void onBind(final Cursor cursor);
 
     public abstract Uri getUri();
 

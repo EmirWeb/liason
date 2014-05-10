@@ -26,7 +26,6 @@ public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
     private LoaderManager mLoaderManager;
     private ForceLoadContentObserver mForceLoadContentObserver;
-    private Uri mUri;
 
     public RestLoaderCallbacks(final Context context, final LoaderManager loaderManager, final Binding binding) {
         mLoaderManager = loaderManager;
@@ -37,22 +36,22 @@ public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        mUri = mBinding.getUri();
+        final Uri uri = mBinding.getUri();
         final String[] projection = mBinding.getProjection();
         final String selection = mBinding.getSelection();
         final String[] selectionArguments = mBinding.getSelectionArguments();
         final String sortOrder = mBinding.getSortOrder();
-        final RestCursorLoader restCursorLoader = new RestCursorLoader(mContext, mUri, projection, selection, selectionArguments, sortOrder);
-        restCursorLoader.setUri(mUri);
+        final RestCursorLoader restCursorLoader = new RestCursorLoader(mContext, uri, projection, selection, selectionArguments, sortOrder);
+        restCursorLoader.setUri(uri);
         mForceLoadContentObserver = (ForceLoadContentObserver) restCursorLoader.getForceLoadContentObserver();
-        mContext.getContentResolver().registerContentObserver(mUri, false, mForceLoadContentObserver);
+        mContext.getContentResolver().registerContentObserver(uri, false, mForceLoadContentObserver);
         return restCursorLoader;
     }
 
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor cursor) {
         cursor.moveToFirst();
-        mBinding.onBind(mUri, cursor);
+        mBinding.onBind(cursor);
     }
 
     public void onStart(final Context context) {
