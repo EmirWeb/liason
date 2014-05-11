@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.bindings;
+package mobi.liason.mvvm.bindings.implementation.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +7,8 @@ import android.view.View;
 import java.util.HashSet;
 import java.util.Set;
 
+import mobi.liason.mvvm.bindings.implementation.Binding;
+
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
@@ -14,13 +16,13 @@ public class ItemTypeBinding {
 
     private final int mLayoutResourceId;
     private final Set<Integer> mResourceIds = new HashSet<Integer>();
-    private final Set<ItemBinding> mItemBindings;
+    private final Set<Binding> mBindings;
 
-    public ItemTypeBinding(final int layoutResourceId, final Set<ItemBinding> itemBindings){
+    public ItemTypeBinding(final int layoutResourceId, final Set<Binding> bindings){
         mLayoutResourceId = layoutResourceId;
-        mItemBindings = itemBindings;
-        for (final ItemBinding itemBinding : itemBindings){
-            final int[] resourceIds = itemBinding.getResourceIds();
+        mBindings = bindings;
+        for (final Binding binding : bindings){
+            final int[] resourceIds = binding.getResourceIds();
             for (final int resourceId : resourceIds){
                 mResourceIds.add(resourceId);
             }
@@ -36,8 +38,8 @@ public class ItemTypeBinding {
     }
 
     public void bind(final Context context, final View view, final Cursor cursor) {
-        for (final ItemBinding itemBinding : mItemBindings){
-            itemBinding.bind(context, view, cursor);
+        for (final Binding binding : mBindings){
+            binding.bind(context, view, cursor);
         }
     }
 }

@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.adapters;
+package mobi.liason.mvvm.bindings.implementation.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,10 +10,6 @@ import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import mobi.liason.mvvm.bindings.AdapterBinding;
-import mobi.liason.mvvm.bindings.ColumnBinding;
-import mobi.liason.mvvm.bindings.ItemTypeBinding;
 
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
@@ -33,16 +29,6 @@ public class BindingCursorAdapter extends CursorAdapter {
         mContext = context;
         mAdapterBinding = adapterBinding;
 
-        final int typeCount = mAdapterBinding.getViewTypeCount();
-        for (int type = 0; type < typeCount; type++) {
-            final ItemTypeBinding itemTypeBinding = mAdapterBinding.getItemTypeBinding(type);
-            if (itemTypeBinding instanceof ColumnBinding) {
-                final String[] columns = itemTypeBinding.getColumns();
-                for (final String column : columns) {
-                    mColumns.add(column);
-                }
-            }
-        }
     }
 
     public BindingCursorAdapter(final Context context, final Cursor cursor, final AdapterBinding adapterBinding, final int flags) {
@@ -74,10 +60,9 @@ public class BindingCursorAdapter extends CursorAdapter {
         final int layoutResourceId = itemTypeBinding.getLayoutResourceId();
         final View rootView = layoutInflater.inflate(layoutResourceId, parent, false);
 
-        final int[] resourceIds = itemTypeBinding.getResourceIds();
-        for (final int resourceId : resourceIds) {
+        final Set<Integer> resourceIds = itemTypeBinding.getResourceIds();
+        for (final Integer resourceId : resourceIds) {
             optimize(rootView, resourceId);
-
         }
         return rootView;
     }
@@ -99,13 +84,11 @@ public class BindingCursorAdapter extends CursorAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return mAdapterBinding.getViewTypeCount();
+        return mAdapterBinding.getItemTypeCount();
     }
 
     private int getItemViewType(final Cursor cursor) {
-        final int typeColumnIndex = cursor.getColumnIndex(SearchResultsView.Columns.TYPE);
-        final int type = cursor.getInt(typeColumnIndex);
-        return type;
+        return mAdapterBinding.getItemType(cursor);
     }
 
     @Override
@@ -118,7 +101,6 @@ public class BindingCursorAdapter extends CursorAdapter {
     public void bindView(final View view, final Context context, final Cursor cursor) {
         final ItemTypeBinding itemTypeBinding = getItemTypeBinding(cursor);
         itemTypeBinding.bind(context, view, cursor);
-
     }
 
 }

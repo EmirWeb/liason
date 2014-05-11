@@ -6,7 +6,7 @@ import android.net.Uri;
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
-public abstract class Binding {
+public abstract class BindDefinition {
 
     public abstract void onBind(final Cursor cursor);
 

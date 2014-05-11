@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
-import mobi.liason.mvvm.bindings.Binding;
+import mobi.liason.mvvm.bindings.BindDefinition;
 import mobi.liason.mvvm.loaders.RestCursorLoader;
 import mobi.liason.mvvm.utilities.IdCreator;
 
@@ -20,27 +20,27 @@ public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
     private static final IdCreator ID_CREATOR = new IdCreator();
 
-    private final Binding mBinding;
+    private final BindDefinition mBindDefinition;
     private final Context mContext;
     private final int mId;
 
     private LoaderManager mLoaderManager;
     private ForceLoadContentObserver mForceLoadContentObserver;
 
-    public RestLoaderCallbacks(final Context context, final LoaderManager loaderManager, final Binding binding) {
+    public RestLoaderCallbacks(final Context context, final LoaderManager loaderManager, final BindDefinition bindDefinition) {
         mLoaderManager = loaderManager;
-        mBinding = binding;
+        mBindDefinition = bindDefinition;
         mContext = context;
         mId = ID_CREATOR.getId();
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-        final Uri uri = mBinding.getUri();
-        final String[] projection = mBinding.getProjection();
-        final String selection = mBinding.getSelection();
-        final String[] selectionArguments = mBinding.getSelectionArguments();
-        final String sortOrder = mBinding.getSortOrder();
+        final Uri uri = mBindDefinition.getUri();
+        final String[] projection = mBindDefinition.getProjection();
+        final String selection = mBindDefinition.getSelection();
+        final String[] selectionArguments = mBindDefinition.getSelectionArguments();
+        final String sortOrder = mBindDefinition.getSortOrder();
         final RestCursorLoader restCursorLoader = new RestCursorLoader(mContext, uri, projection, selection, selectionArguments, sortOrder);
         restCursorLoader.setUri(uri);
         mForceLoadContentObserver = (ForceLoadContentObserver) restCursorLoader.getForceLoadContentObserver();
@@ -51,7 +51,7 @@ public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
     @Override
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor cursor) {
         cursor.moveToFirst();
-        mBinding.onBind(cursor);
+        mBindDefinition.onBind(cursor);
     }
 
     public void onStart(final Context context) {

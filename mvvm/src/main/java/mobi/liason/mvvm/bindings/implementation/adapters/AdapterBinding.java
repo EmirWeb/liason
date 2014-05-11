@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.bindings;
+package mobi.liason.mvvm.bindings.implementation.adapters;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -7,10 +7,12 @@ import android.widget.CursorAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import mobi.liason.mvvm.bindings.BindDefinition;
+
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
-public class AdapterBinding extends Binding {
+public class AdapterBinding extends BindDefinition {
 
     private final List<ItemTypeBinding> mItemTypeBindings = new ArrayList<ItemTypeBinding>();
     private final CursorAdapter mAdapter;
@@ -37,7 +39,12 @@ public class AdapterBinding extends Binding {
         return mItemTypeBindings.get(type);
     }
 
-    public int getViewTypeCount() {
+    public int getItemTypeCount() {
         return mItemTypeBindings.size();
     }
+
+    public int getItemType(final Cursor cursor) {
+        return 0;
+    }
+
 }
