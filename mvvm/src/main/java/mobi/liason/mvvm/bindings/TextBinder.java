@@ -12,9 +12,10 @@ import android.widget.TextView;
 public class TextBinder extends Binder {
 
     private final boolean mIsGone;
+    private static final boolean DEFAULT_IS_GONE = false;
 
     public TextBinder(final int resourceId, final String columnName) {
-        this(resourceId, columnName, false);
+        this(resourceId, columnName, DEFAULT_IS_GONE);
     }
 
     public TextBinder(final int resourceId, final String columnName, final boolean isGone) {

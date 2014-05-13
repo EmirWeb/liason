@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="product_table_version">1</integer>
+    <string name="product_table_name">ProductTable</string>
+
+</resources>
