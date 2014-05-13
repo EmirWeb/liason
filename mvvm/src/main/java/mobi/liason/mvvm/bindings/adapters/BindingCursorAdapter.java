@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.bindings.implementation.adapters;
+package mobi.liason.mvvm.bindings.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -18,7 +18,6 @@ public class BindingCursorAdapter extends CursorAdapter {
 
     private final Context mContext;
     private final AdapterBinding mAdapterBinding;
-    private final Set<String> mColumns = new HashSet<String>();
 
     public BindingCursorAdapter(final Context context, final Cursor cursor, final AdapterBinding adapterBinding) {
         this(context, cursor, adapterBinding, false);
