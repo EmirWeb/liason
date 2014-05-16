@@ -40,13 +40,14 @@ public abstract class Provider extends ContentProvider {
 
     protected synchronized DatabaseHelper getDatabaseHelper(final Context context) {
         if (mDatabaseHelper == null) {
-            mDatabaseHelper = getDatabaseHelper(context);
+            mDatabaseHelper = onCreateDatabaseHelper(context);
         }
         return mDatabaseHelper;
     }
 
     protected List<Content> getContent(final Context context) {
-        return mDatabaseHelper.getContent(context);
+        final DatabaseHelper databaseHelper = getDatabaseHelper(context);
+        return databaseHelper.getContent(context);
     }
 
     @Override

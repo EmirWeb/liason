@@ -16,7 +16,7 @@ import mobi.liason.mvvm.utilities.IdCreator;
 /**
  * Created by Emir Hasanbegovic on 18/04/14.
  */
-public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
+public class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
     private static final IdCreator ID_CREATOR = new IdCreator();
 
@@ -54,6 +54,10 @@ public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
         mBindDefinition.onBind(cursor);
     }
 
+    @Override
+    public void onLoaderReset(final Loader<Cursor> loader) {
+    }
+
     public void onStart(final Context context) {
         final Loader<?> loader = mLoaderManager.getLoader(mId);
         if (loader == null)
@@ -66,9 +70,4 @@ public abstract class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
         if (mForceLoadContentObserver != null)
             mContext.getContentResolver().unregisterContentObserver(mForceLoadContentObserver);
     }
-
-    public void onDestroy(final Context context){
-
-    }
-
 }

@@ -2,19 +2,22 @@ package mobi.liason.sample.content.models;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
+
+import java.util.Arrays;
 import java.util.List;
 
+import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
-import mobi.liason.sample.R;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
 public class ProductTable extends Model {
+
+    public static final String TABLE_NAME = "ProductTable";
 
     public static ContentValues getContentValues(final Product product) {
         final ContentValues contentValues = new ContentValues();
@@ -26,43 +29,30 @@ public class ProductTable extends Model {
     }
 
     @Override
-    public int getVersion(final Context context) {
-        final Resources resources = context.getResources();
-        return resources.getInteger(R.integer.product_table_version);
-    }
-
-    @Override
     public String getName(final Context context) {
-        final Resources resources = context.getResources();
-        return resources.getString(R.string.product_table_name);
+        return TABLE_NAME;
     }
 
     @Override
-    public List<ModelColumn> getColumns(final Context context) {
-        final List<ModelColumn> modelColumns = new ArrayList<ModelColumn>();
-        modelColumns.add(Columns.ID);
-        modelColumns.add(Columns.NAME);
-        modelColumns.add(Columns.IMAGE_THUMB_URL);
-        modelColumns.add(Columns.IMAGE_URL);
-        return modelColumns;
+    public List<Column> getColumns(final Context context) {
+        return Arrays.asList(Columns.COLUMNS);
     }
 
     @Override
     public List<String> getPaths(Context context) {
-        final Resources resources = context.getResources();
-        final String path = resources.getString(R.string.twitter_search_table_uri_path);
-
-        final List<String> paths = new ArrayList<String>(1);
-        paths.add(path);
-
-        return paths;
+        return Lists.newArrayList(Paths.PATH);
     }
 
     public static class Columns {
-        public static final ModelColumn ID = new ModelColumn(Product.Fields.ID, ModelColumn.Type.integer);
-        public static final ModelColumn NAME = new ModelColumn(Product.Fields.NAME, ModelColumn.Type.text);
-        public static final ModelColumn IMAGE_THUMB_URL = new ModelColumn(Product.Fields.IMAGE_THUMB_URL, ModelColumn.Type.text);
-        public static final ModelColumn IMAGE_URL = new ModelColumn(Product.Fields.IMAGE_URL, ModelColumn.Type.text);
+        public static final ModelColumn ID = new ModelColumn(TABLE_NAME, Product.Fields.ID, ModelColumn.Type.integer);
+        public static final ModelColumn NAME = new ModelColumn(TABLE_NAME, Product.Fields.NAME, ModelColumn.Type.text);
+        public static final ModelColumn IMAGE_THUMB_URL = new ModelColumn(TABLE_NAME, Product.Fields.IMAGE_THUMB_URL, ModelColumn.Type.text);
+        public static final ModelColumn IMAGE_URL = new ModelColumn(TABLE_NAME, Product.Fields.IMAGE_URL, ModelColumn.Type.text);
+        public static final Column[] COLUMNS = new Column[]{ID, NAME, IMAGE_THUMB_URL, IMAGE_URL};
+    }
+
+    public static class Paths {
+        public static final String PATH = "ProductTable";
     }
 
 }

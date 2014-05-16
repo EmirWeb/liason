@@ -19,6 +19,18 @@ public class BindingCursorAdapter extends CursorAdapter {
     private final Context mContext;
     private final AdapterBinding mAdapterBinding;
 
+    public BindingCursorAdapter(final Context context, final AdapterBinding adapterBinding) {
+        this(context, null, adapterBinding, false);
+    }
+
+    public BindingCursorAdapter(final Context context, final AdapterBinding adapterBinding, final boolean autoRequery) {
+        this(context, null, null, autoRequery);
+    }
+
+    public BindingCursorAdapter(final Context context, final AdapterBinding adapterBinding, final int flags) {
+        this(context, null, null, flags);
+    }
+
     public BindingCursorAdapter(final Context context, final Cursor cursor, final AdapterBinding adapterBinding) {
         this(context, cursor, adapterBinding, false);
     }

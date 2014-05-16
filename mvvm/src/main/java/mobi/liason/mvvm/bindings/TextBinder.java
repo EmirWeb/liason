@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.TextView;
 
+import mobi.liason.mvvm.database.ViewModel;
+import mobi.liason.mvvm.database.ViewModelColumn;
+
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -13,6 +16,10 @@ public class TextBinder extends Binder {
 
     private final boolean mIsGone;
     private static final boolean DEFAULT_IS_GONE = false;
+
+    public TextBinder(final int resourceId, final ViewModelColumn viewModelColumn) {
+        this(resourceId, viewModelColumn.getName(), DEFAULT_IS_GONE);
+    }
 
     public TextBinder(final int resourceId, final String columnName) {
         this(resourceId, columnName, DEFAULT_IS_GONE);

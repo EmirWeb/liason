@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sample</string>
+    <string name="app_name">Liason Sample app</string>
     <string name="authority">mobi.liason</string>
-    <string name="twitter_search_table_uri_path">TwitterSearchTablePath</string>
 </resources>

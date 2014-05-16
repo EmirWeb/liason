@@ -2,6 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mobi.liason.sample.MainActivity">
+    tools:context="mobi.liason.sample.ProductActivity">
+    <ListView
+        android:id="@+id/activity_product_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

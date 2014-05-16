@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import mobi.liason.mvvm.database.DatabaseHelper;
 import mobi.liason.mvvm.providers.Provider;
 import mobi.liason.sample.R;
+import mobi.liason.sample.SampleDatabaseHelper;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -20,6 +21,6 @@ public class SampleProvider extends Provider {
 
     @Override
     protected DatabaseHelper onCreateDatabaseHelper(Context context) {
-        return null;
+        return SampleDatabaseHelper.getDatabaseHelper(context);
     }
 }

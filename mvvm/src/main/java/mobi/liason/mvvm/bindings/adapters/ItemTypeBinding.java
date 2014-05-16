@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
 
+import com.google.common.collect.Sets;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +25,14 @@ public class ItemTypeBinding {
     private final Set<Integer> mResourceIds = new HashSet<Integer>();
     private final Set<Binding> mBindings;
 
+    public ItemTypeBinding(final int layoutResourceId){
+        this(layoutResourceId, new HashSet<Binding>());
+    }
+
+    public ItemTypeBinding(final int layoutResourceId, final Binding binding){
+        this(layoutResourceId, Sets.newHashSet(binding));
+    }
+
     public ItemTypeBinding(final int layoutResourceId, final Set<Binding> bindings){
         mLayoutResourceId = layoutResourceId;
         mBindings = bindings;
@@ -34,6 +45,10 @@ public class ItemTypeBinding {
                 }
             }
         }
+    }
+
+    public void addBinding(final Binding binding){
+        mBindings.add(binding);
     }
 
     public int getLayoutResourceId() {

@@ -3,7 +3,7 @@ package mobi.liason.mvvm.database;
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ViewModelColumn extends ModelColumn{
+public class ViewModelColumn extends Column{
 
     private ModelColumn mModelColumn;
 
@@ -17,6 +17,11 @@ public class ViewModelColumn extends ModelColumn{
 
     public ViewModelColumn(final String viewName, final String name, final ModelColumn modelColumn) {
         super(viewName, name, modelColumn.getType());
+        mModelColumn = modelColumn;
+    }
+
+    public ViewModelColumn(final String viewName, final ModelColumn modelColumn) {
+        super(viewName, modelColumn.getName(), modelColumn.getType());
         mModelColumn = modelColumn;
     }
 

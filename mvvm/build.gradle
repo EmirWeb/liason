@@ -18,7 +18,9 @@ android {
     }
 }
 
+
 dependencies {
+    compile 'com.google.guava:guava:r05'
     compile 'com.google.code.gson:gson:2.2.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

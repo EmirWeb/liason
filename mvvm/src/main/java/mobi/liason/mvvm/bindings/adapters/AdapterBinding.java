@@ -1,8 +1,9 @@
 package mobi.liason.mvvm.bindings.adapters;
 
+import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.widget.CursorAdapter;
+
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,26 +13,34 @@ import mobi.liason.mvvm.bindings.BindDefinition;
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
-public class AdapterBinding extends BindDefinition {
+public abstract class AdapterBinding extends BindDefinition {
 
     private final List<ItemTypeBinding> mItemTypeBindings;
-    private final CursorAdapter mAdapter;
+    private final BindingCursorAdapter mAdapter;
     private final String mTypeColumnName;
 
-    public AdapterBinding(final CursorAdapter adapter) {
-        this(adapter, null, new ArrayList<ItemTypeBinding>());
+    public AdapterBinding(final Context context, final ItemTypeBinding itemTypeBinding) {
+        this(context, null, Lists.newArrayList(itemTypeBinding));
     }
 
-    public AdapterBinding(final CursorAdapter adapter, final String typeColumnName) {
-        this(adapter, typeColumnName, new ArrayList<ItemTypeBinding>());
+    public AdapterBinding(final Context context, final String typeColumnName, final ItemTypeBinding itemTypeBinding) {
+        this(context, typeColumnName, Lists.newArrayList(itemTypeBinding));
     }
 
-    public AdapterBinding(final CursorAdapter adapter, final List<ItemTypeBinding> itemTypeBindings) {
-        this(adapter, null, itemTypeBindings);
+    public AdapterBinding(final Context context) {
+        this(context, null, new ArrayList<ItemTypeBinding>());
     }
 
-    public AdapterBinding(final CursorAdapter adapter, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
-        mAdapter = adapter;
+    public AdapterBinding(final Context context, final String typeColumnName) {
+        this(context, typeColumnName, new ArrayList<ItemTypeBinding>());
+    }
+
+    public AdapterBinding(final Context context, final List<ItemTypeBinding> itemTypeBindings) {
+        this(context, null, itemTypeBindings);
+    }
+
+    public AdapterBinding(final Context context, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
+        mAdapter = new BindingCursorAdapter(context, this);
         mTypeColumnName = typeColumnName;
         mItemTypeBindings = new ArrayList<ItemTypeBinding>(itemTypeBindings);
     }
@@ -40,14 +49,14 @@ public class AdapterBinding extends BindDefinition {
         mItemTypeBindings.add(itemTypeBinding);
     }
 
-    @Override
-    public void onBind(final Cursor cursor) {
-        mAdapter.swapCursor(cursor);
+    public void setItemBindings(final List<ItemTypeBinding> itemTypeBindings) {
+        mItemTypeBindings.clear();
+        mItemTypeBindings.addAll(itemTypeBindings);
     }
 
     @Override
-    public Uri getUri() {
-        return null;
+    public void onBind(final Cursor cursor) {
+        mAdapter.swapCursor(cursor);
     }
 
     public ItemTypeBinding getItemTypeBinding(final int type) {
