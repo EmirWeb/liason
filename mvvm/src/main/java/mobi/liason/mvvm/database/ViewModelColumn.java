@@ -33,11 +33,13 @@ public class ViewModelColumn extends Column{
             final String name = getName();
 
             final StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(' ');
             stringBuilder.append(modelTableName);
             stringBuilder.append('.');
             stringBuilder.append(modelColumnName);
             stringBuilder.append(" AS ");
             stringBuilder.append(name);
+            stringBuilder.append(' ');
             return stringBuilder.toString();
         }
         return super.getColumnLine();

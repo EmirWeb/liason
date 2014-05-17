@@ -38,6 +38,7 @@ public class Column {
 
     public String getColumnLine() {
         final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(' ');
         stringBuilder.append(mName);
         stringBuilder.append(' ');
 
@@ -47,7 +48,7 @@ public class Column {
             final String sqlType = Type.getSqlType(mType);
             stringBuilder.append(sqlType);
         }
-
+        stringBuilder.append(' ');
         return stringBuilder.toString();
     }
 
@@ -61,14 +62,14 @@ public class Column {
         public static String getSqlType(final Type type){
             switch (type){
                 case blob:
-                    return " BLOB ";
+                    return "BLOB";
                 case integer:
-                    return " INTEGER ";
+                    return "INTEGER";
                 case real:
-                    return " REAL ";
+                    return "REAL";
                 case text:
                 default:
-                    return " TEXT ";
+                    return "TEXT";
             }
         }
     }
