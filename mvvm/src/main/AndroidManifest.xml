@@ -1,1 +1,6 @@
-<manifest package="mobi.liason.mvvm"/>
+<manifest package="mobi.liason.mvvm">
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+</manifest>

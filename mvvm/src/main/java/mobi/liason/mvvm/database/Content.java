@@ -8,6 +8,8 @@ import android.net.Uri;
 
 import java.util.List;
 
+import mobi.liason.mvvm.providers.Path;
+
 /**
  * Created by Emir Hasanbegovic on 18/04/14.
  */
@@ -23,9 +25,9 @@ public abstract class Content {
 
     public abstract String getDrop(final Context context);
 
-    public abstract List<String> getPaths(final Context context);
+    public abstract List<Path> getPaths(final Context context);
 
-    public void onUpgrade(final SQLiteDatabase sqLiteDatabase, final Context context, final int oldVersion) {
+    public void onUpgrade(final Context context, final SQLiteDatabase sqLiteDatabase, final int oldVersion) {
         final int currentVersion = getVersion(context);
         if (oldVersion != currentVersion) {
             final String drop = getDrop(context);
@@ -35,30 +37,36 @@ public abstract class Content {
         }
     }
 
-    public Cursor query(final Context context, final SQLiteDatabase sqLiteDatabase, final String path, final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
+    public Cursor query(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final String[] projection, final String selection, final String[] selectionArgs, final String sortOrder) {
         final String name = getName(context);
         return sqLiteDatabase.query(name, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
-    public String type(final Context context, final SQLiteDatabase sqLiteDatabase, final String path, final Uri uri){
+    public String type(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri){
         return TYPE;
     }
 
-    public Uri insert(final Context context, final SQLiteDatabase sqLiteDatabase, final String path, final Uri uri, final ContentValues values) {
+    public Uri insert(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final ContentValues values) {
         final String name = getName(context);
         final long id = sqLiteDatabase.insert(name, null, values);
 
         final String authority = uri.getAuthority();
-        final Uri insertUri = new Uri.Builder().authority(authority).appendPath(path).build();
+        final String scheme = uri.getScheme();
+        Uri.Builder builder = new Uri.Builder().scheme(scheme).authority(authority);
+        final List<String> pathSegments = path.getPathSegments();
+        for (final String pathSegment : pathSegments){
+            builder = builder.appendPath(pathSegment);
+        }
+        final Uri insertUri = builder.build();
         return insertUri.buildUpon().appendPath(Long.toString(id)).build();
     }
 
-    public int delete(final Context context, final SQLiteDatabase sqLiteDatabase, final String path, final Uri uri, final String selection, final String[] selectionArgs) {
+    public int delete(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final String selection, final String[] selectionArgs) {
         final String name = getName(context);
         return sqLiteDatabase.delete(name, selection, selectionArgs);
     }
 
-    public int update(final Context context, final SQLiteDatabase sqLiteDatabase, final String path, final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
+    public int update(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
         final String name = getName(context);
         return sqLiteDatabase.update(name, values, selection, selectionArgs);
     }

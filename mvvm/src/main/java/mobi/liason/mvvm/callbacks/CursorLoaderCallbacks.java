@@ -10,13 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import mobi.liason.mvvm.bindings.BindDefinition;
-import mobi.liason.mvvm.loaders.RestCursorLoader;
+import mobi.liason.mvvm.loaders.ForceLoadCursorLoader;
+import mobi.liason.mvvm.loaders.ForceLoadCursorLoader;
 import mobi.liason.mvvm.utilities.IdCreator;
 
 /**
  * Created by Emir Hasanbegovic on 18/04/14.
  */
-public class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
+public class CursorLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
     private static final IdCreator ID_CREATOR = new IdCreator();
 
@@ -27,7 +28,7 @@ public class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
     private LoaderManager mLoaderManager;
     private ForceLoadContentObserver mForceLoadContentObserver;
 
-    public RestLoaderCallbacks(final Context context, final LoaderManager loaderManager, final BindDefinition bindDefinition) {
+    public CursorLoaderCallbacks(final Context context, final LoaderManager loaderManager, final BindDefinition bindDefinition) {
         mLoaderManager = loaderManager;
         mBindDefinition = bindDefinition;
         mContext = context;
@@ -41,11 +42,11 @@ public class RestLoaderCallbacks implements LoaderCallbacks<Cursor> {
         final String selection = mBindDefinition.getSelection();
         final String[] selectionArguments = mBindDefinition.getSelectionArguments();
         final String sortOrder = mBindDefinition.getSortOrder();
-        final RestCursorLoader restCursorLoader = new RestCursorLoader(mContext, uri, projection, selection, selectionArguments, sortOrder);
-        restCursorLoader.setUri(uri);
-        mForceLoadContentObserver = (ForceLoadContentObserver) restCursorLoader.getForceLoadContentObserver();
+        final ForceLoadCursorLoader forceLoadCursorLoader = new ForceLoadCursorLoader(mContext, uri, projection, selection, selectionArguments, sortOrder);
+        forceLoadCursorLoader.setUri(uri);
+        mForceLoadContentObserver = (ForceLoadContentObserver) forceLoadCursorLoader.getForceLoadContentObserver();
         mContext.getContentResolver().registerContentObserver(uri, false, mForceLoadContentObserver);
-        return restCursorLoader;
+        return forceLoadCursorLoader;
     }
 
     @Override

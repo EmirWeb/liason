@@ -7,13 +7,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import mobi.liason.mvvm.bindings.BindDefinition;
-import mobi.liason.mvvm.callbacks.RestLoaderCallbacks;
+import mobi.liason.mvvm.callbacks.CursorLoaderCallbacks;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
  */
 public class BindingManager {
-    private final Set<RestLoaderCallbacks> callbacks = new HashSet<RestLoaderCallbacks>();
+    private final Set<CursorLoaderCallbacks> callbacks = new HashSet<CursorLoaderCallbacks>();
     private final LoaderManager mLoaderManager;
     private final Context mContext;
     private boolean hasStarted = false;
@@ -24,23 +24,23 @@ public class BindingManager {
     }
 
     public void addBindDefinition(final BindDefinition bindDefinition){
-        final RestLoaderCallbacks restLoaderCallbacks = new RestLoaderCallbacks(mContext, mLoaderManager, bindDefinition);
+        final CursorLoaderCallbacks cursorLoaderCallbacks = new CursorLoaderCallbacks(mContext, mLoaderManager, bindDefinition);
         if (hasStarted){
-            restLoaderCallbacks.onStart(mContext);
+            cursorLoaderCallbacks.onStart(mContext);
         }
     }
 
     public void onStart() {
         hasStarted = true;
-        for (final RestLoaderCallbacks restLoaderCallbacks : callbacks){
-            restLoaderCallbacks.onStart(mContext);
+        for (final CursorLoaderCallbacks cursorLoaderCallbacks : callbacks){
+            cursorLoaderCallbacks.onStart(mContext);
         }
     }
 
     public void onStop() {
         hasStarted = false;
-        for (final RestLoaderCallbacks restLoaderCallbacks : callbacks){
-            restLoaderCallbacks.onStop(mContext);
+        for (final CursorLoaderCallbacks cursorLoaderCallbacks : callbacks){
+            cursorLoaderCallbacks.onStop(mContext);
         }
     }
 }

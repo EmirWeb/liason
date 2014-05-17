@@ -26,7 +26,7 @@ public abstract class Provider extends ContentProvider {
 
     private final UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     private final Map<Integer, Content> mCodeContentMap = new HashMap<Integer, Content>();
-    private final Map<Integer, String> mCodePathMap = new HashMap<Integer, String>();
+    private final Map<Integer, Path> mCodePathMap = new HashMap<Integer, Path>();
     private DatabaseHelper mDatabaseHelper;
 
     public abstract String getAuthority(final Context context);
@@ -58,11 +58,11 @@ public abstract class Provider extends ContentProvider {
 
         int index = 0;
         for (final Content content : contents) {
-            final List<String> paths = content.getPaths(context);
-            for (final String path : paths) {
+            final List<Path> paths = content.getPaths(context);
+            for (final Path path : paths) {
                 mCodeContentMap.put(index, content);
                 mCodePathMap.put(index, path);
-                mURIMatcher.addURI(authority, path, index);
+                mURIMatcher.addURI(authority, path.toString(), index);
                 index++;
             }
         }
@@ -80,7 +80,7 @@ public abstract class Provider extends ContentProvider {
         final Context context = getContext();
         final SQLiteDatabase sqLiteDatabase = getSQLiteDatabase(context);
         final Content content = mCodeContentMap.get(code);
-        final String path = mCodePathMap.get(code);
+        final Path path = mCodePathMap.get(code);
         return content.query(context, sqLiteDatabase, path, uri, projection, selection, selectionArgs, sortOrder);
     }
 
@@ -94,7 +94,7 @@ public abstract class Provider extends ContentProvider {
         final Context context = getContext();
         final SQLiteDatabase sqLiteDatabase = getSQLiteDatabase(context);
         final Content content = mCodeContentMap.get(code);
-        final String path = mCodePathMap.get(code);
+        final Path path = mCodePathMap.get(code);
         return content.type(context, sqLiteDatabase, path, uri);
     }
 
@@ -108,7 +108,7 @@ public abstract class Provider extends ContentProvider {
         final Context context = getContext();
         final SQLiteDatabase sqLiteDatabase = getSQLiteDatabase(context);
         final Content content = mCodeContentMap.get(code);
-        final String path = mCodePathMap.get(code);
+        final Path path = mCodePathMap.get(code);
         return content.insert(context, sqLiteDatabase, path, uri, values);
     }
 
@@ -122,7 +122,7 @@ public abstract class Provider extends ContentProvider {
         final Context context = getContext();
         final SQLiteDatabase sqLiteDatabase = getSQLiteDatabase(context);
         final Content content = mCodeContentMap.get(code);
-        final String path = mCodePathMap.get(code);
+        final Path path = mCodePathMap.get(code);
         return content.delete(context, sqLiteDatabase, path, uri, selection, selectionArgs);
     }
 
@@ -136,7 +136,7 @@ public abstract class Provider extends ContentProvider {
         final Context context = getContext();
         final SQLiteDatabase sqLiteDatabase = getSQLiteDatabase(context);
         final Content content = mCodeContentMap.get(code);
-        final String path = mCodePathMap.get(code);
+        final Path path = mCodePathMap.get(code);
         return content.update(context, sqLiteDatabase, path, uri, values, selection, selectionArgs);
     }
 

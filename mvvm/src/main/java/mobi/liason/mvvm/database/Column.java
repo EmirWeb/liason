@@ -21,7 +21,7 @@ public class Column {
         mSqlName = tableName;
         mName = name;
         mType = type;
-        mStringType = null;
+        mStringType = Type.getSqlType(type);
     }
 
     public String getName() {
@@ -41,13 +41,7 @@ public class Column {
         stringBuilder.append(' ');
         stringBuilder.append(mName);
         stringBuilder.append(' ');
-
-        if (mStringType != null){
-            stringBuilder.append(mStringType);
-        } else {
-            final String sqlType = Type.getSqlType(mType);
-            stringBuilder.append(sqlType);
-        }
+        stringBuilder.append(mStringType);
         stringBuilder.append(' ');
         return stringBuilder.toString();
     }

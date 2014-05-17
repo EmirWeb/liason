@@ -34,7 +34,7 @@ public abstract class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion != newVersion) {
             final List<Content> contentList = getContent(mContext);
             for (final Content content : contentList) {
-                final String drop = content.getCreate(mContext);
+                final String drop = content.getDrop(mContext);
                 final String create = content.getCreate(mContext);
                 sqLiteDatabase.execSQL(drop);
                 sqLiteDatabase.execSQL(create);
