@@ -68,7 +68,8 @@ public class CursorLoaderCallbacks implements LoaderCallbacks<Cursor> {
     }
 
     public void onStop(final Context context) {
-        if (mForceLoadContentObserver != null)
+        if (mForceLoadContentObserver != null) {
             mContext.getContentResolver().unregisterContentObserver(mForceLoadContentObserver);
+        }
     }
 }

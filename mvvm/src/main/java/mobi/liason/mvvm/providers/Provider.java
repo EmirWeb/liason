@@ -62,7 +62,7 @@ public abstract class Provider extends ContentProvider {
             for (final Path path : paths) {
                 mCodeContentMap.put(index, content);
                 mCodePathMap.put(index, path);
-                mURIMatcher.addURI(authority, path.toString(), index);
+                mURIMatcher.addURI(authority, path.getMatcherPath(), index);
                 index++;
             }
         }

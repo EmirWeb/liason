@@ -38,11 +38,9 @@ public class Column {
 
     public String getColumnLine() {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(' ');
         stringBuilder.append(mName);
         stringBuilder.append(' ');
         stringBuilder.append(mStringType);
-        stringBuilder.append(' ');
         return stringBuilder.toString();
     }
 

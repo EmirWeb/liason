@@ -16,9 +16,7 @@ import mobi.liason.mvvm.bindings.interfaces.DataBinding;
 public class Binder implements ColumnResourceBinding, DataBinding {
 
     private final Set<Integer> mResourceIds = new HashSet<Integer>();
-    ;
     private final Set<String> mColumnNames = new HashSet<String>();
-    ;
 
     public Binder(final int resourceId) {
         mResourceIds.add(resourceId);
@@ -35,7 +33,6 @@ public class Binder implements ColumnResourceBinding, DataBinding {
         if (columnName != null) {
             mColumnNames.add(columnName);
         }
-
     }
 
     public Binder(final Set<Integer> resourceIds, final Set<String> columnNames) {

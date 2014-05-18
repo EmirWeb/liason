@@ -2,15 +2,19 @@ package mobi.liason.mvvm.database;
 
 import android.content.Context;
 
+import com.google.common.collect.Lists;
+
 import java.util.List;
+
+import mobi.liason.mvvm.providers.Path;
 
 /**
  * Created by Emir Hasanbegovic on 13/05/14.
  */
 public abstract class ViewModel extends Model{
 
-    private static final String CREATE = " CREATE VIEW IF NOT EXISTS %s AS SELECT %s FROM %s ; ";
-    private static final String DROP = " DROP TABLE IF EXISTS %s; ";
+    private static final String CREATE = "CREATE VIEW IF NOT EXISTS %s AS SELECT %s FROM %s;";
+    private static final String DROP = "DROP TABLE IF EXISTS %s;";
     private static final int VERSION = -1;
 
     @Override
@@ -37,4 +41,22 @@ public abstract class ViewModel extends Model{
 
     protected abstract String getSelection(final Context context);
 
+    public static String createColumns(final List<Column> columns) {
+        if (columns == null || columns.isEmpty()){
+            return "*";
+        }
+
+        final StringBuilder stringBuilder = new StringBuilder();
+        final int size = columns.size();
+        for (int index = 0; index < size; index++ ){
+            final Column modelColumn = columns.get(index);
+            final String columnName = modelColumn.getName();
+            stringBuilder.append(columnName);
+
+            if (index != size -1) {
+                stringBuilder.append(", ");
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

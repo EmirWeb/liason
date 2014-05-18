@@ -10,8 +10,8 @@ import java.util.List;
  */
 public abstract class Model extends Content {
 
-    private static final String CREATE = " CREATE TABLE IF NOT EXISTS %s ( %s ) ; ";
-    private static final String DROP = " DROP TABLE IF EXISTS %s; ";
+    private static final String CREATE = "CREATE TABLE IF NOT EXISTS %s ( %s );";
+    private static final String DROP = "DROP TABLE IF EXISTS %s;";
     private static final int VERSION = -1;
 
     @Override
@@ -52,7 +52,7 @@ public abstract class Model extends Content {
             stringBuilder.append(typeString);
 
             if (index != size -1) {
-                stringBuilder.append(',');
+                stringBuilder.append(", ");
             }
         }
         return stringBuilder.toString();

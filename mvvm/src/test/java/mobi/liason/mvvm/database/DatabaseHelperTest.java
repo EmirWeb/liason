@@ -17,12 +17,10 @@ import mobi.liason.mvvm.providers.Path;
 
 import static org.mockito.Mockito.verify;
 
-
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class DatabaseHelperTest {
 
-    @Mock
-    SQLiteDatabase mSqLiteDatabase;
+    @Mock SQLiteDatabase mSqLiteDatabase;
     final Context mContext = Robolectric.getShadowApplication().getApplicationContext();
 
     @Test
