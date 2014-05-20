@@ -53,5 +53,7 @@ public class ProductViewModel extends ViewModel{
         public static final Path PRODUCT_VIEW_MODEL = new Path("ProductViewModel");
     }
 
+
+
 }
 

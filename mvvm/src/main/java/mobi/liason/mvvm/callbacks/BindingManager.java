@@ -23,7 +23,7 @@ import mobi.liason.mvvm.loaders.ForceLoadCursorLoader;
 /**
  * Created by Emir Hasanbegovic on 18/04/14.
  */
-public class CursorLoaderCallbacks implements LoaderCallbacks<Cursor> {
+public class BindingManager implements LoaderCallbacks<Cursor> {
 
     private final Map<Integer, BindDefinition> mIdToBindDefinitionMap = new HashMap<Integer, BindDefinition>();
     private final Map<ForceLoadCursorLoader, BindDefinition> mLoaderToBindDefinitionMap = new HashMap<ForceLoadCursorLoader, BindDefinition>();
@@ -32,15 +32,15 @@ public class CursorLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
     private LoaderManager mLoaderManager;
 
-    public CursorLoaderCallbacks(final Context context, final LoaderManager loaderManager) {
+    public BindingManager(final Context context, final LoaderManager loaderManager) {
         this(context, loaderManager, new ArrayList<BindDefinition>());
     }
 
-    public CursorLoaderCallbacks(final Context context, final LoaderManager loaderManager, final BindDefinition bindDefinition) {
+    public BindingManager(final Context context, final LoaderManager loaderManager, final BindDefinition bindDefinition) {
         this(context, loaderManager, Lists.newArrayList(bindDefinition));
     }
 
-    public CursorLoaderCallbacks(final Context context, final LoaderManager loaderManager, final List<BindDefinition> bindDefinitions) {
+    public BindingManager(final Context context, final LoaderManager loaderManager, final List<BindDefinition> bindDefinitions) {
         mLoaderManager = loaderManager;
         for (final BindDefinition bindDefinition : bindDefinitions) {
             addBindDefinition(bindDefinition);

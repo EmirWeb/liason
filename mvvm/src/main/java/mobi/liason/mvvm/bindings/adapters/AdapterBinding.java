@@ -1,7 +1,12 @@
 package mobi.liason.mvvm.bindings.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.google.common.collect.Lists;
 
@@ -18,31 +23,51 @@ public abstract class AdapterBinding extends BindDefinition {
     private final List<ItemTypeBinding> mItemTypeBindings;
     private final BindingCursorAdapter mAdapter;
     private final String mTypeColumnName;
+    private final AdapterView<?> mAdapterView;
 
-    public AdapterBinding(final Context context, final ItemTypeBinding itemTypeBinding) {
-        this(context, null, Lists.newArrayList(itemTypeBinding));
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final ItemTypeBinding itemTypeBinding) {
+        this(context, rootView, resourceId, null, Lists.newArrayList(itemTypeBinding));
     }
 
-    public AdapterBinding(final Context context, final String typeColumnName, final ItemTypeBinding itemTypeBinding) {
-        this(context, typeColumnName, Lists.newArrayList(itemTypeBinding));
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final String typeColumnName, final ItemTypeBinding itemTypeBinding) {
+        this(context, rootView, resourceId, typeColumnName, Lists.newArrayList(itemTypeBinding));
     }
 
-    public AdapterBinding(final Context context) {
-        this(context, null, new ArrayList<ItemTypeBinding>());
+    public AdapterBinding(final Context context, final View rootView, final int resourceId) {
+        this(context, rootView, resourceId, null, new ArrayList<ItemTypeBinding>());
     }
 
-    public AdapterBinding(final Context context, final String typeColumnName) {
-        this(context, typeColumnName, new ArrayList<ItemTypeBinding>());
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final String typeColumnName) {
+        this(context, rootView, resourceId, typeColumnName, new ArrayList<ItemTypeBinding>());
     }
 
-    public AdapterBinding(final Context context, final List<ItemTypeBinding> itemTypeBindings) {
-        this(context, null, itemTypeBindings);
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final List<ItemTypeBinding> itemTypeBindings) {
+        this(context, rootView, resourceId, null, itemTypeBindings);
     }
 
-    public AdapterBinding(final Context context, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
+        this(context, (AbsListView) rootView.findViewById(resourceId), typeColumnName, itemTypeBindings);
+    }
+
+    public AdapterBinding(final Context context, final AbsListView adapterView) {
+        this(context, adapterView, null, new ArrayList<ItemTypeBinding>());
+    }
+
+    public AdapterBinding(final Context context, final AbsListView adapterView, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
         mAdapter = new BindingCursorAdapter(context, this);
         mTypeColumnName = typeColumnName;
         mItemTypeBindings = new ArrayList<ItemTypeBinding>(itemTypeBindings);
+        adapterView.setAdapter(mAdapter);
+        mAdapterView = adapterView;
+    }
+
+
+    public AdapterBinding(final Context context, final Activity rootView, final int resourceId) {
+        this(context, (AbsListView) rootView.findViewById(resourceId), null, new ArrayList<ItemTypeBinding>());
+    }
+
+    public AdapterBinding(final Context context, final Activity rootView, final int resourceId, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
+        this(context, (AbsListView) rootView.findViewById(resourceId), typeColumnName, itemTypeBindings);
     }
 
     public void addItemBinding(final ItemTypeBinding itemTypeBinding) {
@@ -64,7 +89,7 @@ public abstract class AdapterBinding extends BindDefinition {
     }
 
     public int getItemTypeCount() {
-        return mItemTypeBindings.size();
+        return Math.max(mItemTypeBindings.size(), 1);
     }
 
     public int getItemType(final Cursor cursor) {

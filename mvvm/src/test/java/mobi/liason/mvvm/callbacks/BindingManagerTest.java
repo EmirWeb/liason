@@ -23,45 +23,45 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunnerWithInjection.class)
-public class CursorLoaderCallbacksTest {
+public class BindingManagerTest {
 
     public LoaderManager mLoaderManager;
     public Context mContext = Robolectric.getShadowApplication().getApplicationContext();
-    private CursorLoaderCallbacks mCursorLoaderCallbacks;
+    private BindingManager mBindingManager;
 
     @Before
     public void setup(){
         mLoaderManager = mock(LoaderManager.class);
-        mCursorLoaderCallbacks = new CursorLoaderCallbacks(mContext, mLoaderManager);
+        mBindingManager = new BindingManager(mContext, mLoaderManager);
     }
 
     @Test
     public void onStartCallsInitLoaderTwice(){
-        mCursorLoaderCallbacks.addBindDefinition(new MockBindDefinition());
-        mCursorLoaderCallbacks.addBindDefinition(new MockBindDefinition());
-        mCursorLoaderCallbacks.onStart(mContext);
+        mBindingManager.addBindDefinition(new MockBindDefinition());
+        mBindingManager.addBindDefinition(new MockBindDefinition());
+        mBindingManager.onStart(mContext);
         verify(mLoaderManager, atLeast(2)).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
 
     @Test
     public void addingDefinitionAfterStartedCallsInitLoaderTwice(){
-        mCursorLoaderCallbacks.onStart(mContext);
-        mCursorLoaderCallbacks.addBindDefinition(new MockBindDefinition());
-        mCursorLoaderCallbacks.addBindDefinition(new MockBindDefinition());
+        mBindingManager.onStart(mContext);
+        mBindingManager.addBindDefinition(new MockBindDefinition());
+        mBindingManager.addBindDefinition(new MockBindDefinition());
         verify(mLoaderManager, atLeast(2)).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
     @Test
     public void addingDefinitionBeforeStartedDoesNotCallInit(){
-        mCursorLoaderCallbacks.addBindDefinition(new MockBindDefinition());
-        mCursorLoaderCallbacks.addBindDefinition(new MockBindDefinition());
+        mBindingManager.addBindDefinition(new MockBindDefinition());
+        mBindingManager.addBindDefinition(new MockBindDefinition());
         verify(mLoaderManager, never()).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
     @Test
     public void onStartDoesNotCallInitLoader(){
-        mCursorLoaderCallbacks.onStart(mContext);
+        mBindingManager.onStart(mContext);
         verify(mLoaderManager, never()).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
@@ -75,6 +75,11 @@ public class CursorLoaderCallbacksTest {
         @Override
         public Uri getUri() {
             return Uri.parse("http://parchment.mobi");
+        }
+
+        @Override
+        public int getId() {
+            return 1;
         }
     }
 
