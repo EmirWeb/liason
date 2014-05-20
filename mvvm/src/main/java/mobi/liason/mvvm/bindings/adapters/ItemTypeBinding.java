@@ -37,18 +37,23 @@ public class ItemTypeBinding {
         mLayoutResourceId = layoutResourceId;
         mBindings = bindings;
         for (final Binding binding : bindings){
-            if (binding instanceof ResourceBinding) {
-                final ResourceBinding resourceBinding = (ResourceBinding) binding;
-                final Set<Integer> resourceIds = resourceBinding.getResourceIds();
-                for (final int resourceId : resourceIds) {
-                    mResourceIds.add(resourceId);
-                }
+            extractResourceIds(binding);
+        }
+    }
+
+    private void extractResourceIds(final Binding binding) {
+        if (binding instanceof ResourceBinding) {
+            final ResourceBinding resourceBinding = (ResourceBinding) binding;
+            final Set<Integer> resourceIds = resourceBinding.getResourceIds();
+            for (final int resourceId : resourceIds) {
+                mResourceIds.add(resourceId);
             }
         }
     }
 
     public void addBinding(final Binding binding){
         mBindings.add(binding);
+        extractResourceIds(binding);
     }
 
     public int getLayoutResourceId() {

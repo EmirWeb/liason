@@ -21,7 +21,7 @@ public abstract class Content {
 
     public abstract String getName(final Context context);
 
-    public abstract String getCreate(final Context context) ;
+    public abstract String getCreate(final Context context);
 
     public abstract String getDrop(final Context context);
 
@@ -42,7 +42,7 @@ public abstract class Content {
         return sqLiteDatabase.query(name, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
-    public String type(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri){
+    public String type(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri) {
         return TYPE;
     }
 
@@ -54,7 +54,7 @@ public abstract class Content {
         final String scheme = uri.getScheme();
         Uri.Builder builder = new Uri.Builder().scheme(scheme).authority(authority);
         final List<String> pathSegments = path.getPathSegments();
-        for (final String pathSegment : pathSegments){
+        for (final String pathSegment : pathSegments) {
             builder = builder.appendPath(pathSegment);
         }
         final Uri insertUri = builder.build();
@@ -69,6 +69,25 @@ public abstract class Content {
     public int update(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final ContentValues values, final String selection, final String[] selectionArgs) {
         final String name = getName(context);
         return sqLiteDatabase.update(name, values, selection, selectionArgs);
+    }
+
+    public int bulkInsert(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final ContentValues[] contentValuesArray) {
+        final String name = getName(context);
+
+        try {
+            sqLiteDatabase.beginTransaction();
+            int writeCount = 0;
+            for (final ContentValues contentValues : contentValuesArray) {
+                final long id = sqLiteDatabase.insert(name, null, contentValues);
+                if (id != -1) {
+                    writeCount++;
+                }
+            }
+            sqLiteDatabase.setTransactionSuccessful();
+            return writeCount;
+        } finally {
+            sqLiteDatabase.endTransaction();
+        }
     }
 }
 

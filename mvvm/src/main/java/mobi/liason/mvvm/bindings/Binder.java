@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.View;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import mobi.liason.mvvm.bindings.interfaces.ColumnResourceBinding;

@@ -50,7 +50,7 @@ public abstract class ViewModel extends Model{
         final int size = columns.size();
         for (int index = 0; index < size; index++ ){
             final Column modelColumn = columns.get(index);
-            final String columnName = modelColumn.getName();
+            final String columnName = modelColumn.getColumnLine();
             stringBuilder.append(columnName);
 
             if (index != size -1) {

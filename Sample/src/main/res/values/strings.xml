@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">Liason Sample app</string>
     <string name="authority">mobi.liason</string>
+    <string name="scheme">content</string>
 </resources>

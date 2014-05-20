@@ -11,6 +11,7 @@ import java.util.List;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
+import mobi.liason.mvvm.providers.Path;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -39,8 +40,8 @@ public class ProductTable extends Model {
     }
 
     @Override
-    public List<String> getPaths(Context context) {
-        return Lists.newArrayList(Paths.PATH);
+    public List<Path> getPaths(Context context) {
+        return Lists.newArrayList(Paths.PRODUCT_TABLE);
     }
 
     public static class Columns {
@@ -52,7 +53,7 @@ public class ProductTable extends Model {
     }
 
     public static class Paths {
-        public static final String PATH = "ProductTable";
+        public static final Path PRODUCT_TABLE = new Path("ProductTable");
     }
 
 }

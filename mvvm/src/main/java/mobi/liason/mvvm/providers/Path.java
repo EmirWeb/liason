@@ -39,11 +39,7 @@ public class Path {
         return mPath;
     }
 
-    public List<String> getPathSegments() {
-        return mPathSegments;
-    }
-
-    public String getPath(final Object... objects){
+    public List<String> getPathSegments(final Object... objects) {
         final List<String> pathSegments = new ArrayList<String>();
         int objectIndex = 0;
         for (int pathSegmentIndex = 0; pathSegmentIndex < mPathSegments.size(); pathSegmentIndex++){
@@ -71,6 +67,11 @@ public class Path {
         if (objectIndex != objects.length){
             throw new IllegalArgumentException(MATCH_COUNT_MESSAGE);
         }
+        return pathSegments;
+    }
+
+    public String getPath(final Object... objects){
+        final List<String> pathSegments = getPathSegments(objects);
         return TextUtils.join("/", pathSegments);
     }
 

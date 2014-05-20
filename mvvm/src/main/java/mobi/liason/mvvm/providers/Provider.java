@@ -154,5 +154,18 @@ public abstract class Provider extends ContentProvider {
         }
     }
 
+    @Override
+    public int bulkInsert(final Uri uri, final ContentValues[] values) {
+        final int code = mURIMatcher.match(uri);
+        if (code == UriMatcher.NO_MATCH) {
+            return 0;
+        }
+
+        final Context context = getContext();
+        final SQLiteDatabase sqLiteDatabase = getSQLiteDatabase(context);
+        final Content content = mCodeContentMap.get(code);
+        final Path path = mCodePathMap.get(code);
+        return content.bulkInsert(context, sqLiteDatabase, path, uri, values);
+    }
 }
 

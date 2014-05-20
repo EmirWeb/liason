@@ -7,6 +7,7 @@ import mobi.liason.mvvm.bindings.TextBinder;
 import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
 import mobi.liason.mvvm.bindings.adapters.ItemTypeBinding;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
+import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;
 import mobi.liason.sample.utilities.UriUtilities;
@@ -16,6 +17,7 @@ import mobi.liason.sample.utilities.UriUtilities;
  */
 public class ProductViewModelBinding extends AdapterBinding {
 
+    private static final int ID = IdCreator.getStaticId();
     private final Context mContext;
 
     public ProductViewModelBinding(final Context context){
@@ -32,6 +34,11 @@ public class ProductViewModelBinding extends AdapterBinding {
 
     @Override
     public Uri getUri() {
-        return UriUtilities.getUri(mContext, ProductViewModel.Paths.PATH);
+        return UriUtilities.getUri(mContext, ProductViewModel.Paths.PRODUCT_VIEW_MODEL);
+    }
+
+    @Override
+    public int getId() {
+        return ID;
     }
 }

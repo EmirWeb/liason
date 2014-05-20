@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 
+import java.util.List;
+
+import mobi.liason.mvvm.providers.Path;
 import mobi.liason.sample.R;
 
 /**
@@ -11,12 +14,16 @@ import mobi.liason.sample.R;
  */
 public class UriUtilities {
 
-    private static final String URI = "content://%s/%s";
-
-    public static Uri getUri(final Context context, final String path){
+    public static Uri getUri(final Context context, final Path path, final Object... objects){
         final Resources resources = context.getResources();
         final String authority = resources.getString(R.string.authority);
-        final String uri = String.format(URI, authority, path);
-        return Uri.parse(uri);
+        final String scheme = resources.getString(R.string.scheme);
+        final Uri.Builder builder = new Uri.Builder().scheme(scheme).authority(authority);
+        final List<String> pathSegments = path.getPathSegments(objects);
+        for (final String pathSegment : pathSegments){
+            builder.appendPath(pathSegment);
+        }
+
+        return builder.build();
     }
 }

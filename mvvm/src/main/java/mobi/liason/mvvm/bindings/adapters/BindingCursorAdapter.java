@@ -52,13 +52,6 @@ public class BindingCursorAdapter extends CursorAdapter {
         view.setTag(resourceId, view.findViewById(resourceId));
     }
 
-    private static void bindTextView(final View view, final int resourceId, final Cursor cursor, final String columnName) {
-        final int columnIndex = cursor.getColumnIndex(columnName);
-        final String string = cursor.getString(columnIndex);
-        final TextView textView = (TextView) view.getTag(resourceId);
-        textView.setText(string);
-    }
-
     private ItemTypeBinding getItemTypeBinding(final Cursor cursor) {
         final int type = getItemViewType(cursor);
         return mAdapterBinding.getItemTypeBinding(type);
