@@ -8,6 +8,8 @@ import java.util.List;
 import mobi.liason.mvvm.database.Content;
 import mobi.liason.mvvm.database.DatabaseHelper;
 import mobi.liason.sample.content.models.ProductTable;
+import mobi.liason.sample.content.models.TaskStateTable;
+import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;
 
 /**
@@ -27,6 +29,8 @@ public class SampleDatabaseHelper extends DatabaseHelper {
         final List<Content> contentList = new ArrayList<Content>();
         contentList.add(new ProductTable());
         contentList.add(new ProductViewModel());
+        contentList.add(new TaskStateTable());
+        contentList.add(new ProductTaskStateViewModel());
         return contentList;
     }
 

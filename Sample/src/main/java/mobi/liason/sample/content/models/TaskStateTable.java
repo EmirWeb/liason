@@ -69,12 +69,12 @@ public class TaskStateTable extends Model {
         final String uriString = uri.getLastPathSegment();
         sqLiteDatabase.beginTransaction();
         try {
-            final String selection = Columns.URI + "=?";
-            final String[] selectionArguments = { uriString };
+            final String selection = Columns.URI.getName() + "=? AND " + Columns.STATE.getName() + "=?";
+            final String[] selectionArguments = { uriString , State.RUNNING};
 
             final int rows = sqLiteDatabase.update(TaskStateTable.TABLE_NAME, contentValues, selection, selectionArguments);
             if (rows == 0) {
-                final String queryWhereClause = Columns.URI + "=? AND " + Columns.STATE + "=?";
+                final String queryWhereClause = Columns.URI.getName() + "=? AND " + Columns.STATE.getName() + "=?";
                 final String[] queryWhereArguments = new String[]{uriString, State.RUNNING};
                 final Cursor cursor = sqLiteDatabase.query(TaskStateTable.TABLE_NAME, null, queryWhereClause, queryWhereArguments, null, null, null);
                 try {

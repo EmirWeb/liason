@@ -54,6 +54,7 @@ public abstract class AdapterBinding extends BindDefinition {
     }
 
     public AdapterBinding(final Context context, final AbsListView adapterView, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
+        super(context);
         mAdapter = new BindingCursorAdapter(context, this);
         mTypeColumnName = typeColumnName;
         mItemTypeBindings = new ArrayList<ItemTypeBinding>(itemTypeBindings);

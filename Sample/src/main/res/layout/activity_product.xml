@@ -3,6 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="mobi.liason.sample.ProductActivity">
+    <ProgressBar
+        android:id="@+id/activity_product_progress_bar"
+        android:indeterminateDrawable="@drawable/apptheme_progress_indeterminate_horizontal_holo_light"
+        android:indeterminate="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <ListView
         android:id="@+id/activity_product_list_view"
         android:layout_width="match_parent"

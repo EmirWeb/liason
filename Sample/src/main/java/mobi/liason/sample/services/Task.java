@@ -68,15 +68,15 @@ public abstract class Task implements Runnable {
         final ContentResolver contentResolver = mContext.getContentResolver();
         Cursor cursor = null;
         try {
-            cursor = contentResolver.query(taskUri, null, null, null, null);
 
             final boolean forceTask = forceNetworkRequest(mUri);
-            if (!forceTask) {
-                final boolean needsUpdate = needsUpdate(cursor);
-                return !needsUpdate && !forceTask;
+            if (forceTask) {
+                return true;
             }
 
-            return forceTask;
+            cursor = contentResolver.query(taskUri, null, null, null, null);
+            return needsUpdate(cursor);
+
         }finally {
             if (cursor != null){
                 cursor.close();
@@ -153,7 +153,7 @@ public abstract class Task implements Runnable {
             return duration > expirationTime;
         }
 
-        return false;
+        return true;
     }
 
     public long getUpdateTime() {

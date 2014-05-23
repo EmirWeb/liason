@@ -25,6 +25,7 @@ import mobi.liason.mvvm.providers.Path;
 import mobi.liason.sample.R;
 import mobi.liason.sample.content.models.Product;
 import mobi.liason.sample.content.models.ProductTable;
+import mobi.liason.sample.content.viewmodel.ProductViewModel;
 import mobi.liason.sample.services.Task;
 import mobi.liason.sample.utilities.UriUtilities;
 
@@ -47,7 +48,7 @@ public class ProductTask extends Task {
         final String url = uri.toString();
         final ProductResponse productResponse = getProductResponse(url);
 
-        final Uri tableUri = getUri();
+        final Uri tableUri = UriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
 
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
         final ContentProviderOperation deleteContentProviderOperation = ContentProviderOperation.newDelete(tableUri).build();
@@ -66,8 +67,10 @@ public class ProductTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
 
-        contentResolver.notifyChange(tableUri, null);
+        Thread.sleep(10000);
 
+        final Uri modelViewUri = UriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL);
+        contentResolver.notifyChange(modelViewUri, null);
     }
 
     private ProductResponse getProductResponse(final String url){

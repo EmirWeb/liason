@@ -26,13 +26,6 @@ public abstract class TaskService extends Service {
     private final UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     public static final Map<Integer, Class> mCodeTaskClassMap = new HashMap<Integer, Class>();
 
-    public static void startTask(final Context context, final Uri uri) {
-        final String uriString = uri.toString();
-        final Intent intent = new Intent(context, TaskService.class);
-        intent.putExtra(EXTRAS.URI, uriString);
-        context.startService(intent);
-    }
-
     public abstract String getAuthority(final Context context);
 
     public abstract Map<Path, Class> getPathTaskMap(final Context context);
@@ -91,7 +84,7 @@ public abstract class TaskService extends Service {
         super.onDestroy();
     }
 
-    private static final class EXTRAS {
+    protected static final class EXTRAS {
         public static final String URI = "uri";
     }
 
