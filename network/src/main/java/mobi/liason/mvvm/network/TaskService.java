@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-import mobi.liason.mvvm.providers.Path;
+import mobi.liason.loaders.Path;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.

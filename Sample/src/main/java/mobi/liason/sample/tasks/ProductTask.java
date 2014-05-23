@@ -20,13 +20,13 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 
-import mobi.liason.mvvm.providers.Path;
+import mobi.liason.loaders.Path;
 import mobi.liason.sample.R;
 import mobi.liason.sample.content.models.Product;
 import mobi.liason.sample.content.models.ProductTable;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;
 import mobi.liason.mvvm.network.Task;
-import mobi.liason.sample.utilities.UriUtilities;
+import mobi.liason.sample.utilities.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.
@@ -43,11 +43,11 @@ public class ProductTask extends Task {
 
     @Override
     protected void onExecuteTask(final Context context) throws Exception{
-        final Uri uri = UriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCTS);
+        final Uri uri = SampleUriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCTS);
         final String url = uri.toString();
         final ProductResponse productResponse = getProductResponse(url);
 
-        final Uri tableUri = UriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
+        final Uri tableUri = SampleUriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
 
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
         final ContentProviderOperation deleteContentProviderOperation = ContentProviderOperation.newDelete(tableUri).build();
@@ -66,7 +66,7 @@ public class ProductTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
 
-        final Uri modelViewUri = UriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL);
+        final Uri modelViewUri = SampleUriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL);
         contentResolver.notifyChange(modelViewUri, null);
     }
 

@@ -5,11 +5,11 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.os.Bundle;
 
+import mobi.liason.loaders.BindingManager;
 import mobi.liason.mvvm.bindings.TextBinder;
 import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
 import mobi.liason.mvvm.bindings.adapters.ItemTypeBinding;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
-import mobi.liason.mvvm.callbacks.BindingManager;
 import mobi.liason.sample.bindings.ProductTaskStateViewModelBinding;
 import mobi.liason.sample.bindings.ProductViewModelBinding;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;

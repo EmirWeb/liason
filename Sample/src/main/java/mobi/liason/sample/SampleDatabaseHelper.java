@@ -5,8 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import mobi.liason.mvvm.database.Content;
-import mobi.liason.mvvm.database.DatabaseHelper;
+import mobi.liason.loaders.Content;
+import mobi.liason.loaders.DatabaseHelper;
 import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.content.models.ProductTable;
 import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;

@@ -3,8 +3,8 @@ package mobi.liason.sample.providers;
 import android.content.Context;
 import android.content.res.Resources;
 
-import mobi.liason.mvvm.database.DatabaseHelper;
-import mobi.liason.mvvm.providers.Provider;
+import mobi.liason.loaders.DatabaseHelper;
+import mobi.liason.loaders.Provider;
 import mobi.liason.sample.R;
 import mobi.liason.sample.SampleDatabaseHelper;
 

@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.view.View;
 
-import mobi.liason.mvvm.bindings.BindDefinition;
+import mobi.liason.loaders.BindDefinition;
 import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
-import mobi.liason.sample.utilities.UriUtilities;
+import mobi.liason.sample.utilities.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
@@ -64,7 +64,7 @@ public class ProductTaskStateViewModelBinding extends BindDefinition {
 
     @Override
     public Uri getUri() {
-        return UriUtilities.getUri(mContext, ProductTaskStateViewModel.Paths.PRODUCT_TASK_STATE);
+        return SampleUriUtilities.getUri(mContext, ProductTaskStateViewModel.Paths.PRODUCT_TASK_STATE);
     }
 
     @Override

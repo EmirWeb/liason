@@ -11,8 +11,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
-import mobi.liason.mvvm.providers.Path;
-import mobi.liason.mvvm.providers.Provider;
+import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.utilities.UriUtilities;
 
 /**

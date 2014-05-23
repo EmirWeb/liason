@@ -8,10 +8,10 @@ import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.List;
 
+import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModel;
 import mobi.liason.mvvm.database.ViewModelColumn;
-import mobi.liason.mvvm.providers.Path;
 import mobi.liason.sample.content.models.ProductTable;
 
 /**
