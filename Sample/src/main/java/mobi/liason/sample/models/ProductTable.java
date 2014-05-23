@@ -1,4 +1,4 @@
-package mobi.liason.sample.content.models;
+package mobi.liason.sample.models;
 
 import android.content.ContentValues;
 import android.content.Context;

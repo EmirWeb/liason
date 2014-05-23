@@ -1,4 +1,4 @@
-package mobi.liason.sample.providers;
+package mobi.liason.sample.overrides;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import mobi.liason.loaders.DatabaseHelper;
 import mobi.liason.loaders.Provider;
 import mobi.liason.sample.R;
-import mobi.liason.sample.SampleDatabaseHelper;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.

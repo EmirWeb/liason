@@ -10,11 +10,11 @@ import mobi.liason.mvvm.bindings.TextBinder;
 import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
 import mobi.liason.mvvm.bindings.adapters.ItemTypeBinding;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
-import mobi.liason.sample.bindings.ProductTaskStateViewModelBinding;
-import mobi.liason.sample.bindings.ProductViewModelBinding;
-import mobi.liason.sample.content.viewmodel.ProductViewModel;
+import mobi.liason.sample.bindings.ProductBinding;
+import mobi.liason.sample.bindings.ProductTaskStateBinding;
+import mobi.liason.sample.viewmodels.ProductViewModel;
 
-public class ProductActivity extends Activity {
+public class ProductsActivity extends Activity {
 
     private BindingManager mBindingManager;
 
@@ -26,16 +26,13 @@ public class ProductActivity extends Activity {
         final LoaderManager loaderManager = getLoaderManager();
         mBindingManager = new BindingManager(context, loaderManager);
 
-        final AdapterBinding adapterBinding = new ProductViewModelBinding(this, R.id.activity_product_list_view);
-        final ItemTypeBinding itemTypeBinding = new ItemTypeBinding(R.layout.list_item_activity_product_list_view);
-        final Binding binding = new TextBinder(R.id.list_item_activity_product_list_view_product_name, ProductViewModel.Columns.NAME);
-        itemTypeBinding.addBinding(binding);
-        adapterBinding.addItemBinding(itemTypeBinding);
+        final AdapterBinding adapterBinding = new ProductBinding(this, R.id.activity_product_list_view);
 
-        final ProductTaskStateViewModelBinding productTaskStateViewModelBinding = new ProductTaskStateViewModelBinding(this, R.id.activity_product_progress_bar, R.id.activity_product_list_view);
+
+        final ProductTaskStateBinding productTaskStateBinding = new ProductTaskStateBinding(this, R.id.activity_product_progress_bar, R.id.activity_product_list_view);
 
         mBindingManager.addBindDefinition(adapterBinding);
-        mBindingManager.addBindDefinition(productTaskStateViewModelBinding);
+        mBindingManager.addBindDefinition(productTaskStateBinding);
     }
 
     @Override

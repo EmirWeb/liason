@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-import mobi.liason.sample.content.models.Product;
+import mobi.liason.sample.models.Product;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.

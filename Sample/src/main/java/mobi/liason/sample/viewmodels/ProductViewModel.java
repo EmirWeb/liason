@@ -1,4 +1,4 @@
-package mobi.liason.sample.content.viewmodel;
+package mobi.liason.sample.viewmodels;
 
 import android.content.Context;
 import android.provider.BaseColumns;
@@ -12,7 +12,7 @@ import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModel;
 import mobi.liason.mvvm.database.ViewModelColumn;
-import mobi.liason.sample.content.models.ProductTable;
+import mobi.liason.sample.models.ProductTable;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.

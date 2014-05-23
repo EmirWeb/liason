@@ -1,4 +1,4 @@
-package mobi.liason.sample.content.viewmodel;
+package mobi.liason.sample.viewmodels;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,8 +15,8 @@ import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModel;
 import mobi.liason.mvvm.database.ViewModelColumn;
 import mobi.liason.mvvm.network.TaskStateTable;
-import mobi.liason.sample.content.models.ProductTable;
-import mobi.liason.sample.services.SampleTaskService;
+import mobi.liason.sample.models.ProductTable;
+import mobi.liason.sample.overrides.SampleTaskService;
 import mobi.liason.sample.tasks.ProductTask;
 
 /**

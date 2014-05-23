@@ -1,4 +1,4 @@
-package mobi.liason.sample.utilities;
+package mobi.liason.sample.overrides;
 
 import android.content.Context;
 import android.content.res.Resources;

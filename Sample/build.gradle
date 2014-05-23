@@ -24,5 +24,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:19.+'
+    compile 'com.squareup.picasso:picasso:2.2.0'
     compile project(':network')
 }

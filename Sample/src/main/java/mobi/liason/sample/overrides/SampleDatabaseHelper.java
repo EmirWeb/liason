@@ -1,4 +1,4 @@
-package mobi.liason.sample;
+package mobi.liason.sample.overrides;
 
 import android.content.Context;
 
@@ -8,9 +8,9 @@ import java.util.List;
 import mobi.liason.loaders.Content;
 import mobi.liason.loaders.DatabaseHelper;
 import mobi.liason.mvvm.network.TaskStateTable;
-import mobi.liason.sample.content.models.ProductTable;
-import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
-import mobi.liason.sample.content.viewmodel.ProductViewModel;
+import mobi.liason.sample.models.ProductTable;
+import mobi.liason.sample.viewmodels.ProductTaskStateViewModel;
+import mobi.liason.sample.viewmodels.ProductViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.

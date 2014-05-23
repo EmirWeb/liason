@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ProductActivity"
+            android:name=".ProductsActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,11 +20,11 @@
         </activity>
 
         <provider
-            android:name=".providers.SampleProvider"
+            android:name=".overrides.SampleProvider"
             android:authorities="@string/authority" />
 
         <service
-            android:name=".services.SampleTaskService"
+            android:name=".overrides.SampleTaskService"
             android:exported="false" />
     </application>
 

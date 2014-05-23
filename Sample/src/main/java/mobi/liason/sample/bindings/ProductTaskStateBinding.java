@@ -8,20 +8,20 @@ import android.view.View;
 
 import mobi.liason.loaders.BindDefinition;
 import mobi.liason.mvvm.utilities.IdCreator;
-import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
-import mobi.liason.sample.utilities.SampleUriUtilities;
+import mobi.liason.sample.viewmodels.ProductTaskStateViewModel;
+import mobi.liason.sample.overrides.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
  */
-public class ProductTaskStateViewModelBinding extends BindDefinition {
+public class ProductTaskStateBinding extends BindDefinition {
 
     private static final int ID = IdCreator.getStaticId();
     private final Context mContext;
     private final View mDataView;
     private final View mProgressBar;
 
-    public ProductTaskStateViewModelBinding(final Activity activity, final int progressBarResourceId, final int dataResourceId){
+    public ProductTaskStateBinding(final Activity activity, final int progressBarResourceId, final int dataResourceId){
         super(activity.getApplicationContext());
         mContext = activity.getApplicationContext();
         mProgressBar = activity.findViewById(progressBarResourceId);

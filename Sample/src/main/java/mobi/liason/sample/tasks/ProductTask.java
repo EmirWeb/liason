@@ -22,11 +22,11 @@ import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.sample.R;
-import mobi.liason.sample.content.models.Product;
-import mobi.liason.sample.content.models.ProductTable;
-import mobi.liason.sample.content.viewmodel.ProductViewModel;
+import mobi.liason.sample.models.Product;
+import mobi.liason.sample.models.ProductTable;
+import mobi.liason.sample.viewmodels.ProductViewModel;
 import mobi.liason.mvvm.network.Task;
-import mobi.liason.sample.utilities.SampleUriUtilities;
+import mobi.liason.sample.overrides.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.
