@@ -2,10 +2,7 @@ package mobi.liason.sample;
 
 import android.app.Activity;
 import android.app.LoaderManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import mobi.liason.mvvm.bindings.TextBinder;
@@ -15,11 +12,7 @@ import mobi.liason.mvvm.bindings.interfaces.Binding;
 import mobi.liason.mvvm.callbacks.BindingManager;
 import mobi.liason.sample.bindings.ProductTaskStateViewModelBinding;
 import mobi.liason.sample.bindings.ProductViewModelBinding;
-import mobi.liason.sample.content.models.Product;
-import mobi.liason.sample.content.models.ProductTable;
-import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;
-import mobi.liason.sample.utilities.UriUtilities;
 
 public class ProductActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.database;
+package mobi.liason.loaders;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

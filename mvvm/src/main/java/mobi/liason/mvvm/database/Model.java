@@ -5,6 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
+import mobi.liason.loaders.Content;
+
 /**
  * Created by Emir Hasanbegovic on 13/05/14.
  */

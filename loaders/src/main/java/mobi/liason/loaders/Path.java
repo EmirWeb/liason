@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.providers;
+package mobi.liason.loaders;
 
 import android.text.TextUtils;
 

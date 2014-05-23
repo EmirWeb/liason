@@ -7,8 +7,8 @@ import java.util.List;
 
 import mobi.liason.mvvm.database.Content;
 import mobi.liason.mvvm.database.DatabaseHelper;
+import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.content.models.ProductTable;
-import mobi.liason.sample.content.models.TaskStateTable;
 import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;
 

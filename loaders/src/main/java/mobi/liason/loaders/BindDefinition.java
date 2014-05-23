@@ -1,10 +1,8 @@
-package mobi.liason.mvvm.bindings;
+package mobi.liason.loaders;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-
-import mobi.liason.mvvm.utilities.IdCreator;
 
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
@@ -13,15 +11,16 @@ public abstract class BindDefinition {
 
     private final Context mContext;
 
-    public BindDefinition (final Context context){
+    public BindDefinition(final Context context) {
         mContext = context;
     }
 
-    public Context getContext(){
+    public Context getContext() {
         return mContext;
     }
 
-    public void onUnBind(){}
+    public void onUnBind() {
+    }
 
     public String[] getProjection() {
         return null;
@@ -45,17 +44,15 @@ public abstract class BindDefinition {
 
     /**
      * This is used to keep track of the loaders across Activity/Fragment life-cycles
-     *
+     * <p/>
      * We recommend the following implementation.
-     *
+     * <p/>
      * public static final int ID = IdCreator.getStaticId();
      *
-     * @Override
-     * public int getId(){
-     *     return ID;
-     * }
-     *
      * @return Unique Id for the particular data flow
+     * @Override public int getId(){
+     * return ID;
+     * }
      */
     public abstract int getId();
 

@@ -1,8 +1,7 @@
-package mobi.liason.sample.content.models;
+package mobi.liason.mvvm.network;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -16,8 +15,7 @@ import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
 import mobi.liason.mvvm.providers.Path;
-import mobi.liason.sample.services.TaskService;
-import mobi.liason.sample.utilities.UriUtilities;
+import mobi.liason.mvvm.utilities.UriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -90,7 +88,9 @@ public class TaskStateTable extends Model {
         } finally {
             sqLiteDatabase.endTransaction();
         }
-        return UriUtilities.getUri(context, Paths.TASK_STATE, uriString);
+        final String scheme = uri.getScheme();
+        final String authority = uri.getAuthority();
+        return UriUtilities.getUri(scheme, authority, Paths.TASK_STATE, uriString);
     }
 
     public static final class QueryParameters {

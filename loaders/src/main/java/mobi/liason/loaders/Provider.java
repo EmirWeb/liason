@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.providers;
+package mobi.liason.loaders;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import mobi.liason.mvvm.database.Content;
-import mobi.liason.mvvm.database.DatabaseHelper;
 
 /**
  * Created by Emir Hasanbegovic on 18/04/14.

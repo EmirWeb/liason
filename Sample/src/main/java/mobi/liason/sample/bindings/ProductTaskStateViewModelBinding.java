@@ -7,10 +7,8 @@ import android.net.Uri;
 import android.view.View;
 
 import mobi.liason.mvvm.bindings.BindDefinition;
-import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
 import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.content.viewmodel.ProductTaskStateViewModel;
-import mobi.liason.sample.content.viewmodel.ProductViewModel;
 import mobi.liason.sample.utilities.UriUtilities;
 
 /**

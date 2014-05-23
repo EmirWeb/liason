@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.loaders;
+package mobi.liason.loaders;
 
 import android.content.Context;
 import android.content.CursorLoader;

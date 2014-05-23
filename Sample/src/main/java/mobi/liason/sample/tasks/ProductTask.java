@@ -19,14 +19,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
 
 import mobi.liason.mvvm.providers.Path;
 import mobi.liason.sample.R;
 import mobi.liason.sample.content.models.Product;
 import mobi.liason.sample.content.models.ProductTable;
 import mobi.liason.sample.content.viewmodel.ProductViewModel;
-import mobi.liason.sample.services.Task;
+import mobi.liason.mvvm.network.Task;
 import mobi.liason.sample.utilities.UriUtilities;
 
 /**
@@ -38,8 +37,8 @@ public class ProductTask extends Task {
     private static final String AUTHORITY = "lcboapi.com";
     public static final Gson GSON = new Gson();
 
-    public ProductTask(Context context, Uri uri) {
-        super(context, uri);
+    public ProductTask(final Context context, final String authorty, final Uri uri) {
+        super(context, authorty, uri);
     }
 
     @Override

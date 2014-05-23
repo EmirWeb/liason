@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.database;
+package mobi.liason.loaders;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import java.util.List;
-
-import mobi.liason.mvvm.providers.Path;
 
 /**
  * Created by Emir Hasanbegovic on 18/04/14.

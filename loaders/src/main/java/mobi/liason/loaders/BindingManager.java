@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.callbacks;
+package mobi.liason.loaders;
 
 import android.app.LoaderManager;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -16,9 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import mobi.liason.mvvm.bindings.BindDefinition;
-import mobi.liason.mvvm.loaders.ForceLoadCursorLoader;
 
 /**
  * Created by Emir Hasanbegovic on 18/04/14.

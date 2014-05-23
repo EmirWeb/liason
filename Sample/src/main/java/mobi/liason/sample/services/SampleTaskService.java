@@ -8,9 +8,9 @@ import android.net.Uri;
 import java.util.HashMap;
 import java.util.Map;
 
+import mobi.liason.mvvm.network.TaskService;
 import mobi.liason.mvvm.providers.Path;
 import mobi.liason.sample.R;
-import mobi.liason.sample.content.models.TaskStateTable;
 import mobi.liason.sample.tasks.ProductTask;
 
 /**

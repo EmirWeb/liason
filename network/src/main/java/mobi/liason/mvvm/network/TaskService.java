@@ -1,4 +1,4 @@
-package mobi.liason.sample.services;
+package mobi.liason.mvvm.network;
 
 import android.app.Service;
 import android.content.Context;
@@ -67,16 +67,17 @@ public abstract class TaskService extends Service {
         final Uri uri = Uri.parse(uriString);
         final int code = mURIMatcher.match(uri);
         final Context context = getApplicationContext();
-        final Task task = getTask(context, uri, code);
+        final String authority = getAuthority(context);
+        final Task task = getTask(context, authority, uri, code);
         if (task == null) {
             return;
         }
         mSheduledThreadPoolExecutor.execute(task);
     }
 
-    private static Task getTask(final Context context, final Uri uri, final int code) {
+    private static Task getTask(final Context context, final String authority, final Uri uri, final int code) {
         final Class klass = mCodeTaskClassMap.get(code);
-        return createTask(context, uri, klass);
+        return createTask(context, authority,uri, klass);
     }
 
     @Override
@@ -88,11 +89,11 @@ public abstract class TaskService extends Service {
         public static final String URI = "uri";
     }
 
-    public static <T extends Task> T createTask(final Context context, final Uri uri, final Class<T> klass) {
+    public static <T extends Task> T createTask(final Context context, final String authority, final Uri uri, final Class<T> klass) {
         try {
-            final Constructor constructor = klass.getDeclaredConstructor(Context.class, Uri.class);
+            final Constructor constructor = klass.getDeclaredConstructor(Context.class, String.class, Uri.class);
             constructor.setAccessible(true);
-            return (T) constructor.newInstance(context, uri);
+            return (T) constructor.newInstance(context, authority, uri);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

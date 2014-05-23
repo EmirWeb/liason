@@ -6,14 +6,13 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mobi.liason.mvvm.bindings.BindDefinition;
+import mobi.liason.loaders.BindDefinition;
 
 /**
  * Created by Emir Hasanbegovic on 28/04/14.

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
