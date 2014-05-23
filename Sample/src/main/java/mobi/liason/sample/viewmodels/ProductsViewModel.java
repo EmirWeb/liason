@@ -17,7 +17,7 @@ import mobi.liason.sample.models.ProductTable;
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductViewModel extends ViewModel{
+public class ProductsViewModel extends ViewModel{
 
     public static final String VIEW_NAME = "ProductView";
     private static final String SELECTION = ProductTable.TABLE_NAME;

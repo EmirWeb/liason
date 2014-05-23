@@ -17,12 +17,12 @@ import mobi.liason.mvvm.database.ViewModelColumn;
 import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.models.ProductTable;
 import mobi.liason.sample.overrides.SampleTaskService;
-import mobi.liason.sample.tasks.ProductTask;
+import mobi.liason.sample.tasks.ProductsTask;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductTaskStateViewModel extends ViewModel {
+public class ProductsTaskStateViewModel extends ViewModel {
 
     public static final String VIEW_NAME = "TaskStateView";
     private static final String SELECTION = TaskStateTable.TABLE_NAME;
@@ -90,7 +90,7 @@ public class ProductTaskStateViewModel extends ViewModel {
     }
 
     public static class Paths {
-        public static final Path PRODUCT_TASK_STATE = ProductTask.Paths.PRODUCTS;
+        public static final Path PRODUCT_TASK_STATE = ProductsTask.Paths.PRODUCTS;
     }
 
 }

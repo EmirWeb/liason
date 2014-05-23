@@ -24,20 +24,20 @@ import mobi.liason.loaders.Path;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
 import mobi.liason.sample.models.ProductTable;
-import mobi.liason.sample.viewmodels.ProductViewModel;
+import mobi.liason.sample.viewmodels.ProductsViewModel;
 import mobi.liason.mvvm.network.Task;
 import mobi.liason.sample.overrides.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.
  */
-public class ProductTask extends Task {
+public class ProductsTask extends Task {
 
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";
     public static final Gson GSON = new Gson();
 
-    public ProductTask(final Context context, final String authorty, final Uri uri) {
+    public ProductsTask(final Context context, final String authorty, final Uri uri) {
         super(context, authorty, uri);
     }
 
@@ -66,7 +66,7 @@ public class ProductTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
 
-        final Uri modelViewUri = SampleUriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL);
+        final Uri modelViewUri = SampleUriUtilities.getUri(context, ProductsViewModel.Paths.PRODUCT_VIEW_MODEL);
         contentResolver.notifyChange(modelViewUri, null);
     }
 

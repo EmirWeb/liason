@@ -9,8 +9,8 @@ import mobi.liason.loaders.Content;
 import mobi.liason.loaders.DatabaseHelper;
 import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.models.ProductTable;
-import mobi.liason.sample.viewmodels.ProductTaskStateViewModel;
-import mobi.liason.sample.viewmodels.ProductViewModel;
+import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
+import mobi.liason.sample.viewmodels.ProductsViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -28,9 +28,9 @@ public class SampleDatabaseHelper extends DatabaseHelper {
     public List<Content> getContent(final Context context) {
         final List<Content> contentList = new ArrayList<Content>();
         contentList.add(new ProductTable());
-        contentList.add(new ProductViewModel());
+        contentList.add(new ProductsViewModel());
         contentList.add(new TaskStateTable());
-        contentList.add(new ProductTaskStateViewModel());
+        contentList.add(new ProductsTaskStateViewModel());
         return contentList;
     }
 

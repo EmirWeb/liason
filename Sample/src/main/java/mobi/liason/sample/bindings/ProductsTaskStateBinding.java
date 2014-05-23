@@ -8,20 +8,20 @@ import android.view.View;
 
 import mobi.liason.loaders.BindDefinition;
 import mobi.liason.mvvm.utilities.IdCreator;
-import mobi.liason.sample.viewmodels.ProductTaskStateViewModel;
+import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
 import mobi.liason.sample.overrides.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
  */
-public class ProductTaskStateBinding extends BindDefinition {
+public class ProductsTaskStateBinding extends BindDefinition {
 
     private static final int ID = IdCreator.getStaticId();
     private final Context mContext;
     private final View mDataView;
     private final View mProgressBar;
 
-    public ProductTaskStateBinding(final Activity activity, final int progressBarResourceId, final int dataResourceId){
+    public ProductsTaskStateBinding(final Activity activity, final int progressBarResourceId, final int dataResourceId){
         super(activity.getApplicationContext());
         mContext = activity.getApplicationContext();
         mProgressBar = activity.findViewById(progressBarResourceId);
@@ -41,10 +41,10 @@ public class ProductTaskStateBinding extends BindDefinition {
             return;
         }
         
-        final int progressBarVisibility = getVisibility(cursor, ProductTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE.getName());
+        final int progressBarVisibility = getVisibility(cursor, ProductsTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE.getName());
         mProgressBar.setVisibility(progressBarVisibility);
 
-        final int dataVisibility = getVisibility(cursor, ProductTaskStateViewModel.Columns.IS_DATA_VISIBLE.getName());
+        final int dataVisibility = getVisibility(cursor, ProductsTaskStateViewModel.Columns.IS_DATA_VISIBLE.getName());
         mDataView.setVisibility(dataVisibility);
     }
 
@@ -64,7 +64,7 @@ public class ProductTaskStateBinding extends BindDefinition {
 
     @Override
     public Uri getUri() {
-        return SampleUriUtilities.getUri(mContext, ProductTaskStateViewModel.Paths.PRODUCT_TASK_STATE);
+        return SampleUriUtilities.getUri(mContext, ProductsTaskStateViewModel.Paths.PRODUCT_TASK_STATE);
     }
 
     @Override

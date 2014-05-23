@@ -1,4 +1,4 @@
-package mobi.liason.sample.bindings;
+package mobi.liason.sample.binders;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import mobi.liason.mvvm.bindings.Binder;
-import mobi.liason.mvvm.bindings.interfaces.Binding;
-import mobi.liason.mvvm.bindings.interfaces.ColumnResourceBinding;
 import mobi.liason.mvvm.database.ViewModelColumn;
 
 /**
