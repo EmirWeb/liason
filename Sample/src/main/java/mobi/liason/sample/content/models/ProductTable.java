@@ -53,7 +53,7 @@ public class ProductTable extends Model {
     }
 
     public static class Paths {
-        public static final Path PRODUCT_TABLE = new Path("ProductTable");
+        public static final Path PRODUCT_TABLE = new Path(TABLE_NAME);
     }
 
 }

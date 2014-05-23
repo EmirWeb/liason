@@ -1,1 +1,1 @@
-include ':mvvm', ':Sample'
+include ':mvvm', ':Sample', ':network'

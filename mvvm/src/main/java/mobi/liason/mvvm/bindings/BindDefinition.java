@@ -1,5 +1,6 @@
 package mobi.liason.mvvm.bindings;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -9,6 +10,17 @@ import mobi.liason.mvvm.utilities.IdCreator;
  * Created by Emir Hasanbegovic on 28/04/14.
  */
 public abstract class BindDefinition {
+
+    private final Context mContext;
+
+    public BindDefinition (final Context context){
+        mContext = context;
+    }
+
+    public Context getContext(){
+        return mContext;
+    }
+
     public void onUnBind(){}
 
     public String[] getProjection() {

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -33,6 +34,10 @@ public class Path {
         mPath = TextUtils.join("/", pathSegments);
         mPathSegments = Lists.newArrayList(pathSegments);
 
+    }
+
+    public int getPathSegmentCount(){
+        return mPathSegments.size();
     }
 
     public String getMatcherPath() {

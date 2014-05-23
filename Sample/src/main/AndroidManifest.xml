@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mobi.liason.sample" >
+    package="mobi.liason.sample">
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".ProductActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,8 +18,12 @@
         </activity>
 
         <provider
-            android:authorities="@string/authority"
-            android:name=".providers.SampleProvider"/>
+            android:name=".providers.SampleProvider"
+            android:authorities="@string/authority" />
+
+        <service
+            android:name=".services.SampleTaskService"
+            android:exported="false" />
     </application>
 
 </manifest>

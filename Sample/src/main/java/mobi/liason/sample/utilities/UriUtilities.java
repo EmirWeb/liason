@@ -14,16 +14,22 @@ import mobi.liason.sample.R;
  */
 public class UriUtilities {
 
-    public static Uri getUri(final Context context, final Path path, final Object... objects){
-        final Resources resources = context.getResources();
-        final String authority = resources.getString(R.string.authority);
-        final String scheme = resources.getString(R.string.scheme);
+
+    public static Uri getUri(final String scheme, final String authority, final Path path, final Object... objects) {
         final Uri.Builder builder = new Uri.Builder().scheme(scheme).authority(authority);
         final List<String> pathSegments = path.getPathSegments(objects);
-        for (final String pathSegment : pathSegments){
+        for (final String pathSegment : pathSegments) {
             builder.appendPath(pathSegment);
         }
 
         return builder.build();
+
+    }
+
+    public static Uri getUri(final Context context, final Path path, final Object... objects) {
+        final Resources resources = context.getResources();
+        final String authority = resources.getString(R.string.authority);
+        final String scheme = resources.getString(R.string.scheme);
+        return getUri(scheme, authority, path, objects);
     }
 }
