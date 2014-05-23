@@ -67,8 +67,6 @@ public class ProductTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
 
-        Thread.sleep(10000);
-
         final Uri modelViewUri = UriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL);
         contentResolver.notifyChange(modelViewUri, null);
     }

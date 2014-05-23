@@ -69,7 +69,7 @@ public class TaskStateTable extends Model {
         final String uriString = uri.getLastPathSegment();
         sqLiteDatabase.beginTransaction();
         try {
-            final String selection = Columns.URI.getName() + "=? AND " + Columns.STATE.getName() + "=?";
+            final String selection = Columns.URI.getName() + "=? AND " + Columns.STATE.getName() + "<>?";
             final String[] selectionArguments = { uriString , State.RUNNING};
 
             final int rows = sqLiteDatabase.update(TaskStateTable.TABLE_NAME, contentValues, selection, selectionArguments);
