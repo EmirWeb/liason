@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/list_item_product_image"
+        android:layout_width="@dimen/list_item_product_image_view_size"
+        android:layout_height="@dimen/list_item_product_image_view_size" />
+
+    <TextView
+        android:id="@+id/list_item_product_name"
+        android:layout_toRightOf="@id/list_item_product_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

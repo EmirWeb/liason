@@ -17,8 +17,7 @@ import mobi.liason.mvvm.database.ViewModelColumn;
 public class Binder implements ColumnResourceBinding, DataBinding {
 
     private final Set<Integer> mResourceIds = new HashSet<Integer>();
-        private final Set<ViewModelColumn> mViewModelColumns = new HashSet<ViewModelColumn>();
-
+    private final Set<ViewModelColumn> mViewModelColumns = new HashSet<ViewModelColumn>();
 
     public Binder() {
     }

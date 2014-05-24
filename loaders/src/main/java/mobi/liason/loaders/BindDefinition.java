@@ -19,28 +19,28 @@ public abstract class BindDefinition {
         return mContext;
     }
 
-    public void onUnBind() {
+    public void onUnBind(final Context context) {
     }
 
-    public String[] getProjection() {
+    public String[] getProjection(final Context context) {
         return null;
     }
 
-    public String getSelection() {
+    public String getSelection(final Context context) {
         return null;
     }
 
-    public String[] getSelectionArguments() {
+    public String[] getSelectionArguments(final Context context) {
         return null;
     }
 
-    public String getSortOrder() {
+    public String getSortOrder(final Context context) {
         return null;
     }
 
-    public abstract void onBind(final Cursor cursor);
+    public abstract void onBind(final Context context, final Cursor cursor);
 
-    public abstract Uri getUri();
+    public abstract Uri getUri(final Context context);
 
     /**
      * This is used to keep track of the loaders across Activity/Fragment life-cycles
@@ -54,6 +54,6 @@ public abstract class BindDefinition {
      * return ID;
      * }
      */
-    public abstract int getId();
+    public abstract int getId(final Context context);
 
 }

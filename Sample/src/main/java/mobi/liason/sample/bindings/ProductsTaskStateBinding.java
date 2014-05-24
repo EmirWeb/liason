@@ -2,81 +2,40 @@ package mobi.liason.sample.bindings;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
-import android.view.View;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import java.util.Set;
-
-import mobi.liason.loaders.BindDefinition;
-import mobi.liason.mvvm.bindings.Binder;
-import mobi.liason.mvvm.database.ViewModelColumn;
+import mobi.liason.mvvm.bindings.ActivityItemBinding;
 import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
-import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
+import mobi.liason.sample.binders.VisibilityBinder;
 import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
  */
-public class ProductsTaskStateBinding extends Binder {
+public class ProductsTaskStateBinding extends ActivityItemBinding {
 
     private static final int ID = IdCreator.getStaticId();
-    private final Context mContext;
-    private final View mDataView;
-    private final View mProgressBar;
 
-    public ProductsTaskStateBinding(final Activity activity, final int progressBarResourceId, final int dataResourceId){
-        super(Sets.newHashSet(R.id.activity_products_progress_bar, R.id.activity_products_list_view), Sets.newHashSet(ProductsTaskStateViewModel.Columns.IS_DATA_VISIBLE, ProductsTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE));
-        mContext = activity.getApplicationContext();
-        mProgressBar = activity.findViewById(progressBarResourceId);
-        mDataView = activity.findViewById(dataResourceId);
+    public ProductsTaskStateBinding(final Activity activity) {
+        super(activity);
+
+        final VisibilityBinder progressBarVisibilityBinder = new VisibilityBinder(R.id.activity_products_progress_bar, ProductsTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE);
+        addBinding(progressBarVisibilityBinder);
+
+        final VisibilityBinder dataVisibilityBinder = new VisibilityBinder(R.id.activity_products_adapter_view, ProductsTaskStateViewModel.Columns.IS_DATA_VISIBLE);
+        addBinding(dataVisibilityBinder);
     }
 
     @Override
-    public void onBind(final Cursor cursor) {
-        final boolean hasResults = cursor.moveToFirst();
-        if (!hasResults){
-            final int progressBarVisibility = getVisibility(true);
-            mProgressBar.setVisibility(progressBarVisibility);
-
-            final int dataVisibility = getVisibility(false);
-            mDataView.setVisibility(dataVisibility);
-
-            return;
-        }
-        
-        final int progressBarVisibility = getVisibility(cursor, ProductsTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE.getName());
-        mProgressBar.setVisibility(progressBarVisibility);
-
-        final int dataVisibility = getVisibility(cursor, ProductsTaskStateViewModel.Columns.IS_DATA_VISIBLE.getName());
-        mDataView.setVisibility(dataVisibility);
-    }
-
-    private int getVisibility(final Cursor cursor, final String columnName) {
-        final int columnIndex = cursor.getColumnIndex(columnName);
-        final String string = cursor.getString(columnIndex);
-        final boolean isVisible = string != null && Boolean.parseBoolean(string);
-        return getVisibility(isVisible);
-    }
-
-    private int getVisibility(final boolean isVisible){
-        if (isVisible) {
-            return View.VISIBLE;
-        }
-        return View.GONE;
+    public Uri getUri(final Context context) {
+        return SampleUriUtilities.getUri(context, ProductsTaskStateViewModel.Paths.PRODUCTS_TASK_STATE);
     }
 
     @Override
-    public Uri getUri() {
-        return SampleUriUtilities.getUri(mContext, ProductsTaskStateViewModel.Paths.PRODUCT_TASK_STATE);
-    }
-
-    @Override
-    public int getId() {
+    public int getId(final Context context) {
         return ID;
     }
+
 }

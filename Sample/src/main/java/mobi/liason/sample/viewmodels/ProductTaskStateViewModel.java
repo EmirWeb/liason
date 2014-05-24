@@ -17,12 +17,13 @@ import mobi.liason.mvvm.database.ViewModelColumn;
 import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.models.ProductTable;
 import mobi.liason.sample.overrides.SampleTaskService;
+import mobi.liason.sample.tasks.ProductTask;
 import mobi.liason.sample.tasks.ProductsTask;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductsTaskStateViewModel extends ViewModel {
+public class ProductTaskStateViewModel extends ViewModel {
 
     public static final String VIEW_NAME = "ProductsTaskStateView";
 
@@ -38,7 +39,7 @@ public class ProductsTaskStateViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        return TaskStateTable.TABLE_NAME + " WHERE " + TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() + " LIKE '%" + ProductsTask.Paths.PRODUCTS.getPath() + "'";
+        return TaskStateTable.TABLE_NAME + " WHERE " + TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() + " LIKE '%" + ProductsTask.Paths.PRODUCTS.getPath() + "/%'";
     }
 
     @Override
@@ -48,8 +49,16 @@ public class ProductsTaskStateViewModel extends ViewModel {
 
     @Override
     public Cursor query(Context context, SQLiteDatabase sqLiteDatabase, Path path, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        final String uriString = uri.toString();
+
+        final String overridenSelection = Columns.URI.getName() + "=?";
+        final String[] overridenSelectionArguments = {uriString};
+
+        final Cursor cursor = super.query(context, sqLiteDatabase, path, uri, projection, overridenSelection, overridenSelectionArguments, sortOrder);
+
         SampleTaskService.startTask(context, uri);
-        return super.query(context, sqLiteDatabase, path, uri, projection, selection, selectionArgs, sortOrder);
+
+        return cursor;
     }
 
     public static class Columns {
@@ -81,7 +90,7 @@ public class ProductsTaskStateViewModel extends ViewModel {
     }
 
     public static class Paths {
-        public static final Path PRODUCTS_TASK_STATE = ProductsTask.Paths.PRODUCTS;
+        public static final Path PRODUCTS_TASK_STATE = ProductTask.Paths.PRODUCTS;
     }
 
 }

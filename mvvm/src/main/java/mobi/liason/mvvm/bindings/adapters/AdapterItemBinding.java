@@ -10,31 +10,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 import mobi.liason.mvvm.bindings.interfaces.Binding;
-import mobi.liason.mvvm.bindings.interfaces.ColumnBinding;
-import mobi.liason.mvvm.bindings.interfaces.ColumnResourceBinding;
-import mobi.liason.mvvm.bindings.interfaces.DataBinding;
 import mobi.liason.mvvm.bindings.interfaces.ResourceBinding;
-import mobi.liason.mvvm.bindings.items.ItemBinding;
-import mobi.liason.mvvm.database.ViewModelColumn;
+import mobi.liason.mvvm.bindings.ItemBinding;
 
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
-public class ItemTypeBinding {
+public class AdapterItemBinding {
 
     private final int mLayoutResourceId;
     private final Set<Integer> mResourceIds = new HashSet<Integer>();
     private final Set<Binding> mBindings;
 
-    public ItemTypeBinding(final int layoutResourceId){
+    public AdapterItemBinding(final int layoutResourceId){
         this(layoutResourceId, new HashSet<Binding>());
     }
 
-    public ItemTypeBinding(final int layoutResourceId, final Binding binding){
+    public AdapterItemBinding(final int layoutResourceId, final Binding binding){
         this(layoutResourceId, Sets.newHashSet(binding));
     }
 
-    public ItemTypeBinding(final int layoutResourceId, final Set<Binding> bindings){
+    public AdapterItemBinding(final int layoutResourceId, final Set<Binding> bindings){
         mLayoutResourceId = layoutResourceId;
         mBindings = bindings;
         for (final Binding binding : bindings){

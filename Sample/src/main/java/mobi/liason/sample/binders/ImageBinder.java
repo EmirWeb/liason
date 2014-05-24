@@ -1,7 +1,6 @@
 package mobi.liason.sample.binders;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,15 +12,15 @@ import mobi.liason.mvvm.database.ViewModelColumn;
 /**
  * Created by Emir Hasanbegovic on 2014-05-23.
  */
-public class ImageBinder extends Binder{
+public class ImageBinder extends Binder {
 
-    public ImageBinder(int resourceId, ViewModelColumn viewModelColumn) {
-        super(resourceId,viewModelColumn);
+    public ImageBinder(final int resourceId, final ViewModelColumn viewModelColumn) {
+        super(resourceId, viewModelColumn);
     }
 
     @Override
-    public void onBind(Context context, View view, int resourceId, ViewModelColumn viewModelColumn, Object value) {
-        final ImageView imageView =(ImageView) view;
+    public void onBind(final Context context, final View view, final int resourceId, final ViewModelColumn viewModelColumn, final Object value) {
+        final ImageView imageView = (ImageView) view;
         final String url = (String) value;
         imageView.setImageBitmap(null);
         Picasso.with(context).load(url).into(imageView);

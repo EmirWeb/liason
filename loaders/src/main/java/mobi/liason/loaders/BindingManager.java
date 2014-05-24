@@ -47,7 +47,7 @@ public class BindingManager implements LoaderCallbacks<Cursor> {
     }
 
     public void addBindDefinition(final BindDefinition bindDefinition){
-        final int id = bindDefinition.getId();
+        final int id = bindDefinition.getId(mContext);
         mIdToBindDefinitionMap.put(id, bindDefinition);
         if (mHasStarted){
             startLoader(id);
@@ -57,11 +57,11 @@ public class BindingManager implements LoaderCallbacks<Cursor> {
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         final BindDefinition bindDefinition = mIdToBindDefinitionMap.get(id);
-        final Uri uri = bindDefinition.getUri();
-        final String[] projection = bindDefinition.getProjection();
-        final String selection = bindDefinition.getSelection();
-        final String[] selectionArguments = bindDefinition.getSelectionArguments();
-        final String sortOrder = bindDefinition.getSortOrder();
+        final Uri uri = bindDefinition.getUri(mContext);
+        final String[] projection = bindDefinition.getProjection(mContext);
+        final String selection = bindDefinition.getSelection(mContext);
+        final String[] selectionArguments = bindDefinition.getSelectionArguments(mContext);
+        final String sortOrder = bindDefinition.getSortOrder(mContext);
         final ForceLoadCursorLoader forceLoadCursorLoader = new ForceLoadCursorLoader(mContext, uri, projection, selection, selectionArguments, sortOrder);
         forceLoadCursorLoader.setUri(uri);
         final ContentObserver contentObserver = forceLoadCursorLoader.getForceLoadContentObserver();
@@ -74,13 +74,13 @@ public class BindingManager implements LoaderCallbacks<Cursor> {
     public void onLoadFinished(final Loader<Cursor> loader, final Cursor cursor) {
         cursor.moveToFirst();
         final BindDefinition bindDefinition = mLoaderToBindDefinitionMap.get(loader);
-        bindDefinition.onBind(cursor);
+        bindDefinition.onBind(mContext, cursor);
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         final BindDefinition bindDefinition = mLoaderToBindDefinitionMap.get(loader);
-        bindDefinition.onUnBind();
+        bindDefinition.onUnBind(mContext);
     }
 
     public void onStart(final Context context) {

@@ -5,7 +5,7 @@
     tools:context="mobi.liason.sample.ProductsActivity">
 
     <ListView
-        android:id="@+id/activity_products_list_view"
+        android:id="@+id/activity_products_adapter_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

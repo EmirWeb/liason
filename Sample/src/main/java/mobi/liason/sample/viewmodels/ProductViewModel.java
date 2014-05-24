@@ -20,9 +20,9 @@ import mobi.liason.sample.models.ProductTable;
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductsViewModel extends ViewModel {
+public class ProductViewModel extends ViewModel {
 
-    public static final String VIEW_NAME = "ProductsView";
+    public static final String VIEW_NAME = "ProductView";
 
     @Override
     public String getName(final Context context) {
@@ -36,28 +36,33 @@ public class ProductsViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        return ProductTable.TABLE_NAME;
+        return  ProductTable.TABLE_NAME;
     }
 
     @Override
     public List<Path> getPaths(Context context) {
-        return Lists.newArrayList(Paths.PRODUCTS_VIEW_MODEL);
+        return Lists.newArrayList(Paths.PRODUCT_VIEW_MODEL);
     }
 
     @Override
     public Cursor query(Context context, SQLiteDatabase sqLiteDatabase, Path path, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return super.query(context, sqLiteDatabase, path, uri, projection, selection, selectionArgs, sortOrder);
+        final String lastPathSegment = uri.getLastPathSegment();
+        final String overridenSelection = Columns._ID.getName() + "=?";
+        final String[] overridenSelectionArguments = {lastPathSegment};
+        final Cursor cursor = super.query(context, sqLiteDatabase, path, uri, projection, overridenSelection, overridenSelectionArguments, sortOrder);
+        return cursor;
     }
 
     public static class Columns {
         public static final ViewModelColumn _ID = new ViewModelColumn(VIEW_NAME, BaseColumns._ID, ProductTable.Columns.ID);
         public static final ViewModelColumn NAME = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.NAME);
-        public static final ViewModelColumn IMAGE_THUMB_URL = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.IMAGE_THUMB_URL);
-        public static final Column[] COLUMNS = new Column[]{_ID, NAME, IMAGE_THUMB_URL};
+        public static final ViewModelColumn IMAGE_URL = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.IMAGE_URL);
+        public static final ViewModelColumn DESCRIPTION = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.DESCRIPTION);
+        public static final Column[] COLUMNS = new Column[]{_ID, NAME, IMAGE_URL, DESCRIPTION};
     }
 
     public static class Paths {
-        public static final Path PRODUCTS_VIEW_MODEL = new Path(VIEW_NAME);
+        public static final Path PRODUCT_VIEW_MODEL = new Path(VIEW_NAME, "#");
     }
 
 

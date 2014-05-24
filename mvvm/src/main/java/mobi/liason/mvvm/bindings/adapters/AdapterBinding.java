@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 
 import com.google.common.collect.Lists;
@@ -13,96 +12,90 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobi.liason.loaders.BindDefinition;
+import mobi.liason.mvvm.database.ViewModelColumn;
 
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
 public abstract class AdapterBinding extends BindDefinition {
 
-    private final List<ItemTypeBinding> mItemTypeBindings;
+    private final List<AdapterItemBinding> mAdapterItemBindings;
     private final BindingCursorAdapter mAdapter;
-    private final String mTypeColumnName;
-    private final AdapterView<?> mAdapterView;
+    private final ViewModelColumn mTypeViewModelColumn;
+    private final AdapterView mAdapterView;
 
-    public AdapterBinding(final Context context, final View rootView, final int resourceId, final ItemTypeBinding itemTypeBinding) {
-        this(context, rootView, resourceId, null, Lists.newArrayList(itemTypeBinding));
+    public AdapterBinding(final Context context, final AdapterView adapterView) {
+        this(context, adapterView, null, new ArrayList<AdapterItemBinding>());
     }
 
-    public AdapterBinding(final Context context, final View rootView, final int resourceId, final String typeColumnName, final ItemTypeBinding itemTypeBinding) {
-        this(context, rootView, resourceId, typeColumnName, Lists.newArrayList(itemTypeBinding));
+    public AdapterBinding(final Context context, final AdapterView adapterView, final AdapterItemBinding adapterItemBinding) {
+        this(context, adapterView, null, Lists.newArrayList(adapterItemBinding));
+    }
+
+    public AdapterBinding(final Context context, final AdapterView adapterView, final List<AdapterItemBinding> adapterItemBindings) {
+        this(context, adapterView, null, adapterItemBindings);
     }
 
     public AdapterBinding(final Context context, final View rootView, final int resourceId) {
-        this(context, rootView, resourceId, null, new ArrayList<ItemTypeBinding>());
+        this(context, rootView, resourceId, null, new ArrayList<AdapterItemBinding>());
     }
 
-    public AdapterBinding(final Context context, final View rootView, final int resourceId, final String typeColumnName) {
-        this(context, rootView, resourceId, typeColumnName, new ArrayList<ItemTypeBinding>());
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final AdapterItemBinding adapterItemBinding) {
+        this(context, rootView, resourceId, null, Lists.newArrayList(adapterItemBinding));
     }
 
-    public AdapterBinding(final Context context, final View rootView, final int resourceId, final List<ItemTypeBinding> itemTypeBindings) {
-        this(context, rootView, resourceId, null, itemTypeBindings);
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final List<AdapterItemBinding> adapterItemBindings) {
+        this(context, rootView, resourceId, null, adapterItemBindings);
     }
 
-    public AdapterBinding(final Context context, final View rootView, final int resourceId, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
-        this(context, (AbsListView) rootView.findViewById(resourceId), typeColumnName, itemTypeBindings);
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final ViewModelColumn viewModelColumn) {
+        this(context, rootView, resourceId, viewModelColumn, new ArrayList<AdapterItemBinding>());
     }
 
-    public AdapterBinding(final Context context, final AbsListView adapterView) {
-        this(context, adapterView, null, new ArrayList<ItemTypeBinding>());
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final ViewModelColumn viewModelColumn, final AdapterItemBinding adapterItemBinding) {
+        this(context, rootView, resourceId, viewModelColumn, Lists.newArrayList(adapterItemBinding));
     }
 
-    public AdapterBinding(final Context context, final AbsListView adapterView, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
+    public AdapterBinding(final Context context, final View rootView, final int resourceId, final ViewModelColumn viewModelColumn, final List<AdapterItemBinding> adapterItemBindings) {
+        this(context, (AdapterView) rootView.findViewById(resourceId), viewModelColumn, adapterItemBindings);
+    }
+
+    public AdapterBinding(final Context context, final AdapterView adapterView, final ViewModelColumn viewModelColumn, final List<AdapterItemBinding> adapterItemBindings) {
         super(context);
         mAdapter = new BindingCursorAdapter(context, this);
-        mTypeColumnName = typeColumnName;
-        mItemTypeBindings = new ArrayList<ItemTypeBinding>(itemTypeBindings);
-        adapterView.setAdapter(mAdapter);
+        mTypeViewModelColumn = viewModelColumn;
+        mAdapterItemBindings = new ArrayList<AdapterItemBinding>(adapterItemBindings);
         mAdapterView = adapterView;
+        adapterView.setAdapter(mAdapter);
     }
 
-
-    public AdapterBinding(final Context context, final Activity rootView, final int resourceId) {
-        this(context, (AbsListView) rootView.findViewById(resourceId), null, new ArrayList<ItemTypeBinding>());
+    public void addItemBinding(final AdapterItemBinding adapterItemBinding) {
+        mAdapterItemBindings.add(adapterItemBinding);
     }
 
-    public AdapterBinding(final Context context, final Activity rootView, final int resourceId, final String typeColumnName, final List<ItemTypeBinding> itemTypeBindings) {
-        this(context, (AbsListView) rootView.findViewById(resourceId), typeColumnName, itemTypeBindings);
-    }
-
-    public void addItemBinding(final ItemTypeBinding itemTypeBinding) {
-        mItemTypeBindings.add(itemTypeBinding);
-    }
-
-    public void setItemBindings(final List<ItemTypeBinding> itemTypeBindings) {
-        mItemTypeBindings.clear();
-        mItemTypeBindings.addAll(itemTypeBindings);
+    public void setItemBindings(final List<AdapterItemBinding> adapterItemBindings) {
+        mAdapterItemBindings.clear();
+        mAdapterItemBindings.addAll(adapterItemBindings);
     }
 
     @Override
-    public void onBind(final Cursor cursor) {
+    public void onBind(final Context context, final Cursor cursor) {
         mAdapter.swapCursor(cursor);
     }
 
-    public ItemTypeBinding getItemTypeBinding(final int type) {
-        return mItemTypeBindings.get(type);
+    public AdapterItemBinding getItemTypeBinding(final int type) {
+        return mAdapterItemBindings.get(type);
     }
 
     public int getItemTypeCount() {
-        return Math.max(mItemTypeBindings.size(), 1);
+        return Math.max(mAdapterItemBindings.size(), 1);
     }
 
     public int getItemType(final Cursor cursor) {
-        if (mTypeColumnName == null) {
+        if (mTypeViewModelColumn == null) {
             return 0;
         }
 
-        final int typeColumnIndex = cursor.getColumnIndex(mTypeColumnName);
-        if (typeColumnIndex == -1) {
-            return 0;
-        }
-
-        final int type = cursor.getInt(typeColumnIndex);
-        return type;
+        return (Integer) mTypeViewModelColumn.getValue(cursor);
     }
 }

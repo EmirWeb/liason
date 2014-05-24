@@ -7,13 +7,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import mobi.liason.loaders.BindingManager;
 import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
 import mobi.liason.sample.bindings.ProductsAdapterBinding;
 import mobi.liason.sample.bindings.ProductsTaskStateBinding;
-import mobi.liason.sample.viewmodels.ProductsViewModel;
+import mobi.liason.sample.viewmodels.ProductViewModel;
 
 public class ProductsActivity extends Activity implements AdapterView.OnItemClickListener{
 
@@ -26,12 +25,13 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final Context context = getApplicationContext();
         final LoaderManager loaderManager = getLoaderManager();
         mBindingManager = new BindingManager(context, loaderManager);
-        final ListView listView = (ListView) findViewById(R.id.activity_products_list_view);
-        listView.setOnItemClickListener(this);
-        final AdapterBinding adapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_list_view);
-        final ProductsTaskStateBinding productsTaskStateBinding = new ProductsTaskStateBinding(this, R.id.activity_products_progress_bar, R.id.activity_products_list_view);
+        final AdapterView adapterView = (AdapterView) findViewById(R.id.activity_products_adapter_view);
+        adapterView.setOnItemClickListener(this);
 
+        final AdapterBinding adapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_adapter_view);
         mBindingManager.addBindDefinition(adapterBinding);
+
+        final ProductsTaskStateBinding productsTaskStateBinding = new ProductsTaskStateBinding(this);
         mBindingManager.addBindDefinition(productsTaskStateBinding);
     }
 
@@ -52,7 +52,7 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-        final long productId = (Long) ProductsViewModel.Columns._ID.getValue(cursor);
+        final long productId = (Long) ProductViewModel.Columns._ID.getValue(cursor);
         ProductActivity.startActivity(this, productId);
     }
 }

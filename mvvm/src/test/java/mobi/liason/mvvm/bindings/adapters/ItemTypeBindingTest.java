@@ -18,6 +18,7 @@ import java.util.Set;
 
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
 import mobi.liason.mvvm.bindings.TextBinder;
+import mobi.liason.mvvm.bindings.adapters.AdapterItemBinding;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
 import mobi.liason.mvvm.bindings.interfaces.ColumnBinding;
 import mobi.liason.mvvm.bindings.interfaces.ColumnResourceBinding;
@@ -39,72 +40,72 @@ public class ItemTypeBindingTest {
 
     @Test
     public void getLayoutResourceIdReturnsSameLayoutResourceIdPassedInConstructor(){
-        ItemTypeBinding itemTypeBinding = new ItemTypeBinding(1);
-        int layoutResourceId = itemTypeBinding.getLayoutResourceId();
+        AdapterItemBinding adapterItemBinding = new AdapterItemBinding(1);
+        int layoutResourceId = adapterItemBinding.getLayoutResourceId();
         assertThat(layoutResourceId).isEqualTo(1);
 
-        itemTypeBinding = new ItemTypeBinding(2, new TextBinder(0,"COLUMN_NAME"));
-        layoutResourceId = itemTypeBinding.getLayoutResourceId();
+        adapterItemBinding = new AdapterItemBinding(2, new TextBinder(0,"COLUMN_NAME"));
+        layoutResourceId = adapterItemBinding.getLayoutResourceId();
         assertThat(layoutResourceId).isEqualTo(2);
 
 
         final Set<Binding> bindings = new HashSet<Binding>();
         bindings.add(new TextBinder(0, "COLUMN_NAME_0"));
         bindings.add(new TextBinder(1, "COLUMN_NAME_1"));
-        itemTypeBinding = new ItemTypeBinding(2, bindings);
-        layoutResourceId = itemTypeBinding.getLayoutResourceId();
+        adapterItemBinding = new AdapterItemBinding(2, bindings);
+        layoutResourceId = adapterItemBinding.getLayoutResourceId();
         assertThat(layoutResourceId).isEqualTo(2);
     }
 
     @Test
     public void getResourceIdsReturnsResourceIdsPassedInConstructorViaBindings(){
-        ItemTypeBinding itemTypeBinding = new ItemTypeBinding(2, new TextBinder(0,"COLUMN_NAME"));
-        Set<Integer> resourceIds = itemTypeBinding.getResourceIds();
+        AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2, new TextBinder(0,"COLUMN_NAME"));
+        Set<Integer> resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0);
 
 
         final Set<Binding> bindings = new HashSet<Binding>();
         bindings.add(new TextBinder(0, "COLUMN_NAME_0"));
         bindings.add(new TextBinder(1, "COLUMN_NAME_1"));
-        itemTypeBinding = new ItemTypeBinding(2, bindings);
-        resourceIds = itemTypeBinding.getResourceIds();
+        adapterItemBinding = new AdapterItemBinding(2, bindings);
+        resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0, 1);
     }
 
     @Test
     public void getResourceIdsReturnsResourceIdsPassedInMethodViaBindings(){
-        ItemTypeBinding itemTypeBinding = new ItemTypeBinding(2);
-        itemTypeBinding.addBinding(new TextBinder(0,"COLUMN_NAME"));
+        AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
+        adapterItemBinding.addBinding(new TextBinder(0,"COLUMN_NAME"));
 
-        Set<Integer> resourceIds = itemTypeBinding.getResourceIds();
+        Set<Integer> resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0);
 
 
-        itemTypeBinding = new ItemTypeBinding(2);
-        itemTypeBinding.addBinding(new TextBinder(0, "COLUMN_NAME_0"));
-        itemTypeBinding.addBinding(new TextBinder(1, "COLUMN_NAME_1"));
+        adapterItemBinding = new AdapterItemBinding(2);
+        adapterItemBinding.addBinding(new TextBinder(0, "COLUMN_NAME_0"));
+        adapterItemBinding.addBinding(new TextBinder(1, "COLUMN_NAME_1"));
 
-        resourceIds = itemTypeBinding.getResourceIds();
+        resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0, 1);
     }
 
     @Test
     public void bindCallsAllCallbacksForColumnResourceBinding(){
         final Context context = Robolectric.getShadowApplication().getApplicationContext();
-        final ItemTypeBinding itemTypeBinding = new ItemTypeBinding(2);
+        final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ColumnResourceBinding mockColumnResourceBinding = mock(ColumnResourceBinding.class);
 
         when(mockColumnResourceBinding.getResourceIds()).thenReturn(Sets.newHashSet(0,1));
         when(mockColumnResourceBinding.getColumnNames()).thenReturn(Sets.newHashSet("COLUMN_1","COLUMN_2"));
 
-        itemTypeBinding.addBinding(mockColumnResourceBinding);
+        adapterItemBinding.addBinding(mockColumnResourceBinding);
 
         final Cursor mockCursor = mock(Cursor.class);
 
         final View mockView = mock(View.class);
         when(mockView.getTag(anyInt())).thenReturn(new TextView(context));
 
-        itemTypeBinding.bind(context, mockView, mockCursor);
+        adapterItemBinding.bind(context, mockView, mockCursor);
 
         final InOrder inOrder = inOrder(mockColumnResourceBinding);
         inOrder.verify(mockColumnResourceBinding).onBindStart(any(Context.class));
@@ -126,19 +127,19 @@ public class ItemTypeBindingTest {
     @Test
     public void bindCallsAllCallbacksForColumnBinding(){
         final Context context = Robolectric.getShadowApplication().getApplicationContext();
-        final ItemTypeBinding itemTypeBinding = new ItemTypeBinding(2);
+        final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ColumnBinding mockColumnBinding = mock(ColumnBinding.class);
 
         when(mockColumnBinding.getColumnNames()).thenReturn(Sets.newHashSet("COLUMN_1","COLUMN_2"));
 
-        itemTypeBinding.addBinding(mockColumnBinding);
+        adapterItemBinding.addBinding(mockColumnBinding);
 
         final Cursor mockCursor = mock(Cursor.class);
 
         final View mockView = mock(View.class);
         when(mockView.getTag(anyInt())).thenReturn(new TextView(context));
 
-        itemTypeBinding.bind(context, mockView, mockCursor);
+        adapterItemBinding.bind(context, mockView, mockCursor);
 
         final InOrder inOrder = inOrder(mockColumnBinding);
         inOrder.verify(mockColumnBinding).onBindStart(any(Context.class));
@@ -152,19 +153,19 @@ public class ItemTypeBindingTest {
     @Test
     public void bindCallsAllCallbacksForResourceBinding(){
         final Context context = Robolectric.getShadowApplication().getApplicationContext();
-        final ItemTypeBinding itemTypeBinding = new ItemTypeBinding(2);
+        final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ResourceBinding resourceBinding = mock(ResourceBinding.class);
 
         when(resourceBinding.getResourceIds()).thenReturn(Sets.newHashSet(0,1));
 
-        itemTypeBinding.addBinding(resourceBinding);
+        adapterItemBinding.addBinding(resourceBinding);
 
         final Cursor mockCursor = mock(Cursor.class);
 
         final View mockView = mock(View.class);
         when(mockView.getTag(anyInt())).thenReturn(new TextView(context));
 
-        itemTypeBinding.bind(context, mockView, mockCursor);
+        adapterItemBinding.bind(context, mockView, mockCursor);
 
         final InOrder inOrder = inOrder(resourceBinding);
         inOrder.verify(resourceBinding).onBindStart(any(Context.class));
@@ -178,18 +179,18 @@ public class ItemTypeBindingTest {
     @Test
     public void bindCallsAllCallbacksForDataBinding(){
         final Context context = Robolectric.getShadowApplication().getApplicationContext();
-        final ItemTypeBinding itemTypeBinding = new ItemTypeBinding(2);
+        final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final DataBinding mockDataBinding = mock(DataBinding.class);
 
 
-        itemTypeBinding.addBinding(mockDataBinding);
+        adapterItemBinding.addBinding(mockDataBinding);
 
         final Cursor mockCursor = mock(Cursor.class);
 
         final View mockView = mock(View.class);
         when(mockView.getTag(anyInt())).thenReturn(new TextView(context));
 
-        itemTypeBinding.bind(context, mockView, mockCursor);
+        adapterItemBinding.bind(context, mockView, mockCursor);
 
         final InOrder inOrder = inOrder(mockDataBinding);
         inOrder.verify(mockDataBinding).onBindStart(any(Context.class));

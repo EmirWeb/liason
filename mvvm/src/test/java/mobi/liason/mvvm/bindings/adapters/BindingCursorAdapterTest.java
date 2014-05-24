@@ -30,11 +30,11 @@ public class BindingCursorAdapterTest {
     @Test
     public void newViewOptimizesTags(){
         final Context context = Robolectric.getShadowApplication().getApplicationContext();
-        final ItemTypeBinding mockItemTypeBinding = mock(ItemTypeBinding.class);
-        when(mockItemTypeBinding.getResourceIds()).thenReturn(Sets.newHashSet(1,2));
+        final AdapterItemBinding mockAdapterItemBinding = mock(AdapterItemBinding.class);
+        when(mockAdapterItemBinding.getResourceIds()).thenReturn(Sets.newHashSet(1,2));
 
         final AdapterBinding mockAdapterBinding = mock(AdapterBinding.class);
-        when(mockAdapterBinding.getItemTypeBinding(anyInt())).thenReturn(mockItemTypeBinding);
+        when(mockAdapterBinding.getItemTypeBinding(anyInt())).thenReturn(mockAdapterItemBinding);
 
         final View mockView = mock(View.class);
 
@@ -61,17 +61,17 @@ public class BindingCursorAdapterTest {
     public void newViewInflatesCorrectView(){
         final Context context = Robolectric.getShadowApplication().getApplicationContext();
 
-        final ItemTypeBinding mockItemTypeBinding1 = mock(ItemTypeBinding.class);
-        when(mockItemTypeBinding1.getResourceIds()).thenReturn(Sets.newHashSet(0));
-        when(mockItemTypeBinding1.getLayoutResourceId()).thenReturn(0);
+        final AdapterItemBinding mockAdapterItemBinding1 = mock(AdapterItemBinding.class);
+        when(mockAdapterItemBinding1.getResourceIds()).thenReturn(Sets.newHashSet(0));
+        when(mockAdapterItemBinding1.getLayoutResourceId()).thenReturn(0);
 
-        final ItemTypeBinding mockItemTypeBinding2 = mock(ItemTypeBinding.class);
-        when(mockItemTypeBinding2.getResourceIds()).thenReturn(Sets.newHashSet(1));
-        when(mockItemTypeBinding2.getLayoutResourceId()).thenReturn(1);
+        final AdapterItemBinding mockAdapterItemBinding2 = mock(AdapterItemBinding.class);
+        when(mockAdapterItemBinding2.getResourceIds()).thenReturn(Sets.newHashSet(1));
+        when(mockAdapterItemBinding2.getLayoutResourceId()).thenReturn(1);
 
         final AdapterBinding mockAdapterBinding = mock(AdapterBinding.class);
-        when(mockAdapterBinding.getItemTypeBinding(0)).thenReturn(mockItemTypeBinding1);
-        when(mockAdapterBinding.getItemTypeBinding(1)).thenReturn(mockItemTypeBinding2);
+        when(mockAdapterBinding.getItemTypeBinding(0)).thenReturn(mockAdapterItemBinding1);
+        when(mockAdapterBinding.getItemTypeBinding(1)).thenReturn(mockAdapterItemBinding2);
         when(mockAdapterBinding.getItemType(any(Cursor.class))).thenReturn(1);
 
 

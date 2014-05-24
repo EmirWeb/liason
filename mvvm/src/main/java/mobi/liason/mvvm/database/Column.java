@@ -47,7 +47,15 @@ public class Column {
     }
 
     public Object getValue(final Cursor cursor) {
+        if (cursor.getCount() == 0){
+            return null;
+        }
+
         final int columnIndex = cursor.getColumnIndex(mName);
+        if (columnIndex == -1){
+            return null;
+        }
+
         switch (mType) {
             case blob:
                 return cursor.getBlob(columnIndex);
@@ -82,5 +90,10 @@ public class Column {
                     return "TEXT";
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return mName;
     }
 }

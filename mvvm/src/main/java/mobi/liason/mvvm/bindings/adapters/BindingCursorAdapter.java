@@ -52,7 +52,7 @@ public class BindingCursorAdapter extends CursorAdapter {
         view.setTag(resourceId, view.findViewById(resourceId));
     }
 
-    private ItemTypeBinding getItemTypeBinding(final Cursor cursor) {
+    private AdapterItemBinding getItemTypeBinding(final Cursor cursor) {
         final int type = getItemViewType(cursor);
         return mAdapterBinding.getItemTypeBinding(type);
     }
@@ -60,11 +60,11 @@ public class BindingCursorAdapter extends CursorAdapter {
     @Override
     public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
         final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final ItemTypeBinding itemTypeBinding = getItemTypeBinding(cursor);
-        final int layoutResourceId = itemTypeBinding.getLayoutResourceId();
+        final AdapterItemBinding adapterItemBinding = getItemTypeBinding(cursor);
+        final int layoutResourceId = adapterItemBinding.getLayoutResourceId();
         final View rootView = layoutInflater.inflate(layoutResourceId, parent, false);
 
-        final Set<Integer> resourceIds = itemTypeBinding.getResourceIds();
+        final Set<Integer> resourceIds = adapterItemBinding.getResourceIds();
         for (final Integer resourceId : resourceIds) {
             optimize(rootView, resourceId);
         }
@@ -103,8 +103,8 @@ public class BindingCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(final View view, final Context context, final Cursor cursor) {
-        final ItemTypeBinding itemTypeBinding = getItemTypeBinding(cursor);
-        itemTypeBinding.bind(context, view, cursor);
+        final AdapterItemBinding adapterItemBinding = getItemTypeBinding(cursor);
+        adapterItemBinding.bind(context, view, cursor);
     }
 
 }
