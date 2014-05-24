@@ -21,11 +21,10 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
+import mobi.liason.mvvm.network.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
 import mobi.liason.sample.models.ProductTable;
-import mobi.liason.sample.viewmodels.ProductViewModel;
-import mobi.liason.mvvm.network.Task;
 import mobi.liason.sample.overrides.SampleUriUtilities;
 import mobi.liason.sample.viewmodels.ProductsViewModel;
 
@@ -37,13 +36,14 @@ public class ProductsTask extends Task {
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";
     public static final Gson GSON = new Gson();
+    public static final String PRODUCTS = "products";
 
     public ProductsTask(final Context context, final String authorty, final Uri uri) {
         super(context, authorty, uri);
     }
 
     @Override
-    protected void onExecuteTask(final Context context) throws Exception{
+    protected void onExecuteTask(final Context context) throws Exception {
         final Uri uri = SampleUriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCTS);
         final String url = uri.toString();
         final ProductsResponse productsResponse = getProductResponse(url);
@@ -55,7 +55,7 @@ public class ProductsTask extends Task {
         contentProviderOperations.add(deleteContentProviderOperation);
 
         final ArrayList<Product> products = productsResponse.getProducts();
-        for (final Product product : products){
+        for (final Product product : products) {
             final ContentValues contentValues = ProductTable.getContentValues(product);
             final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
             contentProviderOperations.add(insertContentProviderOperation);
@@ -71,7 +71,7 @@ public class ProductsTask extends Task {
         contentResolver.notifyChange(modelViewUri, null);
     }
 
-    private ProductsResponse getProductResponse(final String url){
+    private ProductsResponse getProductResponse(final String url) {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         try {
@@ -83,17 +83,17 @@ public class ProductsTask extends Task {
             HttpResponse response = httpclient.execute(request);
             inputStream = response.getEntity().getContent();
             inputStreamReader = new InputStreamReader(inputStream);
-            return  GSON.fromJson(inputStreamReader, ProductsResponse.class);
+            return GSON.fromJson(inputStreamReader, ProductsResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (inputStreamReader != null){
+            if (inputStreamReader != null) {
                 try {
                     inputStreamReader.close();
                 } catch (IOException e) {
                 }
             }
-            if (inputStream != null){
+            if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
@@ -104,6 +104,6 @@ public class ProductsTask extends Task {
     }
 
     public static class Paths {
-        public static final Path PRODUCTS = new Path("products");
+        public static final Path PRODUCTS = new Path(ProductsTask.PRODUCTS);
     }
 }

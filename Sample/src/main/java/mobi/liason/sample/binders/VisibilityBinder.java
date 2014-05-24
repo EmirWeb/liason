@@ -26,6 +26,7 @@ public class VisibilityBinder extends Binder {
     @Override
     public void onBind(Context context, View view, int resourceId, ViewModelColumn viewModelColumn, Object value) {
         final boolean isVisible = isVisible(viewModelColumn, value);
+
         if (isVisible) {
             view.setVisibility(View.VISIBLE);
         } else {

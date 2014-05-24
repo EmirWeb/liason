@@ -35,20 +35,27 @@ public class ProductTask extends Task {
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";
     public static final Gson GSON = new Gson();
+    public static final String PRODUCTS = "products";
 
     public ProductTask(final Context context, final String authorty, final Uri uri) {
         super(context, authorty, uri);
     }
 
     @Override
-    protected void onExecuteTask(final Context context) throws Exception{
-        final Uri uri = SampleUriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCTS);
+    protected void onExecuteTask(final Context context) throws Exception {
+        final Uri modelViewUri = getUri();
+        final String idString = modelViewUri.getLastPathSegment();
+        final long id = Long.parseLong(idString);
+        final Uri uri = SampleUriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, id);
         final String url = uri.toString();
         final ProductResponse productResponse = getProductResponse(url);
         final Uri tableUri = SampleUriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
 
+        final String selection = ProductTable.Columns.ID.getName() + "=?";
+        final String[] selectionArguments = {idString};
+
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
-        final ContentProviderOperation deleteContentProviderOperation = ContentProviderOperation.newDelete(tableUri).build();
+        final ContentProviderOperation deleteContentProviderOperation = ContentProviderOperation.newDelete(tableUri).withSelection(selection, selectionArguments).build();
         contentProviderOperations.add(deleteContentProviderOperation);
 
         final Product product = productResponse.getProduct();
@@ -61,12 +68,10 @@ public class ProductTask extends Task {
 
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
-
-        final Uri modelViewUri = getUri();
         contentResolver.notifyChange(modelViewUri, null);
     }
 
-    private ProductResponse getProductResponse(final String url){
+    private ProductResponse getProductResponse(final String url) {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         try {
@@ -82,13 +87,13 @@ public class ProductTask extends Task {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (inputStreamReader != null){
+            if (inputStreamReader != null) {
                 try {
                     inputStreamReader.close();
                 } catch (IOException e) {
                 }
             }
-            if (inputStream != null){
+            if (inputStream != null) {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
@@ -99,6 +104,6 @@ public class ProductTask extends Task {
     }
 
     public static class Paths {
-        public static final Path PRODUCTS = new Path("products","#");
+        public static final Path PRODUCT = new Path(PRODUCTS, "#");
     }
 }

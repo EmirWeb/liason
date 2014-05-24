@@ -18,14 +18,13 @@ import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.models.ProductTable;
 import mobi.liason.sample.overrides.SampleTaskService;
 import mobi.liason.sample.tasks.ProductTask;
-import mobi.liason.sample.tasks.ProductsTask;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
 public class ProductTaskStateViewModel extends ViewModel {
 
-    public static final String VIEW_NAME = "ProductsTaskStateView";
+    public static final String VIEW_NAME = ProductTaskStateViewModel.class.getSimpleName();
 
     @Override
     public String getName(final Context context) {
@@ -39,12 +38,24 @@ public class ProductTaskStateViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        return TaskStateTable.TABLE_NAME + " WHERE " + TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() + " LIKE '%" + ProductsTask.Paths.PRODUCTS.getPath() + "/%'";
+        final String selection =
+                TaskStateTable.TABLE_NAME +
+                        " LEFT JOIN " +
+                        ProductTable.TABLE_NAME +
+                        " ON " +
+                        TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() +
+                        " LIKE " +
+                        "'%' || '" + ProductTask.PRODUCTS + "/' || " + ProductTable.Columns.ID.getName() + " || '%'" +
+                        " WHERE " +
+                        TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() +
+                        " LIKE " +
+                        "'%" + ProductTask.PRODUCTS + "/%'";
+        return selection;
     }
 
     @Override
     public List<Path> getPaths(Context context) {
-        return Lists.newArrayList(Paths.PRODUCTS_TASK_STATE);
+        return Lists.newArrayList(Paths.PRODUCT_TASK_STATE);
     }
 
     @Override
@@ -64,12 +75,13 @@ public class ProductTaskStateViewModel extends ViewModel {
     public static class Columns {
 
         public static final ViewModelColumn URI = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.URI);
+        public static final ViewModelColumn ID = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.ID);
         public static final ViewModelColumn STATE = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.STATE);
         public static final ViewModelColumn JSON = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.JSON);
 
         public static final String DATA_SELECTION = "CASE" +
                 " WHEN " +
-                "(SELECT COUNT(*) FROM " + ProductTable.TABLE_NAME + ") > 0" +
+                ID.getName() + " NOT NULL " +
                 " THEN " +
                 "'" + Boolean.toString(true) + "'" +
                 " ELSE " +
@@ -86,11 +98,11 @@ public class ProductTaskStateViewModel extends ViewModel {
 
         public static final ViewModelColumn IS_PROGRESS_BAR_VISIBLE = new ViewModelColumn(VIEW_NAME, "isProgressBarVisible", PROGRESS_BAR_SELECTION, Column.Type.text);
         public static final ViewModelColumn IS_DATA_VISIBLE = new ViewModelColumn(VIEW_NAME, "isDataVisible", DATA_SELECTION, Column.Type.text);
-        public static final Column[] COLUMNS = new Column[]{URI, STATE, JSON, IS_PROGRESS_BAR_VISIBLE, IS_DATA_VISIBLE};
+        public static final Column[] COLUMNS = new Column[]{ID, URI, STATE, JSON, IS_PROGRESS_BAR_VISIBLE, IS_DATA_VISIBLE};
     }
 
     public static class Paths {
-        public static final Path PRODUCTS_TASK_STATE = ProductTask.Paths.PRODUCTS;
+        public static final Path PRODUCT_TASK_STATE = ProductTask.Paths.PRODUCT;
     }
 
 }

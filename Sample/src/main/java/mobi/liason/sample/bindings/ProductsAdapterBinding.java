@@ -28,10 +28,10 @@ public class ProductsAdapterBinding extends ActivityAdapterBinding{
         final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(R.layout.list_item_product);
         addItemBinding(adapterItemBinding);
 
-        final Binding textBinding = new TextBinder(R.id.list_item_product_name, ProductViewModel.Columns.NAME);
+        final Binding textBinding = new TextBinder(R.id.list_item_product_name, ProductsViewModel.Columns.NAME);
         adapterItemBinding.addBinding(textBinding);
 
-        final Binding imageBinding = new ImageBinder(R.id.list_item_product_image, ProductViewModel.Columns.IMAGE_URL);
+        final Binding imageBinding = new ImageBinder(R.id.list_item_product_image, ProductsViewModel.Columns.IMAGE_THUMB_URL);
         adapterItemBinding.addBinding(imageBinding);
     }
 

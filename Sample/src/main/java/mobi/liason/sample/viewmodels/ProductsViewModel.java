@@ -22,7 +22,7 @@ import mobi.liason.sample.models.ProductTable;
  */
 public class ProductsViewModel extends ViewModel {
 
-    public static final String VIEW_NAME = "ProductsView";
+    public static final String VIEW_NAME = ProductsViewModel.class.getSimpleName();
 
     @Override
     public String getName(final Context context) {
@@ -36,7 +36,7 @@ public class ProductsViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        return ProductTable.TABLE_NAME;
+        return ProductTable.TABLE_NAME + " ORDER BY " + Columns.NAME.getName();
     }
 
     @Override

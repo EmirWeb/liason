@@ -36,7 +36,7 @@ public class SampleTaskService extends TaskService {
     public Map<Path, Class> getPathTaskMap(Context context) {
         final Map<Path, Class> mPathClassMap = new HashMap<Path, Class>();
         mPathClassMap.put(ProductsTask.Paths.PRODUCTS, ProductsTask.class);
-        mPathClassMap.put(ProductTask.Paths.PRODUCTS, ProductsTask.class);
+        mPathClassMap.put(ProductTask.Paths.PRODUCT, ProductTask.class);
         return mPathClassMap;
     }
 }

@@ -24,7 +24,7 @@ import mobi.liason.sample.tasks.ProductsTask;
  */
 public class ProductsTaskStateViewModel extends ViewModel {
 
-    public static final String VIEW_NAME = "ProductsTaskStateView";
+    public static final String VIEW_NAME = ProductsTaskStateViewModel.class.getSimpleName();
 
     @Override
     public String getName(final Context context) {

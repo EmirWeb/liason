@@ -18,7 +18,7 @@ import mobi.liason.mvvm.database.ModelColumn;
  */
 public class ProductTable extends Model {
 
-    public static final String TABLE_NAME = "ProductTable";
+    public static final String TABLE_NAME = ProductTable.class.getSimpleName();
 
     public static ContentValues getContentValues(final Product product) {
         final ContentValues contentValues = new ContentValues();
@@ -56,7 +56,6 @@ public class ProductTable extends Model {
 
     public static class Paths {
         public static final Path PRODUCT_TABLE = new Path(TABLE_NAME);
-
     }
 
 }

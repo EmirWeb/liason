@@ -56,6 +56,5 @@ public class Product {
         public static final String IMAGE_THUMB_URL = "image_thumb_url";
         public static final String IMAGE_URL = "image_url";
         public static final String DESCRIPTION = "description";
-
     }
 }

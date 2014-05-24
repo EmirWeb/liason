@@ -22,7 +22,7 @@ import mobi.liason.sample.models.ProductTable;
  */
 public class ProductViewModel extends ViewModel {
 
-    public static final String VIEW_NAME = "ProductView";
+    public static final String VIEW_NAME = ProductViewModel.class.getSimpleName();
 
     @Override
     public String getName(final Context context) {

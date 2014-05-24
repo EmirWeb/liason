@@ -1,10 +1,7 @@
 package mobi.liason.mvvm.bindings;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.view.View;
 
 import com.google.common.collect.Sets;
@@ -23,37 +20,37 @@ import mobi.liason.mvvm.database.ViewModelColumn;
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
-public abstract class ItemBinding extends BindDefinition{
+public abstract class ItemBinding extends BindDefinition {
 
     private View mRootView;
     private final Set<Binding> mBindings;
 
-    public ItemBinding(final Context context, final View rootView, final Binding binding){
+    public ItemBinding(final Context context, final View rootView, final Binding binding) {
         this(context, rootView, Sets.newHashSet(binding));
     }
 
-    public ItemBinding(final Context context, final View rootView){
+    public ItemBinding(final Context context, final View rootView) {
         this(context, rootView, new HashSet<Binding>());
     }
 
-    public ItemBinding(final Context context){
+    public ItemBinding(final Context context) {
         this(context, null, new HashSet<Binding>());
     }
 
-    public ItemBinding(final Context context, final View rootView, final Set<Binding> bindings){
+    public ItemBinding(final Context context, final View rootView, final Set<Binding> bindings) {
         super(context);
         mRootView = rootView;
         mBindings = bindings;
-        for (final Binding binding : bindings){
+        for (final Binding binding : bindings) {
             extractResourceIds(binding);
         }
     }
 
-    public void setRootView(final View rootView){
+    public void setRootView(final View rootView) {
         mRootView = rootView;
     }
 
-    public void addBinding(final Binding binding){
+    public void addBinding(final Binding binding) {
         mBindings.add(binding);
         extractResourceIds(binding);
     }
@@ -75,7 +72,7 @@ public abstract class ItemBinding extends BindDefinition{
     }
 
     public static void bind(final Context context, final Set<Binding> bindings, final View view, final Cursor cursor) {
-        for (final Binding binding : bindings){
+        for (final Binding binding : bindings) {
 
             binding.onBindStart(context);
 
