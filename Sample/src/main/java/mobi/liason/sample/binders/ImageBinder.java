@@ -16,14 +16,13 @@ import mobi.liason.mvvm.database.ViewModelColumn;
 public class ImageBinder extends Binder{
 
     public ImageBinder(int resourceId, ViewModelColumn viewModelColumn) {
-        super(resourceId,viewModelColumn.getName());
+        super(resourceId,viewModelColumn);
     }
 
-
     @Override
-    public void onBind(Context context, Cursor cursor, View view, int resourceId, int columnIndex, String columnName) {
+    public void onBind(Context context, View view, int resourceId, ViewModelColumn viewModelColumn, Object value) {
         final ImageView imageView =(ImageView) view;
-        final String url = cursor.getString(columnIndex);
+        final String url = (String) value;
         imageView.setImageBitmap(null);
         Picasso.with(context).load(url).into(imageView);
     }

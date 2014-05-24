@@ -4,29 +4,14 @@
     android:layout_height="match_parent"
     tools:context="mobi.liason.sample.ProductsActivity">
 
-
-    <ImageView
-        android:id="@+id/activity_product_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/activity_product_name"
+    <ListView
+        android:id="@+id/activity_products_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/activity_product_image"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/activity_product_description"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/activity_product_name"
         android:visibility="gone" />
 
     <ProgressBar
-        android:id="@+id/activity_product_progress_bar"
+        android:id="@+id/activity_products_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"

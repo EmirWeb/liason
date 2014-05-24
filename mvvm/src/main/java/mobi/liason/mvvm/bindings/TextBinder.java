@@ -18,21 +18,17 @@ public class TextBinder extends Binder {
     private static final boolean DEFAULT_IS_GONE = false;
 
     public TextBinder(final int resourceId, final ViewModelColumn viewModelColumn) {
-        this(resourceId, viewModelColumn.getName(), DEFAULT_IS_GONE);
+        this(resourceId, viewModelColumn, DEFAULT_IS_GONE);
     }
 
-    public TextBinder(final int resourceId, final String columnName) {
-        this(resourceId, columnName, DEFAULT_IS_GONE);
-    }
-
-    public TextBinder(final int resourceId, final String columnName, final boolean isGone) {
-        super(resourceId, columnName);
+    public TextBinder(final int resourceId, final ViewModelColumn viewModelColumn, final boolean isGone) {
+        super(resourceId, viewModelColumn);
         mIsGone = isGone;
     }
 
     @Override
-    public void onBind(Context context, Cursor cursor, final View view, int resourceId, int columnIndex, String columnName) {
-        final String string = cursor.getString(columnIndex);
+    public void onBind(final Context context, final View view, final int resourceId, final ViewModelColumn viewModelColumn, final Object value) {
+        final String string = (String) value;
         final boolean isVisible = string != null;
         if (isVisible) {
             final TextView textView = (TextView) view;

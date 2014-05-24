@@ -183,4 +183,7 @@ public abstract class Task implements Runnable {
 
     protected abstract void onExecuteTask(final Context context) throws Exception;
 
+    public Uri getUri() {
+        return mUri;
+    }
 }

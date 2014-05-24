@@ -11,6 +11,7 @@ import java.util.Map;
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.network.TaskService;
 import mobi.liason.sample.R;
+import mobi.liason.sample.tasks.ProductTask;
 import mobi.liason.sample.tasks.ProductsTask;
 
 /**
@@ -35,6 +36,7 @@ public class SampleTaskService extends TaskService {
     public Map<Path, Class> getPathTaskMap(Context context) {
         final Map<Path, Class> mPathClassMap = new HashMap<Path, Class>();
         mPathClassMap.put(ProductsTask.Paths.PRODUCTS, ProductsTask.class);
+        mPathClassMap.put(ProductTask.Paths.PRODUCTS, ProductsTask.class);
         return mPathClassMap;
     }
 }

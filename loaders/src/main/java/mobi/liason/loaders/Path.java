@@ -80,4 +80,29 @@ public class Path {
         return TextUtils.join("/", pathSegments);
     }
 
+
+    @Override
+    public boolean equals(final Object object) {
+        if (object == null || !(object instanceof Path)){
+            return false;
+        }
+
+        final Path path = (Path) object;
+
+        if (!mPath.equals(path.mPath)){
+            return false;
+        }
+
+        if (mPathSegments.size() != path.mPathSegments.size()){
+            return false;
+        }
+
+        for (int index = 0; index < mPathSegments.size(); index++){
+            if (!mPathSegments.get(index).equals(path.mPathSegments.get(index))){
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

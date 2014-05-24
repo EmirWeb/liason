@@ -21,23 +21,23 @@ import java.net.URI;
 import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
+import mobi.liason.mvvm.network.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
 import mobi.liason.sample.models.ProductTable;
-import mobi.liason.sample.viewmodels.ProductsViewModel;
-import mobi.liason.mvvm.network.Task;
 import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.viewmodels.ProductsViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.
  */
-public class ProductsTask extends Task {
+public class ProductTask extends Task {
 
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";
     public static final Gson GSON = new Gson();
 
-    public ProductsTask(final Context context, final String authorty, final Uri uri) {
+    public ProductTask(final Context context, final String authorty, final Uri uri) {
         super(context, authorty, uri);
     }
 
@@ -45,20 +45,17 @@ public class ProductsTask extends Task {
     protected void onExecuteTask(final Context context) throws Exception{
         final Uri uri = SampleUriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCTS);
         final String url = uri.toString();
-        final ProductsResponse productsResponse = getProductResponse(url);
-
+        final ProductResponse productResponse = getProductResponse(url);
         final Uri tableUri = SampleUriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
 
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
         final ContentProviderOperation deleteContentProviderOperation = ContentProviderOperation.newDelete(tableUri).build();
         contentProviderOperations.add(deleteContentProviderOperation);
 
-        final ArrayList<Product> products = productsResponse.getProducts();
-        for (final Product product : products){
-            final ContentValues contentValues = ProductTable.getContentValues(product);
-            final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
-            contentProviderOperations.add(insertContentProviderOperation);
-        }
+        final Product product = productResponse.getProduct();
+        final ContentValues contentValues = ProductTable.getContentValues(product);
+        final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
+        contentProviderOperations.add(insertContentProviderOperation);
 
         final Resources resources = context.getResources();
         final String authority = resources.getString(R.string.authority);
@@ -66,11 +63,11 @@ public class ProductsTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
 
-        final Uri modelViewUri = SampleUriUtilities.getUri(context, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
+        final Uri modelViewUri = getUri();
         contentResolver.notifyChange(modelViewUri, null);
     }
 
-    private ProductsResponse getProductResponse(final String url){
+    private ProductResponse getProductResponse(final String url){
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         try {
@@ -82,7 +79,7 @@ public class ProductsTask extends Task {
             HttpResponse response = httpclient.execute(request);
             inputStream = response.getEntity().getContent();
             inputStreamReader = new InputStreamReader(inputStream);
-            return  GSON.fromJson(inputStreamReader, ProductsResponse.class);
+            return GSON.fromJson(inputStreamReader, ProductResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -103,6 +100,6 @@ public class ProductsTask extends Task {
     }
 
     public static class Paths {
-        public static final Path PRODUCTS = new Path("products");
+        public static final Path PRODUCTS = new Path("products","#");
     }
 }

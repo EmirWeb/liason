@@ -1,5 +1,7 @@
 package mobi.liason.mvvm.database;
 
+import android.database.Cursor;
+
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
@@ -44,6 +46,22 @@ public class Column {
         return stringBuilder.toString();
     }
 
+    public Object getValue(final Cursor cursor) {
+        final int columnIndex = cursor.getColumnIndex(mName);
+        switch (mType) {
+            case blob:
+                return cursor.getBlob(columnIndex);
+            case integer:
+                return cursor.getLong(columnIndex);
+            case real:
+                return cursor.getFloat(columnIndex);
+            case text:
+            default:
+                return cursor.getString(columnIndex);
+
+        }
+    }
+
     public String getSqlName() {
         return mSqlName;
     }
@@ -51,8 +69,8 @@ public class Column {
     public static enum Type {
         text, integer, blob, real;
 
-        public static String getSqlType(final Type type){
-            switch (type){
+        public static String getSqlType(final Type type) {
+            switch (type) {
                 case blob:
                     return "BLOB";
                 case integer:

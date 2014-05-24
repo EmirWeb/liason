@@ -7,5 +7,7 @@ import android.content.Context;
  */
 public interface Binding {
     public void onBindStart(final Context context);
+
     public void onBindEnd(final Context context);
+
 }

@@ -6,15 +6,23 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.view.View;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
+import java.util.Set;
+
 import mobi.liason.loaders.BindDefinition;
+import mobi.liason.mvvm.bindings.Binder;
+import mobi.liason.mvvm.database.ViewModelColumn;
 import mobi.liason.mvvm.utilities.IdCreator;
+import mobi.liason.sample.R;
 import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
 import mobi.liason.sample.overrides.SampleUriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
  */
-public class ProductsTaskStateBinding extends BindDefinition {
+public class ProductsTaskStateBinding extends Binder {
 
     private static final int ID = IdCreator.getStaticId();
     private final Context mContext;
@@ -22,7 +30,7 @@ public class ProductsTaskStateBinding extends BindDefinition {
     private final View mProgressBar;
 
     public ProductsTaskStateBinding(final Activity activity, final int progressBarResourceId, final int dataResourceId){
-        super(activity.getApplicationContext());
+        super(Sets.newHashSet(R.id.activity_products_progress_bar, R.id.activity_products_list_view), Sets.newHashSet(ProductsTaskStateViewModel.Columns.IS_DATA_VISIBLE, ProductsTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE));
         mContext = activity.getApplicationContext();
         mProgressBar = activity.findViewById(progressBarResourceId);
         mDataView = activity.findViewById(dataResourceId);

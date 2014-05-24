@@ -11,5 +11,5 @@ import java.util.Set;
  */
 public interface ResourceBinding extends Binding {
     public Set<Integer> getResourceIds();
-    public void onBind(final Context context, final Cursor cursor, final View view, final int resourceId);
+    public void onBind(final Context context, final View view, final int resourceId);
 }

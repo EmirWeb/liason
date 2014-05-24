@@ -26,6 +26,7 @@ public class ProductTable extends Model {
         contentValues.put(Columns.NAME.getName(), product.getName());
         contentValues.put(Columns.IMAGE_THUMB_URL.getName(), product.getImageThumbUrl());
         contentValues.put(Columns.IMAGE_URL.getName(), product.getImageUrl());
+        contentValues.put(Columns.DESCRIPTION.getName(), product.getDescription());
         return contentValues;
     }
 
@@ -49,11 +50,13 @@ public class ProductTable extends Model {
         public static final ModelColumn NAME = new ModelColumn(TABLE_NAME, Product.Fields.NAME, ModelColumn.Type.text);
         public static final ModelColumn IMAGE_THUMB_URL = new ModelColumn(TABLE_NAME, Product.Fields.IMAGE_THUMB_URL, ModelColumn.Type.text);
         public static final ModelColumn IMAGE_URL = new ModelColumn(TABLE_NAME, Product.Fields.IMAGE_URL, ModelColumn.Type.text);
-        public static final Column[] COLUMNS = new Column[]{ID, NAME, IMAGE_THUMB_URL, IMAGE_URL};
+        public static final ModelColumn DESCRIPTION = new ModelColumn(TABLE_NAME, Product.Fields.DESCRIPTION, ModelColumn.Type.text);
+        public static final Column[] COLUMNS = new Column[]{ID, NAME, IMAGE_THUMB_URL, IMAGE_URL, DESCRIPTION};
     }
 
     public static class Paths {
         public static final Path PRODUCT_TABLE = new Path(TABLE_NAME);
+
     }
 
 }

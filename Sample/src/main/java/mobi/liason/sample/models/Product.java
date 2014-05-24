@@ -19,11 +19,15 @@ public class Product {
     @SerializedName(Fields.IMAGE_URL)
     private final String mImageUrl;
 
-    public Product(final Long id, final String name, final String imageThumbUrl, final String imageUrl) {
+    @SerializedName(Fields.DESCRIPTION)
+    private final String mDescription;
+
+    public Product(final Long id, final String name, final String imageThumbUrl, final String imageUrl, final String description) {
         mId = id;
         mName = name;
         mImageThumbUrl = imageThumbUrl;
         mImageUrl = imageUrl;
+        mDescription = description;
     }
 
     public Long getId() {
@@ -32,6 +36,10 @@ public class Product {
 
     public String getName() {
         return mName;
+    }
+
+    public String getDescription() {
+        return mDescription;
     }
 
     public String getImageThumbUrl() {
@@ -47,5 +55,7 @@ public class Product {
         public static final String NAME = "name";
         public static final String IMAGE_THUMB_URL = "image_thumb_url";
         public static final String IMAGE_URL = "image_url";
+        public static final String DESCRIPTION = "description";
+
     }
 }

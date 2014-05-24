@@ -36,7 +36,7 @@ public class ProductsAdapterBinding extends AdapterBinding {
 
     @Override
     public Uri getUri() {
-        return SampleUriUtilities.getUri(mContext, ProductsViewModel.Paths.PRODUCT_VIEW_MODEL);
+        return SampleUriUtilities.getUri(mContext, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
     }
 
     @Override

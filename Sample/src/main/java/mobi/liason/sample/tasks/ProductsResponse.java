@@ -9,17 +9,17 @@ import mobi.liason.sample.models.Product;
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductResponse {
+public class ProductsResponse {
 
     @SerializedName(Fields.RESULT)
-    private final Product mProduct;
+    private final ArrayList<Product> mProducts;
 
-    public ProductResponse(final Product product) {
-        mProduct = product;
+    public ProductsResponse(final ArrayList<Product> products) {
+        mProducts = products;
     }
 
-    public Product getProduct() {
-        return mProduct;
+    public ArrayList<Product> getProducts() {
+        return mProducts;
     }
 
 
