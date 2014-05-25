@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.callbacks;
+package mobi.liason.loaders;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -10,10 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-
-import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
-import mobi.liason.mvvm.bindings.BindDefinition;
-
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -30,55 +26,64 @@ public class BindingManagerTest {
     private BindingManager mBindingManager;
 
     @Before
-    public void setup(){
+    public void setup() {
         mLoaderManager = mock(LoaderManager.class);
         mBindingManager = new BindingManager(mContext, mLoaderManager);
     }
 
     @Test
-    public void onStartCallsInitLoaderTwice(){
-        mBindingManager.addBindDefinition(new MockBindDefinition());
-        mBindingManager.addBindDefinition(new MockBindDefinition());
+    public void onStartCallsInitLoaderTwice() {
+        mBindingManager.addBindDefinition(new MockBindDefinition(mContext));
+        mBindingManager.addBindDefinition(new MockBindDefinition(mContext){
+            @Override
+            public int getId(Context context) {
+                return 2;
+            }
+        });
         mBindingManager.onStart(mContext);
         verify(mLoaderManager, atLeast(2)).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
 
     @Test
-    public void addingDefinitionAfterStartedCallsInitLoaderTwice(){
+    public void addingDefinitionAfterStartedCallsInitLoaderTwice() {
         mBindingManager.onStart(mContext);
-        mBindingManager.addBindDefinition(new MockBindDefinition());
-        mBindingManager.addBindDefinition(new MockBindDefinition());
+        mBindingManager.addBindDefinition(new MockBindDefinition(mContext));
+        mBindingManager.addBindDefinition(new MockBindDefinition(mContext));
         verify(mLoaderManager, atLeast(2)).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
     @Test
-    public void addingDefinitionBeforeStartedDoesNotCallInit(){
-        mBindingManager.addBindDefinition(new MockBindDefinition());
-        mBindingManager.addBindDefinition(new MockBindDefinition());
+    public void addingDefinitionBeforeStartedDoesNotCallInit() {
+        mBindingManager.addBindDefinition(new MockBindDefinition(mContext));
+        mBindingManager.addBindDefinition(new MockBindDefinition(mContext));
         verify(mLoaderManager, never()).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
     @Test
-    public void onStartDoesNotCallInitLoader(){
+    public void onStartDoesNotCallInitLoader() {
         mBindingManager.onStart(mContext);
         verify(mLoaderManager, never()).initLoader(anyInt(), any(Bundle.class), any(LoaderManager.LoaderCallbacks.class));
     }
 
     public static class MockBindDefinition extends BindDefinition {
 
+        public MockBindDefinition(Context context) {
+            super(context);
+        }
+
         @Override
-        public void onBind(Cursor cursor) {
+        public void onBind(Context context, Cursor cursor) {
 
         }
 
         @Override
-        public Uri getUri() {
+        public Uri getUri(Context context) {
             return Uri.parse("http://parchment.mobi");
         }
 
         @Override
-        public int getId() {
+        public int getId(Context context) {
             return 1;
         }
     }

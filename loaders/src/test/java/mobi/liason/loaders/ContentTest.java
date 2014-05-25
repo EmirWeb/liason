@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.database;
+package mobi.liason.loaders;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -13,9 +13,6 @@ import org.mockito.Mock;
 import org.robolectric.Robolectric;
 
 import java.util.List;
-
-import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
-import mobi.liason.mvvm.providers.Path;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;

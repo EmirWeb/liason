@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.database;
+package mobi.liason.loaders;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,20 +12,18 @@ import org.robolectric.Robolectric;
 
 import java.util.List;
 
-import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
-import mobi.liason.mvvm.providers.Path;
-
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class DatabaseHelperTest {
 
-    @Mock SQLiteDatabase mSqLiteDatabase;
+    @Mock
+    SQLiteDatabase mSqLiteDatabase;
     final Context mContext = Robolectric.getShadowApplication().getApplicationContext();
 
     @Test
-    public void onCreateWithOneContentWritesSQLCorrectly(){
-        final DatabaseHelper databaseHelper = new DatabaseHelper(mContext, "TEST_DB", 1){
+    public void onCreateWithOneContentWritesSQLCorrectly() {
+        final DatabaseHelper databaseHelper = new DatabaseHelper(mContext, "TEST_DB", 1) {
             @Override
             public List<Content> getContent(Context context) {
                 final Content mockContent = new MockContent("EMIR");
@@ -38,8 +36,8 @@ public class DatabaseHelperTest {
     }
 
     @Test
-    public void onCreateWithMultipleContentWritesSQLCorrectly(){
-        final DatabaseHelper databaseHelper = new DatabaseHelper(mContext, "TEST_DB", 1){
+    public void onCreateWithMultipleContentWritesSQLCorrectly() {
+        final DatabaseHelper databaseHelper = new DatabaseHelper(mContext, "TEST_DB", 1) {
             @Override
             public List<Content> getContent(Context context) {
                 final Content mockContent = new MockContent("EMIR");
@@ -55,8 +53,8 @@ public class DatabaseHelperTest {
     }
 
     @Test
-    public void onUpgradeWithMultipleContentWritesSQLCorrectly(){
-        final DatabaseHelper databaseHelper = new DatabaseHelper(mContext, "TEST_DB", 1){
+    public void onUpgradeWithMultipleContentWritesSQLCorrectly() {
+        final DatabaseHelper databaseHelper = new DatabaseHelper(mContext, "TEST_DB", 1) {
             @Override
             public List<Content> getContent(Context context) {
                 final Content mockContent = new MockContent("EMIR");
@@ -65,7 +63,7 @@ public class DatabaseHelperTest {
             }
         };
 
-        databaseHelper.onUpgrade(mSqLiteDatabase, 0 , 1);
+        databaseHelper.onUpgrade(mSqLiteDatabase, 0, 1);
         verify(mSqLiteDatabase).execSQL("DROP TABLE EMIR;");
         verify(mSqLiteDatabase).execSQL("CREATE TABLE EMIR;");
         verify(mSqLiteDatabase).execSQL("DROP TABLE EMIR1;");
@@ -78,7 +76,7 @@ public class DatabaseHelperTest {
 
         public String mName;
 
-        public MockContent (final String name){
+        public MockContent(final String name) {
             mName = name;
         }
 

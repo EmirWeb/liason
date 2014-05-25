@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.providers;
+package mobi.liason.loaders;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,11 +11,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 
 import java.util.List;
-
-import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
-import mobi.liason.mvvm.database.Content;
-import mobi.liason.mvvm.database.DatabaseHelper;
-import mobi.liason.mvvm.database.ViewModel;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -31,7 +26,7 @@ public class ProviderTest {
 
     @Test
     public void queryingViewModel_callsQueryOnCorrectViewModel() {
-        final ViewModel mock = mock(ViewModel.class);
+        final Content mock = mock(Content.class);
         mMockDatabaseHelper.setContent(Lists.newArrayList((Content) mock));
         final Path path = new Path("PATH1", "PATH2");
         final List<Path> paths = Lists.newArrayList(path);
@@ -44,7 +39,7 @@ public class ProviderTest {
 
     @Test
     public void queryingViewModelWithValues_callsQueryOnCorrectViewModel() {
-        final ViewModel mock = mock(ViewModel.class);
+        final Content mock = mock(Content.class);
         mMockDatabaseHelper.setContent(Lists.newArrayList((Content) mock));
         final Path path = new Path("PATH1", "#", "PATH2");
         final List<Path> paths = Lists.newArrayList(path);

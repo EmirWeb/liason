@@ -1,6 +1,5 @@
 package mobi.liason.mvvm.bindings.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.view.View;

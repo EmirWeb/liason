@@ -10,8 +10,9 @@ import org.robolectric.Robolectric;
 
 import java.util.List;
 
+import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
-import mobi.liason.mvvm.providers.Path;
+
 
 import static org.fest.assertions.api.Assertions.assertThat;
 

@@ -1,11 +1,9 @@
-package mobi.liason.mvvm.providers;
+package mobi.liason.loaders;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-
-import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.fail;

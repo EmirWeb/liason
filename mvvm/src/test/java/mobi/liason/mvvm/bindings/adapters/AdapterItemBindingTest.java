@@ -24,10 +24,13 @@ import mobi.liason.mvvm.bindings.interfaces.ColumnBinding;
 import mobi.liason.mvvm.bindings.interfaces.ColumnResourceBinding;
 import mobi.liason.mvvm.bindings.interfaces.DataBinding;
 import mobi.liason.mvvm.bindings.interfaces.ResourceBinding;
+import mobi.liason.mvvm.database.Column;
+import mobi.liason.mvvm.database.ViewModelColumn;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -36,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunnerWithInjection.class)
-public class ItemTypeBindingTest {
+public class AdapterItemBindingTest {
 
     @Test
     public void getLayoutResourceIdReturnsSameLayoutResourceIdPassedInConstructor(){
@@ -44,14 +47,14 @@ public class ItemTypeBindingTest {
         int layoutResourceId = adapterItemBinding.getLayoutResourceId();
         assertThat(layoutResourceId).isEqualTo(1);
 
-        adapterItemBinding = new AdapterItemBinding(2, new TextBinder(0,"COLUMN_NAME"));
+        adapterItemBinding = new AdapterItemBinding(2, new TextBinder(0,new ViewModelColumn("TABLE_NAME", "COLUMN_NAME", Column.Type.text)));
         layoutResourceId = adapterItemBinding.getLayoutResourceId();
         assertThat(layoutResourceId).isEqualTo(2);
 
 
         final Set<Binding> bindings = new HashSet<Binding>();
-        bindings.add(new TextBinder(0, "COLUMN_NAME_0"));
-        bindings.add(new TextBinder(1, "COLUMN_NAME_1"));
+        bindings.add(new TextBinder(0, new ViewModelColumn("TABLE_NAME", "COLUMN_NAME_0", Column.Type.text)));
+        bindings.add(new TextBinder(1, new ViewModelColumn("TABLE_NAME", "COLUMN_NAME_1", Column.Type.text)));
         adapterItemBinding = new AdapterItemBinding(2, bindings);
         layoutResourceId = adapterItemBinding.getLayoutResourceId();
         assertThat(layoutResourceId).isEqualTo(2);
@@ -59,14 +62,14 @@ public class ItemTypeBindingTest {
 
     @Test
     public void getResourceIdsReturnsResourceIdsPassedInConstructorViaBindings(){
-        AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2, new TextBinder(0,"COLUMN_NAME"));
+        AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2, new TextBinder(0,new ViewModelColumn("TABLE_NAME", "COLUMN_NAME", Column.Type.text)));
         Set<Integer> resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0);
 
 
         final Set<Binding> bindings = new HashSet<Binding>();
-        bindings.add(new TextBinder(0, "COLUMN_NAME_0"));
-        bindings.add(new TextBinder(1, "COLUMN_NAME_1"));
+        bindings.add(new TextBinder(0, new ViewModelColumn("TABLE_NAME", "COLUMN_NAME_0", Column.Type.text)));
+        bindings.add(new TextBinder(1, new ViewModelColumn("TABLE_NAME", "COLUMN_NAME_1", Column.Type.text)));
         adapterItemBinding = new AdapterItemBinding(2, bindings);
         resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0, 1);
@@ -75,15 +78,15 @@ public class ItemTypeBindingTest {
     @Test
     public void getResourceIdsReturnsResourceIdsPassedInMethodViaBindings(){
         AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
-        adapterItemBinding.addBinding(new TextBinder(0,"COLUMN_NAME"));
+        adapterItemBinding.addBinding(new TextBinder(0,new ViewModelColumn("TABLE_NAME", "COLUMN_NAME", Column.Type.text)));
 
         Set<Integer> resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0);
 
 
         adapterItemBinding = new AdapterItemBinding(2);
-        adapterItemBinding.addBinding(new TextBinder(0, "COLUMN_NAME_0"));
-        adapterItemBinding.addBinding(new TextBinder(1, "COLUMN_NAME_1"));
+        adapterItemBinding.addBinding(new TextBinder(0, new ViewModelColumn("TABLE_NAME", "COLUMN_NAME_0", Column.Type.text)));
+        adapterItemBinding.addBinding(new TextBinder(1, new ViewModelColumn("TABLE_NAME", "COLUMN_NAME_1", Column.Type.text)));
 
         resourceIds = adapterItemBinding.getResourceIds();
         assertThat(resourceIds).containsExactly(0, 1);
@@ -96,7 +99,9 @@ public class ItemTypeBindingTest {
         final ColumnResourceBinding mockColumnResourceBinding = mock(ColumnResourceBinding.class);
 
         when(mockColumnResourceBinding.getResourceIds()).thenReturn(Sets.newHashSet(0,1));
-        when(mockColumnResourceBinding.getColumnNames()).thenReturn(Sets.newHashSet("COLUMN_1","COLUMN_2"));
+        final ViewModelColumn viewModelColumn1 = new ViewModelColumn("TABLE_NAME", "COLUMN_1", Column.Type.text);
+        final ViewModelColumn viewModelColumn2 = new ViewModelColumn("TABLE_NAME", "COLUMN_2", Column.Type.text);
+        when(mockColumnResourceBinding.getViewModelColumns()).thenReturn(Sets.newHashSet(viewModelColumn1, viewModelColumn2));
 
         adapterItemBinding.addBinding(mockColumnResourceBinding);
 
@@ -111,16 +116,16 @@ public class ItemTypeBindingTest {
         inOrder.verify(mockColumnResourceBinding).onBindStart(any(Context.class));
         inOrder.verify(mockColumnResourceBinding).onBindEnd(any(Context.class));
 
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(0));
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(1));
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(0));
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(1));
 
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(0), anyInt(), eq("COLUMN_1"));
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(0), anyInt(), eq("COLUMN_2"));
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(1), anyInt(), eq("COLUMN_1"));
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(1), anyInt(), eq("COLUMN_2"));
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(0), eq(viewModelColumn1), anyObject());
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(0), eq(viewModelColumn2), anyObject());
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(1), eq(viewModelColumn1), anyObject());
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(1), eq(viewModelColumn2), anyObject());
 
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), anyInt(), eq("COLUMN_1"));
-        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), anyInt(), eq("COLUMN_2"));
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), eq(viewModelColumn1), anyObject());
+        verify(mockColumnResourceBinding, times(1)).onBind(any(Context.class), eq(viewModelColumn2), anyObject());
 
     }
 
@@ -130,7 +135,9 @@ public class ItemTypeBindingTest {
         final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ColumnBinding mockColumnBinding = mock(ColumnBinding.class);
 
-        when(mockColumnBinding.getColumnNames()).thenReturn(Sets.newHashSet("COLUMN_1","COLUMN_2"));
+        final ViewModelColumn viewModelColumn1 = new ViewModelColumn("TABLE_NAME", "COLUMN_1", Column.Type.text);
+        final ViewModelColumn viewModelColumn2 = new ViewModelColumn("TABLE_NAME", "COLUMN_2", Column.Type.text);
+        when(mockColumnBinding.getViewModelColumns()).thenReturn(Sets.newHashSet(viewModelColumn1, viewModelColumn2));
 
         adapterItemBinding.addBinding(mockColumnBinding);
 
@@ -145,8 +152,8 @@ public class ItemTypeBindingTest {
         inOrder.verify(mockColumnBinding).onBindStart(any(Context.class));
         inOrder.verify(mockColumnBinding).onBindEnd(any(Context.class));
 
-        verify(mockColumnBinding, times(1)).onBind(any(Context.class), any(Cursor.class), anyInt(), eq("COLUMN_1"));
-        verify(mockColumnBinding, times(1)).onBind(any(Context.class), any(Cursor.class), anyInt(), eq("COLUMN_2"));
+        verify(mockColumnBinding, times(1)).onBind(any(Context.class), eq(viewModelColumn1), anyObject());
+        verify(mockColumnBinding, times(1)).onBind(any(Context.class), eq(viewModelColumn2), anyObject());
 
     }
 
@@ -171,8 +178,8 @@ public class ItemTypeBindingTest {
         inOrder.verify(resourceBinding).onBindStart(any(Context.class));
         inOrder.verify(resourceBinding).onBindEnd(any(Context.class));
 
-        verify(resourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(0));
-        verify(resourceBinding, times(1)).onBind(any(Context.class), any(Cursor.class), any(View.class), eq(1));
+        verify(resourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(0));
+        verify(resourceBinding, times(1)).onBind(any(Context.class), any(View.class), eq(1));
 
     }
 

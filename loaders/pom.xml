@@ -3,11 +3,11 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>mobi.liason</groupId>
-    <artifactId>mvvm</artifactId>
+    <artifactId>loaders</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
-    <name>Liason - MVVM</name>
-    <description>MVVM library</description>
+    <name>Liason - Loaders</name>
+    <description>Loaders library</description>
     <url>liason.mobi</url>
 
     <parent>
@@ -98,12 +98,6 @@
             <artifactId>fest-android</artifactId>
             <version>1.0.7</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>mobi.liason</groupId>
-            <artifactId>loaders</artifactId>
-            <version>0.0.1</version>
         </dependency>
     </dependencies>
 
