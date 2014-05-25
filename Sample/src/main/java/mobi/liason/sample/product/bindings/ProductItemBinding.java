@@ -1,4 +1,4 @@
-package mobi.liason.sample.bindings;
+package mobi.liason.sample.product.bindings;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +11,7 @@ import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ImageBinder;
 import mobi.liason.sample.overrides.SampleUriUtilities;
-import mobi.liason.sample.viewmodels.ProductViewModel;
+import mobi.liason.sample.product.viewmodels.ProductViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 24/05/14.

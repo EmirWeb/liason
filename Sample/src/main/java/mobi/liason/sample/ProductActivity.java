@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import mobi.liason.loaders.BindingManager;
-import mobi.liason.sample.bindings.ProductItemBinding;
-import mobi.liason.sample.bindings.ProductTaskStateBinding;
+import mobi.liason.sample.product.bindings.ProductItemBinding;
+import mobi.liason.sample.product.bindings.ProductTaskStateBinding;
 
 public class ProductActivity extends Activity {
 

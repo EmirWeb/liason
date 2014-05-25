@@ -1,4 +1,4 @@
-package mobi.liason.sample.viewmodels;
+package mobi.liason.sample.product.viewmodels;
 
 import android.content.Context;
 import android.database.Cursor;

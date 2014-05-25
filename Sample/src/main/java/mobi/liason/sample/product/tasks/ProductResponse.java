@@ -1,4 +1,4 @@
-package mobi.liason.sample.tasks;
+package mobi.liason.sample.product.tasks;
 
 import com.google.gson.annotations.SerializedName;
 

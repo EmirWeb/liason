@@ -9,10 +9,10 @@ import mobi.liason.loaders.Content;
 import mobi.liason.loaders.DatabaseHelper;
 import mobi.liason.mvvm.network.TaskStateTable;
 import mobi.liason.sample.models.ProductTable;
-import mobi.liason.sample.viewmodels.ProductTaskStateViewModel;
-import mobi.liason.sample.viewmodels.ProductViewModel;
-import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
-import mobi.liason.sample.viewmodels.ProductsViewModel;
+import mobi.liason.sample.product.viewmodels.ProductTaskStateViewModel;
+import mobi.liason.sample.product.viewmodels.ProductViewModel;
+import mobi.liason.sample.products.viewmodels.ProductsTaskStateViewModel;
+import mobi.liason.sample.products.viewmodels.ProductsViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.

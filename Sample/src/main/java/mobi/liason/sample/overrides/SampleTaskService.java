@@ -11,8 +11,8 @@ import java.util.Map;
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.network.TaskService;
 import mobi.liason.sample.R;
-import mobi.liason.sample.tasks.ProductTask;
-import mobi.liason.sample.tasks.ProductsTask;
+import mobi.liason.sample.product.tasks.ProductTask;
+import mobi.liason.sample.products.tasks.ProductsTask;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.

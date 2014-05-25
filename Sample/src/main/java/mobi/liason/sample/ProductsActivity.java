@@ -10,9 +10,9 @@ import android.widget.AdapterView;
 
 import mobi.liason.loaders.BindingManager;
 import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
-import mobi.liason.sample.bindings.ProductsAdapterBinding;
-import mobi.liason.sample.bindings.ProductsTaskStateBinding;
-import mobi.liason.sample.viewmodels.ProductViewModel;
+import mobi.liason.sample.products.bindings.ProductsAdapterBinding;
+import mobi.liason.sample.products.bindings.ProductsTaskStateBinding;
+import mobi.liason.sample.product.viewmodels.ProductViewModel;
 
 public class ProductsActivity extends Activity implements AdapterView.OnItemClickListener{
 

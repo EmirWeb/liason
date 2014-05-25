@@ -1,4 +1,4 @@
-package mobi.liason.sample.bindings;
+package mobi.liason.sample.products.bindings;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ProgressBarVisibilityBinder;
 import mobi.liason.sample.binders.VisibilityBinder;
 import mobi.liason.sample.overrides.SampleUriUtilities;
-import mobi.liason.sample.viewmodels.ProductsTaskStateViewModel;
+import mobi.liason.sample.products.viewmodels.ProductsTaskStateViewModel;
 
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
