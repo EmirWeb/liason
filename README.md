@@ -1,6 +1,8 @@
 Liason
 ===============================
 
+[![Build Status](https://travis-ci.org/EmirWeb/liason.svg?branch=master)](https://travis-ci.org/EmirWeb/liason)
+
 ## Library that uses Loaders to implement MVVM
 
 The following library automates the majority of the loader and MVVM flow to give developers easy access to the MVVM paradigm
