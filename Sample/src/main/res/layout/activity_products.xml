@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_products_pull_to_refresh_layout"
     tools:context="mobi.liason.sample.ProductsActivity">
 
     <ListView
@@ -10,12 +11,4 @@
         android:layout_height="match_parent"
         android:visibility="gone" />
 
-    <ProgressBar
-        android:id="@+id/activity_products_progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/apptheme_progress_indeterminate_horizontal_holo_light"
-        android:visibility="gone" />
-
-</RelativeLayout>
+</uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

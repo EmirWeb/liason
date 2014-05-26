@@ -12,11 +12,13 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
-import mobi.liason.mvvm.network.Task;
+import mobi.liason.mvvm.task.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
 import mobi.liason.sample.models.ProductTable;
 import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.product.viewmodels.ProductViewModel;
+import mobi.liason.sample.products.viewmodels.ProductsViewModel;
 import mobi.liason.sample.utilities.TaskUtilities;
 
 /**
@@ -26,7 +28,6 @@ public class ProductTask extends Task {
 
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";
-    public static final Gson GSON = new Gson();
     public static final String PRODUCTS = "products";
 
     public ProductTask(final Context context, final String authorty, final Uri uri) {
@@ -61,6 +62,9 @@ public class ProductTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
         contentResolver.notifyChange(uri, null);
+
+        final Uri productsViewModelUri = SampleUriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, id);
+        contentResolver.notifyChange(productsViewModelUri, null);
     }
 
     public static class Paths {

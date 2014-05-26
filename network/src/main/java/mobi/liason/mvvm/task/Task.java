@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.network;
+package mobi.liason.mvvm.task;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -141,7 +141,7 @@ public abstract class Task implements Runnable {
     }
 
     private boolean forceNetworkRequest(final Uri uri) {
-        final String forceRequestString = uri.getQueryParameter(TaskStateTable.QueryParameters.FORCE_TASK);
+        final String forceRequestString = uri.getQueryParameter(QueryParameters.FORCE_TASK);
         return forceRequestString != null && Boolean.parseBoolean(forceRequestString);
     }
 
@@ -186,4 +186,9 @@ public abstract class Task implements Runnable {
     public Uri getUri() {
         return mUri;
     }
+
+    public static final class QueryParameters {
+        public static final String FORCE_TASK = "forceTask";
+    }
+
 }

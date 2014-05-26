@@ -7,7 +7,7 @@ import java.util.List;
 
 import mobi.liason.loaders.Content;
 import mobi.liason.loaders.DatabaseHelper;
-import mobi.liason.mvvm.network.TaskStateTable;
+import mobi.liason.mvvm.task.TaskStateTable;
 import mobi.liason.sample.models.ProductTable;
 import mobi.liason.sample.product.viewmodels.ProductTaskStateViewModel;
 import mobi.liason.sample.product.viewmodels.ProductViewModel;

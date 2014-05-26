@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.network;
+package mobi.liason.mvvm.task;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -91,10 +91,6 @@ public class TaskStateTable extends Model {
         final String scheme = uri.getScheme();
         final String authority = uri.getAuthority();
         return UriUtilities.getUri(scheme, authority, Paths.TASK_STATE, uriString);
-    }
-
-    public static final class QueryParameters {
-        public static final String FORCE_TASK = "forceTask";
     }
 
     public static final class State {

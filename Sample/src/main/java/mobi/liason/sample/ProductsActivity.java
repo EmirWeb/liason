@@ -1,52 +1,61 @@
 package mobi.liason.sample;
 
 import android.app.Activity;
-import android.app.LoaderManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
-import mobi.liason.loaders.BindingManager;
+import mobi.liason.loaders.ActivityBindingManager;
 import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
+import mobi.liason.sample.overrides.SampleTaskService;
+import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.product.viewmodels.ProductViewModel;
 import mobi.liason.sample.products.bindings.ProductsAdapterBinding;
 import mobi.liason.sample.products.bindings.ProductsTaskStateBinding;
-import mobi.liason.sample.product.viewmodels.ProductViewModel;
+import mobi.liason.sample.products.tasks.ProductsTask;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class ProductsActivity extends Activity implements AdapterView.OnItemClickListener{
+public class ProductsActivity extends Activity implements AdapterView.OnItemClickListener, OnRefreshListener {
 
-    private BindingManager mBindingManager;
+    private ActivityBindingManager mActivityBindingManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
-        final Context context = getApplicationContext();
-        final LoaderManager loaderManager = getLoaderManager();
-        mBindingManager = new BindingManager(context, loaderManager);
+        mActivityBindingManager = new ActivityBindingManager(this);
         final AdapterView adapterView = (AdapterView) findViewById(R.id.activity_products_adapter_view);
         adapterView.setOnItemClickListener(this);
 
         final AdapterBinding adapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_adapter_view);
-        mBindingManager.addBindDefinition(adapterBinding);
+        mActivityBindingManager.addBindDefinition(adapterBinding);
 
         final ProductsTaskStateBinding productsTaskStateBinding = new ProductsTaskStateBinding(this);
-        mBindingManager.addBindDefinition(productsTaskStateBinding);
+        mActivityBindingManager.addBindDefinition(productsTaskStateBinding);
+
+        final PullToRefreshLayout pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.activity_products_pull_to_refresh_layout);
+        ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(this).setup(pullToRefreshLayout);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         final Context context = getApplicationContext();
-        mBindingManager.onStart(context);
+        mActivityBindingManager.onStart(context);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         final Context context = getApplicationContext();
-        mBindingManager.onStop(context);
+        mActivityBindingManager.onStop(context);
     }
 
     @Override
@@ -54,6 +63,13 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final Cursor cursor = (Cursor) parent.getItemAtPosition(position);
         final long productId = (Long) ProductViewModel.Columns._ID.getValue(cursor);
         ProductActivity.startActivity(this, productId);
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        final Context context = getApplicationContext();
+        final Uri uri = SampleUriUtilities.getUri(context, ProductsTask.Paths.PRODUCTS);
+        SampleTaskService.forceStartTask(this, uri);
     }
 }
 

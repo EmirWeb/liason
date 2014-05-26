@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.network;
+package mobi.liason.mvvm.task;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;

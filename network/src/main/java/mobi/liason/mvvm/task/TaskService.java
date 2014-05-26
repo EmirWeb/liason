@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.network;
+package mobi.liason.mvvm.task;
 
 import android.app.Service;
 import android.content.Context;
