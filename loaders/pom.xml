@@ -26,9 +26,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/EmirWeb/parchment</url>
-        <connection>scm:git:https://github.com/EmirWeb/parchment.git</connection>
-        <developerConnection>scm:git:https://github.com/EmirWeb/parchment.git</developerConnection>
+        <url>https://github.com/EmirWeb/liason</url>
+        <connection>scm:git:https://github.com/EmirWeb/liason.git</connection>
+        <developerConnection>scm:git:https://github.com/EmirWeb/liason.git</developerConnection>
     </scm>
 
     <developers>
