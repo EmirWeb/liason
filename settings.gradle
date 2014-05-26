@@ -1,1 +1,1 @@
-include ':mvvm', ':Sample', ':network', ':loaders'
+include ':mvvm', ':Sample', ':task', ':loaders'
