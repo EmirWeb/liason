@@ -152,7 +152,7 @@
                         ${project.basedir}/src/main/AndroidManifest.xml
                     </androidManifestFile>
                     <sdk>
-                        <platform>19</platform>
+                        <platform>18</platform>
                     </sdk>
                 </configuration>
             </plugin>
