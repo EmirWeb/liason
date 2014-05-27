@@ -26,5 +26,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.+'
     compile 'com.squareup.picasso:picasso:2.2.0'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
-    compile project(':network')
+    compile project(':task')
 }
