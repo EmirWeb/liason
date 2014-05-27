@@ -22,3 +22,6 @@ local.properties
 lint.xml
 project.properties
 .orig
+gradle/
+gradlew
+gradlew.bat
