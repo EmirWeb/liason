@@ -48,6 +48,11 @@
             <name>MavenCentral</name>
             <url>http://repo.maven.apache.org/maven2</url>
         </repository>
+        <repository>
+            <id>oss-sonatype</id>
+            <name>oss-sonatype</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
