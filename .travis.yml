@@ -6,8 +6,6 @@ android:
     - build-tools-19.0.1
 
 script: 
-    - (cd loaders && mvn clean install && cd ..)
-    - (cd mvvm && mvn clean install && cd ..)
-    - (cd task && mvn clean install && cd ..)
+    - (cd loaders && mvn clean test && cd ..)
 
 
