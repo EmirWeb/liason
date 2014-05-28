@@ -22,8 +22,6 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 public class ProductsActivity extends Activity implements AdapterView.OnItemClickListener, OnRefreshListener {
 
     private ActivityBindingManager mActivityBindingManager;
-    private ProductsAdapterBinding mProductsAdapterBinding;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +31,8 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final AdapterView adapterView = (AdapterView) findViewById(R.id.activity_products_adapter_view);
         adapterView.setOnItemClickListener(this);
 
-        mProductsAdapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_adapter_view);
-        mActivityBindingManager.addBindDefinition(mProductsAdapterBinding);
+        final ProductsAdapterBinding productsAdapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_adapter_view);
+        mActivityBindingManager.addBindDefinition(productsAdapterBinding);
 
         final ProductsTaskStateBinding productsTaskStateBinding = new ProductsTaskStateBinding(this);
         mActivityBindingManager.addBindDefinition(productsTaskStateBinding);
@@ -70,7 +68,6 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final Context context = getApplicationContext();
         final Uri uri = SampleUriUtilities.getUri(context, ProductsTask.Paths.PRODUCTS);
         SampleTaskService.forceStartTask(this, uri);
-        mProductsAdapterBinding.rebind();
     }
 }
 

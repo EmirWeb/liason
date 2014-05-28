@@ -481,6 +481,7 @@ public class NetowrkTaskStateViewModel extends ViewModel {
 }
 ```
 
+## Set up 8: Add ProgressBar to Activity
 ```xml
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -499,7 +500,7 @@ public class NetowrkTaskStateViewModel extends ViewModel {
 </FrameLayout>
 ```
 
-
+## Set up 9: Make new binding
 ```java
 public class NetworkTaskStateBinding extends ActivityItemBinding {
 
@@ -524,6 +525,25 @@ public class NetworkTaskStateBinding extends ActivityItemBinding {
     public int getId(final Context context) {
         return ID;
     }
+
+}
+```
+
+## Set up 10: Add Binding to Activity
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_products);
+    mActivityBindingManager = new ActivityBindingManager(this);
+    final AdapterView adapterView = (AdapterView) findViewById(R.id.activity_products_adapter_view);
+    adapterView.setOnItemClickListener(this);
+
+    final AdapterBinding adapterBinding = new SampleAdapterBinding(this, R.id.activity_adapter_view);
+    mActivityBindingManager.addBindDefinition(adapterBinding);
+
+    final NetworkTaskStateBinding networkStateBinding = new NetworkTaskStateBinding(this);
+    mActivityBindingManager.addBindDefinition(networkStateBinding);
 
 }
 ```

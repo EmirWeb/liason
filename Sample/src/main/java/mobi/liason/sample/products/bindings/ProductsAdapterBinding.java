@@ -21,9 +21,8 @@ public class ProductsAdapterBinding extends ActivityAdapterBinding{
     public ProductsAdapterBinding(final Activity activity, final int resourceId){
         super(activity, resourceId);
 
-        final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(R.layout.list_item_product);
+        final AdapterItemBinding adapterItemBinding = new ProductsAdapterItemBinding(R.layout.list_item_product);
         addItemBinding(adapterItemBinding);
-
 
     }
 
