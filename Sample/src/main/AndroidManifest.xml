@@ -24,6 +24,7 @@
 
         <provider
             android:name=".overrides.SampleProvider"
+            android:exported="false"
             android:authorities="@string/authority" />
 
         <service

@@ -46,10 +46,11 @@ public class BindingManager implements LoaderCallbacks<Cursor> {
         mContext = context;
     }
 
-    public void addBindDefinition(final BindDefinition bindDefinition){
+    public void addBindDefinition(final BindDefinition bindDefinition) {
         final int id = bindDefinition.getId(mContext);
         mIdToBindDefinitionMap.put(id, bindDefinition);
-        if (mHasStarted){
+        bindDefinition.setManager(this);
+        if (mHasStarted) {
             startLoader(id);
         }
     }
@@ -109,4 +110,17 @@ public class BindingManager implements LoaderCallbacks<Cursor> {
         }
     }
 
+    public void restartLoader(final BindDefinition bindDefinition) {
+        for (final BindDefinition idMappedBindDefinition : mIdToBindDefinitionMap.values()) {
+            if (bindDefinition == idMappedBindDefinition) {
+                for (final ForceLoadCursorLoader forceLoadCursorLoader : mLoaderToBindDefinitionMap.keySet()) {
+                    final BindDefinition loaderMappedBindDefinition = mLoaderToBindDefinitionMap.get(forceLoadCursorLoader);
+                    if (loaderMappedBindDefinition == bindDefinition){
+                        forceLoadCursorLoader.reset();
+                        return;
+                    }
+                }
+            }
+        }
+    }
 }

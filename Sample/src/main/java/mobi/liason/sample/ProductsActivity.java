@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import mobi.liason.loaders.ActivityBindingManager;
-import mobi.liason.mvvm.bindings.adapters.AdapterBinding;
 import mobi.liason.sample.overrides.SampleTaskService;
 import mobi.liason.sample.overrides.SampleUriUtilities;
 import mobi.liason.sample.product.viewmodels.ProductViewModel;
@@ -23,6 +22,7 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 public class ProductsActivity extends Activity implements AdapterView.OnItemClickListener, OnRefreshListener {
 
     private ActivityBindingManager mActivityBindingManager;
+    private ProductsAdapterBinding mProductsAdapterBinding;
 
 
     @Override
@@ -33,8 +33,8 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final AdapterView adapterView = (AdapterView) findViewById(R.id.activity_products_adapter_view);
         adapterView.setOnItemClickListener(this);
 
-        final AdapterBinding adapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_adapter_view);
-        mActivityBindingManager.addBindDefinition(adapterBinding);
+        mProductsAdapterBinding = new ProductsAdapterBinding(this, R.id.activity_products_adapter_view);
+        mActivityBindingManager.addBindDefinition(mProductsAdapterBinding);
 
         final ProductsTaskStateBinding productsTaskStateBinding = new ProductsTaskStateBinding(this);
         mActivityBindingManager.addBindDefinition(productsTaskStateBinding);
@@ -70,6 +70,7 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final Context context = getApplicationContext();
         final Uri uri = SampleUriUtilities.getUri(context, ProductsTask.Paths.PRODUCTS);
         SampleTaskService.forceStartTask(this, uri);
+        mProductsAdapterBinding.rebind();
     }
 }
 

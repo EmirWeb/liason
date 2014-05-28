@@ -10,6 +10,7 @@ import android.net.Uri;
 public abstract class BindDefinition {
 
     private final Context mContext;
+    private BindingManager mBindingManager;
 
     public BindDefinition(final Context context) {
         mContext = context;
@@ -56,4 +57,11 @@ public abstract class BindDefinition {
      */
     public abstract int getId(final Context context);
 
+    public void rebind() {
+        mBindingManager.restartLoader(this);
+    }
+
+    public void setManager(final BindingManager bindingManager) {
+        mBindingManager = bindingManager;
+    }
 }
