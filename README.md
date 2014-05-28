@@ -10,6 +10,16 @@ Android 4.0 +
 
 # Getting Started
 
+Watch:
+[Google IO talk about R.E.S.T. structure](http://tinyurl.com/restIO)
+
+Read:
+[Content Providers](http://tinyurl.com/androidproviders)
+
+Read:
+[Loaders](http://tinyurl.com/androidloaders)
+
+
 ## Step 1: Set up dependency
 Include the Parchment library in your pom.xml file as follows:
 ```xml
