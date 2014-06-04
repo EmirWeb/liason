@@ -8,6 +8,7 @@ import com.squareup.picasso.Picasso;
 
 import mobi.liason.mvvm.bindings.Binder;
 import mobi.liason.mvvm.database.ViewModelColumn;
+import mobi.liason.sample.R;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-23.
@@ -23,6 +24,6 @@ public class ImageBinder extends Binder {
         final ImageView imageView = (ImageView) view;
         final String url = (String) value;
         imageView.setImageBitmap(null);
-        Picasso.with(context).load(url).into(imageView);
+        Picasso.with(context).load(url).placeholder(R.drawable.list_item_product_image_not_found).into(imageView);
     }
 }

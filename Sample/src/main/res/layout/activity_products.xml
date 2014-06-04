@@ -1,14 +1,20 @@
 <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_products_pull_to_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_products_pull_to_refresh_layout"
+    android:background="@color/activity_background"
     tools:context="mobi.liason.sample.ProductsActivity">
 
     <ListView
         android:id="@+id/activity_products_adapter_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="@dimen/activity_products_list_view_padding"
+        android:padding="@dimen/activity_products_list_view_padding"
+        android:scrollbarStyle="outsideOverlay"
         android:visibility="gone" />
 
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

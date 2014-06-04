@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import mobi.liason.loaders.Path;
-import mobi.liason.mvvm.utilities.UriUtilities;
+import mobi.liason.loaders.UriUtilities;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.

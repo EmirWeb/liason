@@ -33,7 +33,7 @@ public class ProductTaskStateBinding extends ActivityItemBinding {
 
         final Set<Integer> dataResourceIds = new HashSet<Integer>();
         dataResourceIds.add(R.id.activity_product_image);
-        dataResourceIds.add(R.id.activity_product_description);
+        dataResourceIds.add(R.id.activity_product_tasting_note);
         dataResourceIds.add(R.id.activity_product_name);
 
         final VisibilityBinder dataVisibilityBinder = new VisibilityBinder(dataResourceIds, ProductTaskStateViewModel.Columns.IS_DATA_VISIBLE);

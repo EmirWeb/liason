@@ -22,12 +22,18 @@ public class Product {
     @SerializedName(Fields.DESCRIPTION)
     private final String mDescription;
 
-    public Product(final Long id, final String name, final String imageThumbUrl, final String imageUrl, final String description) {
+    @SerializedName(Fields.TASTING_NOTE)
+    private final String mTastingNote;
+
+
+
+    public Product(final Long id, final String name, final String imageThumbUrl, final String imageUrl, final String description, final String tastingNote) {
         mId = id;
         mName = name;
         mImageThumbUrl = imageThumbUrl;
         mImageUrl = imageUrl;
         mDescription = description;
+        mTastingNote = tastingNote;
     }
 
     public Long getId() {
@@ -50,11 +56,17 @@ public class Product {
         return mImageUrl;
     }
 
+    public String getTastingNote() {
+        return mTastingNote;
+    }
+
     public static class Fields {
         public static final String ID = "id";
         public static final String NAME = "name";
         public static final String IMAGE_THUMB_URL = "image_thumb_url";
         public static final String IMAGE_URL = "image_url";
         public static final String DESCRIPTION = "description";
+        public static final String TASTING_NOTE = "tasting_note";
+
     }
 }

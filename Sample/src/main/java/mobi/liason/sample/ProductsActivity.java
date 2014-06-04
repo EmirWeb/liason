@@ -40,6 +40,8 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         final PullToRefreshLayout pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.activity_products_pull_to_refresh_layout);
         ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(this).setup(pullToRefreshLayout);
 
+        getWindow().setBackgroundDrawable(null);
+
     }
 
     @Override

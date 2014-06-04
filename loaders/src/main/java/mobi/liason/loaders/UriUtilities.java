@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.utilities;
+package mobi.liason.loaders;
 
 import android.net.Uri;
 

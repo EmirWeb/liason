@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 
 import mobi.liason.loaders.Path;
-import mobi.liason.mvvm.utilities.UriUtilities;
+import mobi.liason.loaders.UriUtilities;
 import mobi.liason.sample.R;
 
 /**

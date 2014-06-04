@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:foreground="@drawable/list_item_product_background">
 
     <ImageView
         android:id="@+id/list_item_product_image"
         android:layout_width="@dimen/list_item_product_image_view_size"
-        android:layout_height="@dimen/list_item_product_image_view_size" />
+        android:layout_height="@dimen/list_item_product_image_view_size"
+        android:layout_gravity="left" />
 
     <TextView
         android:id="@+id/list_item_product_name"
-        android:layout_toRightOf="@id/list_item_product_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        style="@style/product_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/list_item_product_text_view_background"
+        android:gravity="center" />
 
-</RelativeLayout>
+</FrameLayout>
