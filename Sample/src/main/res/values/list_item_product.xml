@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="list_item_product_image_view_size">75dp</dimen>
+    <dimen name="activity_products_list_view_padding">10dp</dimen>
+    <dimen name="list_item_product_border_size">1px</dimen>
+    <dimen name="list_item_product_text_size">20sp</dimen>
+
+    <color name="list_item_product_border_color">@color/light_grey</color>
+    <color name="list_item_product_text_color">@color/dark_grey</color>
+    <color name="list_item_product_text_view_background">@color/activity_background</color>
 </resources>

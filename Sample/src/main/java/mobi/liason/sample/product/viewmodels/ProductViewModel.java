@@ -57,8 +57,8 @@ public class ProductViewModel extends ViewModel {
         public static final ViewModelColumn _ID = new ViewModelColumn(VIEW_NAME, BaseColumns._ID, ProductTable.Columns.ID);
         public static final ViewModelColumn NAME = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.NAME);
         public static final ViewModelColumn IMAGE_URL = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.IMAGE_URL);
-        public static final ViewModelColumn DESCRIPTION = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.DESCRIPTION);
-        public static final Column[] COLUMNS = new Column[]{_ID, NAME, IMAGE_URL, DESCRIPTION};
+        public static final ViewModelColumn TASTING_NOTE = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.TASTING_NOTE);
+        public static final Column[] COLUMNS = new Column[]{_ID, NAME, IMAGE_URL, TASTING_NOTE};
     }
 
     public static class Paths {

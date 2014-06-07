@@ -11,6 +11,7 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
 
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class BindingCursorAdapterTest {
 

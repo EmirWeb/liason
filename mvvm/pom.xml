@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mobi.liason</groupId>
     <artifactId>mvvm</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     <name>Liason - MVVM</name>
     <description>MVVM library</description>
@@ -94,8 +94,8 @@
 
         <dependency>
             <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>17.0</version>
+            <artifactId>guava-collections</artifactId>
+            <version>r03</version>
         </dependency>
 
         <dependency>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>mobi.liason</groupId>
             <artifactId>loaders</artifactId>
-            <version>0.0.1</version>
+            <version>[0.0.1,)</version>
         </dependency>
     </dependencies>
 
@@ -140,6 +140,30 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

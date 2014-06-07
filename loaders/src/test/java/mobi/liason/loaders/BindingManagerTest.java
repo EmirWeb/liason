@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -18,12 +19,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+@Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class BindingManagerTest {
 
     public LoaderManager mLoaderManager;
     public Context mContext = Robolectric.getShadowApplication().getApplicationContext();
     private BindingManager mBindingManager;
+
 
     @Before
     public void setup() {

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
+@Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class ContentTest {
 

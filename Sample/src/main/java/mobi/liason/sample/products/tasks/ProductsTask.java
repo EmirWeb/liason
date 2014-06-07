@@ -7,13 +7,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.task.Task;
-import mobi.liason.mvvm.utilities.UriUtilities;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
 import mobi.liason.sample.models.ProductTable;

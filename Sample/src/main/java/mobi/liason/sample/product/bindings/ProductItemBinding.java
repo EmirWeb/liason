@@ -27,7 +27,7 @@ public class ProductItemBinding extends ActivityItemBinding {
         final Binding nameTextBinding = new TextBinder(R.id.activity_product_name, ProductViewModel.Columns.NAME);
         addBinding(nameTextBinding);
 
-        final Binding descriptionTextBinding = new TextBinder(R.id.activity_product_description, ProductViewModel.Columns.DESCRIPTION);
+        final Binding descriptionTextBinding = new TextBinder(R.id.activity_product_tasting_note, ProductViewModel.Columns.TASTING_NOTE);
         addBinding(descriptionTextBinding);
 
         final Binding imageBinding = new ImageBinder(R.id.activity_product_image, ProductViewModel.Columns.IMAGE_URL);
