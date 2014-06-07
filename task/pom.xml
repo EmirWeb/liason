@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mobi.liason</groupId>
     <artifactId>task</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     <name>Liason - Task extension for MVVM</name>
     <description>Task library</description>
@@ -94,10 +94,10 @@
 
         <dependency>
             <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>17.0</version>
+            <artifactId>guava-collections</artifactId>
+            <version>r03</version>
         </dependency>
-
+        
         <dependency>
             <groupId>com.squareup</groupId>
             <artifactId>fest-android</artifactId>
@@ -108,7 +108,7 @@
         <dependency>
             <groupId>mobi.liason</groupId>
             <artifactId>mvvm</artifactId>
-            <version>0.0.1</version>
+            <version>[0.0.1,)</version>
         </dependency>
 
         <dependency>

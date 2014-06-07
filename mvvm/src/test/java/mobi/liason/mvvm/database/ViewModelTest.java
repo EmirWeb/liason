@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.annotation.Config;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
-
+@Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class ViewModelTest {
 
