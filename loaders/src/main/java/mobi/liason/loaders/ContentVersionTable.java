@@ -1,5 +1,6 @@
 package mobi.liason.loaders;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -58,6 +59,14 @@ public class ContentVersionTable extends Content {
         final String overridenSelection = Columns.NAME + "=?";
         final String[] overidenSelectionArguments = {contentName};
         return super.query(context, sqLiteDatabase, path, uri, projection, overridenSelection, overidenSelectionArguments, sortOrder);
+    }
+
+
+    @Override
+    public Uri insert(Context context, SQLiteDatabase sqLiteDatabase, Path path, Uri uri, ContentValues values) {
+        final String contentName = uri.getLastPathSegment();
+        values.put(Columns.NAME, contentName);
+        return super.insert(context, sqLiteDatabase, path, uri, values);
     }
 }
 

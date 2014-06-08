@@ -65,6 +65,9 @@ public class ProductViewModel extends ViewModel {
         public static final Path PRODUCT_VIEW_MODEL = new Path(VIEW_NAME, "#");
     }
 
-
+    @Override
+    public int getVersion(Context context) {
+        return 0;
+    }
 }
 

@@ -1,5 +1,6 @@
 package mobi.liason.loaders;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,41 +23,67 @@ public abstract class DatabaseHelper extends SQLiteOpenHelper {
         mContext = context;
     }
 
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        final SQLiteDatabase writableDatabase = super.getWritableDatabase();
+        return writableDatabase;
+    }
+
     public abstract List<Content> getContent(final Context context);
 
     @Override
     public void onOpen(final SQLiteDatabase sqLiteDatabase) {
+        if (sqLiteDatabase.isReadOnly()){
+            return;
+        }
+
+        final ContentVersionTable contentVersionTable = new ContentVersionTable();
+
         final List<Content> contentList = getContent(mContext);
         for (final Content content : contentList) {
             final int newVersion = content.getVersion(mContext);
 
-            if (newVersion == -1) {
-                content.onUpgrade(mContext, sqLiteDatabase, -1);
-            } else {
-                final String contentName = content.getName(mContext);
-                final Uri uri = UriUtilities.getUri(SCHEME, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
-                final String[] projection = {ContentVersionTable.Columns.VERSION};
-                final Cursor cursor = content.query(mContext, sqLiteDatabase, ContentVersionTable.Paths.PATH, uri, projection, null, null, null);
+            final String contentName = content.getName(mContext);
+            final Uri uri = UriUtilities.getUri(SCHEME, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
+            final String[] projection = {ContentVersionTable.Columns.VERSION};
+            final Cursor cursor = contentVersionTable.query(mContext, sqLiteDatabase, ContentVersionTable.Paths.PATH, uri, projection, null, null, null);
 
+            if (cursor.moveToFirst()) {
                 final int versionColumnIndex = cursor.getColumnIndex(ContentVersionTable.Columns.VERSION);
                 if (versionColumnIndex != -1) {
                     final int oldVersion = cursor.getInt(versionColumnIndex);
                     if (newVersion != oldVersion) {
                         content.onUpgrade(mContext, sqLiteDatabase, oldVersion);
+
+                        final ContentValues contentValues = new ContentValues();
+                        contentValues.put(ContentVersionTable.Columns.VERSION, newVersion);
+                        final Uri insertUri = contentVersionTable.insert(mContext, sqLiteDatabase, ContentVersionTable.Paths.PATH, uri, contentValues);
                     }
                 }
-                cursor.close();
             }
+            cursor.close();
+
         }
     }
 
     @Override
     public void onCreate(final SQLiteDatabase sqLiteDatabase) {
+        final ContentVersionTable contentVersionTable = new ContentVersionTable();
+        final String contentVersionTableCreate = contentVersionTable.getCreate(mContext);
+        sqLiteDatabase.execSQL(contentVersionTableCreate);
+
         final List<Content> contentList = getContent(mContext);
-        contentList.add(new ContentVersionTable());
         for (final Content content : contentList) {
             final String create = content.getCreate(mContext);
             sqLiteDatabase.execSQL(create);
+
+            final int newVersion = content.getVersion(mContext);
+            final String contentName = content.getName(mContext);
+            final Uri uri = UriUtilities.getUri(SCHEME, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
+            final ContentValues contentValues = new ContentValues();
+            contentValues.put(ContentVersionTable.Columns.VERSION, newVersion);
+            final Uri insertUri = contentVersionTable.insert(mContext, sqLiteDatabase, ContentVersionTable.Paths.PATH, uri, contentValues);
+
         }
     }
 

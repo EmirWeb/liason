@@ -50,12 +50,13 @@ public abstract class Content {
 
         final String authority = uri.getAuthority();
         final String scheme = uri.getScheme();
-        Uri.Builder builder = new Uri.Builder().scheme(scheme).authority(authority);
-        final List<String> pathSegments = path.getPathSegments();
-        for (final String pathSegment : pathSegments) {
-            builder = builder.appendPath(pathSegment);
+
+        try {
+            return UriUtilities.getUri(scheme, authority, path, id);
+        } catch (final Exception exception){
         }
-        final Uri insertUri = builder.build();
+
+        final Uri insertUri = UriUtilities.getUri(scheme, authority, path);
         return insertUri.buildUpon().appendPath(Long.toString(id)).build();
     }
 

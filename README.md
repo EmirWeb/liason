@@ -26,7 +26,7 @@ Include the Parchment library in your pom.xml file as follows:
 <dependency>
     <groupId>liason.mobi</groupId>
     <artifactId>task</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ or, to your build.gradle as follows:
 
 ```java
 dependencies {
-    compile 'mobi.liason:task:0.0.1'
+    compile 'mobi.liason:task:0.0.2'
 }
 ```
 

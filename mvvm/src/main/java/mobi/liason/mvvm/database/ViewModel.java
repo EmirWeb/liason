@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class ViewModel extends Model{
 
     private static final String CREATE = "CREATE VIEW IF NOT EXISTS %s AS SELECT %s FROM %s;";
-    private static final String DROP = "DROP TABLE IF EXISTS %s;";
+    private static final String DROP = "DROP VIEW IF EXISTS %s;";
     private static final int VERSION = -1;
 
     @Override
