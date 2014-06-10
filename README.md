@@ -1,13 +1,7 @@
 Liason
 ===============================
-
 Introduce enterprise grade structure to your application. Liason is a great tool for large teams, projects that  will be touched by a large number of developers and projects that will need to live in the store for a long period of time.
-
-## Requires
-Android 4.0 +
-
-# Getting Started
-
+## Getting Started
 ### pom.xml
 ```xml
 <dependency>
@@ -22,10 +16,18 @@ dependencies {
     compile 'mobi.liason:task:0.0.2'
 }
 ```
+### Requires
+Android 4.0 +
 
-### [Tutorials and Documentation](https://github.com/EmirWeb/liason/wiki)
 
-### External Resources
+
+## Resources
+
+Read:
+[Tutorials and Documentation](https://github.com/EmirWeb/liason/wiki)
+
+Read:
+[Presentation deck](https://docs.google.com/a/emirweb.com/presentation/d/1WvuQp3kk8gRHLGzpbPfpwRmMyJwId3h6RNvlEaqQIZ4/edit?pli=1#slide=id.g33cc3cf42_01629)
 
 Watch:
 [Google IO talk about R.E.S.T. structure](http://tinyurl.com/restIO)
