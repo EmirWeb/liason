@@ -1,9 +1,7 @@
 Liason
 ===============================
 
-## Library that uses Loaders to implement MVVM
-
-The following library automates the majority of the loader and MVVM flow to give developers easy access to the MVVM paradigm
+Introduce enterprise grade structure to your application. Liason is a great tool for large teams, projects that  will be touched by a large number of developers and projects that will need to live in the store for a long period of time.
 
 ## Requires
 Android 4.0 +
