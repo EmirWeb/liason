@@ -38,8 +38,8 @@ public abstract class Task implements Runnable {
 
     @Override
     public void run() {
-        final boolean shouldRunResult = shouldRunRequest();
-        if (!shouldRunResult) {
+        final boolean shouldRunRequest = shouldRunRequest();
+        if (!shouldRunRequest) {
             return;
         }
 

@@ -106,4 +106,20 @@ public abstract class TaskService extends Service {
         return null;
     }
 
+    public static void startTask(final Context context, final Uri uri, final Class klass) {
+        final String uriString = uri.toString();
+        final Intent intent = new Intent(context, klass);
+        intent.putExtra(EXTRAS.URI, uriString);
+        context.startService(intent);
+    }
+
+    public static void forceStartTask(final Context context, final Uri uri, final Class klass) {
+        final Uri forcedUri = uri.buildUpon().appendQueryParameter(Task.QueryParameters.FORCE_TASK, Boolean.toString(true)).build();
+        final String uriString = forcedUri.toString();
+        final Intent intent = new Intent(context, klass);
+        intent.putExtra(EXTRAS.URI, uriString);
+        context.startService(intent);
+    }
+
+
 }
