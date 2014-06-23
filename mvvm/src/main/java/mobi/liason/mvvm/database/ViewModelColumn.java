@@ -5,44 +5,44 @@ package mobi.liason.mvvm.database;
  */
 public class ViewModelColumn extends Column {
 
-    private final ModelColumn mModelColumn;
+    private final Column mColumn;
     private final String mCustomSelection;
 
     public ViewModelColumn(final String viewName, final String name, final Type type, final String stringType) {
         super(viewName, name, type, stringType);
-        mModelColumn = null;
+        mColumn = null;
         mCustomSelection = null;
     }
 
     public ViewModelColumn(final String viewName, final String name, final Type type) {
         super(viewName, name, type);
-        mModelColumn = null;
+        mColumn = null;
         mCustomSelection = null;
     }
 
-    public ViewModelColumn(final String viewName, final String name, final ModelColumn modelColumn) {
-        super(viewName, name, modelColumn.getType());
-        mModelColumn = modelColumn;
+    public ViewModelColumn(final String viewName, final String name, final Column column) {
+        super(viewName, name, column.getType());
+        mColumn = column;
         mCustomSelection = null;
     }
 
-    public ViewModelColumn(final String viewName, final ModelColumn modelColumn) {
-        super(viewName, modelColumn.getName(), modelColumn.getType());
-        mModelColumn = modelColumn;
+    public ViewModelColumn(final String viewName, final Column column) {
+        super(viewName, column.getName(), column.getType());
+        mColumn = column;
         mCustomSelection = null;
     }
 
     public ViewModelColumn(final String viewName, final String name, final String customSelection, final Type type) {
         super(viewName, name, type);
-        mModelColumn = null;
+        mColumn = null;
         mCustomSelection = customSelection;
     }
 
     @Override
     public String getColumnLine() {
-        if (mModelColumn != null) {
-            final String modelTableName = mModelColumn.getSqlName();
-            final String modelColumnName = mModelColumn.getName();
+        if (mColumn != null) {
+            final String modelTableName = mColumn.getSqlName();
+            final String modelColumnName = mColumn.getName();
 
 
             final StringBuilder stringBuilder = new StringBuilder();

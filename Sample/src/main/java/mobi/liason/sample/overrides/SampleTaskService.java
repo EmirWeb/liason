@@ -1,7 +1,6 @@
 package mobi.liason.sample.overrides;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 
@@ -9,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mobi.liason.loaders.Path;
-import mobi.liason.mvvm.task.Task;
 import mobi.liason.mvvm.task.TaskService;
 import mobi.liason.sample.R;
 import mobi.liason.sample.product.tasks.ProductTask;
