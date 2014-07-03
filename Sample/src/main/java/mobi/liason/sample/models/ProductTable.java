@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
@@ -46,6 +48,11 @@ public class ProductTable extends Model {
         return Lists.newArrayList(Paths.PRODUCT_TABLE);
     }
 
+    @Override
+    public Set<Column> getUniqueColumns(Context context) {
+        return Sets.newHashSet(Columns.UNIQUE);
+    }
+
     public static class Columns {
         public static final ModelColumn ID = new ModelColumn(TABLE_NAME, Product.Fields.ID, ModelColumn.Type.integer);
         public static final ModelColumn NAME = new ModelColumn(TABLE_NAME, Product.Fields.NAME, ModelColumn.Type.text);
@@ -54,6 +61,7 @@ public class ProductTable extends Model {
         public static final ModelColumn DESCRIPTION = new ModelColumn(TABLE_NAME, Product.Fields.DESCRIPTION, ModelColumn.Type.text);
         public static final ModelColumn TASTING_NOTE = new ModelColumn(TABLE_NAME, Product.Fields.TASTING_NOTE + "EEE", ModelColumn.Type.text);
         public static final Column[] COLUMNS = new Column[]{ID, NAME, IMAGE_THUMB_URL, IMAGE_URL, DESCRIPTION, TASTING_NOTE};
+        public static final Column[] UNIQUE = new Column[]{ID};
     }
 
     public static class Paths {

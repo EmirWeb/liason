@@ -3,6 +3,7 @@ package mobi.liason.mvvm.database;
 import android.content.Context;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
+import java.util.Set;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
@@ -37,6 +39,20 @@ public class ModelTest {
     }
 
     @Test
+    public void getCreateWithOneParameterAndUnique_returnsCorrectSqlTableCreationAndDrop(){
+        final MockModel mockModel = new MockModel("EMIR", new Path("PATH1", "PATH2"));
+        final ModelColumn modelColumn = new ModelColumn("CONTENT_NAME", "COLUMN_NAME", Column.Type.text);
+        mockModel.setModelColums(modelColumn);
+        mockModel.setUniqueModelColums(modelColumn);
+
+        final String sqlCreateQuery = mockModel.getCreate(mContext);
+        assertThat(sqlCreateQuery).isEqualTo("CREATE TABLE IF NOT EXISTS EMIR ( COLUMN_NAME TEXT, UNIQUE ( COLUMN_NAME ) ON CONFLICT REPLACE );");
+
+        final String sqlDropQuery = mockModel.getDrop(mContext);
+        assertThat(sqlDropQuery).isEqualTo("DROP TABLE IF EXISTS EMIR;");
+    }
+
+    @Test
     public void getCreateWithMultipleParameters_returnsCorrectSqlTableCreationAndDrop(){
         final MockModel mockModel = new MockModel("EMIR", new Path("PATH1", "PATH2"));
         final ModelColumn modelColumn = new ModelColumn("CONTENT_NAME", "COLUMN_NAME", Column.Type.text);
@@ -50,11 +66,14 @@ public class ModelTest {
         assertThat(sqlDropQuery).isEqualTo("DROP TABLE IF EXISTS EMIR;");
     }
 
+
+
     public static class MockModel extends  Model {
 
         public String mName;
         public List<Path> mPathSegments;
         private List<Column> mModelColums;
+        private Set<Column> mUniqueModelColums;
 
         public MockModel(String name, Path... pathSegments) {
             mName = name;
@@ -63,6 +82,10 @@ public class ModelTest {
 
         public void setModelColums(Column... modelColums){
             mModelColums = Lists.newArrayList(modelColums);
+        }
+
+        public void setUniqueModelColums(Column... modelColums){
+            mUniqueModelColums = Sets.newHashSet(modelColums);
         }
 
         @Override
@@ -78,6 +101,11 @@ public class ModelTest {
         @Override
         public List<Column> getColumns(Context context) {
             return mModelColums;
+        }
+
+        @Override
+        public Set<Column> getUniqueColumns(Context context) {
+            return mUniqueModelColums;
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import mobi.liason.loaders.Content;
 
@@ -15,12 +16,14 @@ public abstract class Model extends Content {
     private static final String CREATE = "CREATE TABLE IF NOT EXISTS %s ( %s );";
     private static final String DROP = "DROP TABLE IF EXISTS %s;";
     private static final int VERSION = -1;
+    private static final String UNIQUE = ", UNIQUE ( %s ) ON CONFLICT REPLACE";
 
     @Override
     public String getCreate(final Context context) {
         final String name = getName(context);
         final List<Column> columns = getColumns(context);
-        final String createColumns = createColumns(columns);
+        final Set<Column> uniqueColumns = getUniqueColumns(context);
+        final String createColumns = createColumns(columns, uniqueColumns);
         final String create = String.format(CREATE, name, createColumns);
         return create;
     }
@@ -32,6 +35,10 @@ public abstract class Model extends Content {
         return drop;
     }
 
+    public Set<Column> getUniqueColumns(final Context context) {
+        return null;
+    }
+
     @Override
     public int getVersion(final Context context) {
         return VERSION;
@@ -41,7 +48,7 @@ public abstract class Model extends Content {
         return new ArrayList<Column>();
     }
 
-    public static String createColumns(final List<Column> columns) {
+    public static String createColumns(final List<Column> columns, final Set<Column> uniqueColumns) {
         final StringBuilder stringBuilder = new StringBuilder();
         final int size = columns.size();
         for (int index = 0; index < size; index++ ){
@@ -57,6 +64,31 @@ public abstract class Model extends Content {
                 stringBuilder.append(", ");
             }
         }
+
+        if (uniqueColumns == null || uniqueColumns.isEmpty()){
+            return stringBuilder.toString();
+        }
+
+        final String unique = String.format(UNIQUE, createUniqueColumns(uniqueColumns));
+        stringBuilder.append(unique);
+        return stringBuilder.toString();
+
+    }
+
+    private static String createUniqueColumns(final Set<Column> columns) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        final int size = columns.size();
+        int index = 0;
+        for(final Column modelColumn : columns){
+            final String columnName = modelColumn.getName();
+            stringBuilder.append(columnName);
+
+            if (index != size -1) {
+                stringBuilder.append(", ");
+            }
+            index++;
+        }
         return stringBuilder.toString();
     }
+
 }

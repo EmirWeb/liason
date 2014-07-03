@@ -44,12 +44,7 @@ public class ProductTask extends Task {
         final ProductResponse productResponse = TaskUtilities.getModel(url, ProductResponse.class);
         final Uri tableUri = SampleUriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
 
-        final String selection = ProductTable.Columns.ID.getName() + "=?";
-        final String[] selectionArguments = {idString};
-
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
-        final ContentProviderOperation deleteContentProviderOperation = ContentProviderOperation.newDelete(tableUri).withSelection(selection, selectionArguments).build();
-        contentProviderOperations.add(deleteContentProviderOperation);
 
         final Product product = productResponse.getProduct();
         final ContentValues contentValues = ProductTable.getContentValues(product);
