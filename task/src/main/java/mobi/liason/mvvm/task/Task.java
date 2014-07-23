@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
+import android.text.format.DateUtils;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
@@ -18,13 +20,12 @@ import mobi.liason.loaders.UriUtilities;
  * Created by Emir Hasanbegovic on 2014-05-20.
  */
 public abstract class Task implements Runnable {
-    private static final long STALE_DATA_THRESHOLD = 30 * 1000;
+    private static final long STALE_DATA_THRESHOLD = 30 * DateUtils.SECOND_IN_MILLIS;
     private final Context mContext;
     private final Uri mUri;
     private final String mAuthority;
     private JsonObject mJsonObject;
     private boolean mHasFailed;
-    private static final String SCHEME = "content";
 
     public Task(final Context context, final String authority, final Uri uri) {
         mContext = context;
@@ -65,7 +66,7 @@ public abstract class Task implements Runnable {
     public boolean shouldRunRequest() {
         final String uriString = mUri.toString();
         final Path path = TaskStateTable.Paths.TASK_STATE;
-        final Uri taskStateUri = UriUtilities.getUri(SCHEME, mAuthority, path, uriString);
+        final Uri taskStateUri = UriUtilities.getUri(ContentResolver.SCHEME_CONTENT, mAuthority, path, uriString);
         final ContentResolver contentResolver = mContext.getContentResolver();
         Cursor cursor = null;
         try {
@@ -112,7 +113,7 @@ public abstract class Task implements Runnable {
     private void setState(final String state) {
         final String uriString = mUri.toString();
         final Path path = TaskStateTable.Paths.TASK_STATE;
-        final Uri taskStateUri = UriUtilities.getUri(SCHEME, mAuthority, path, uriString);
+        final Uri taskStateUri = UriUtilities.getUri(ContentResolver.SCHEME_CONTENT, mAuthority, path, uriString);
 
         final String selection = TaskStateTable.Columns.URI.getName() + "=?";
         final String[] selectionArguments = new String[]{uriString};
@@ -128,7 +129,7 @@ public abstract class Task implements Runnable {
     private boolean setRunning() {
         final String uriString = mUri.toString();
         final Path path = TaskStateTable.Paths.TASK_STATE;
-        final Uri taskStateUri = UriUtilities.getUri(SCHEME, mAuthority, path, uriString);
+        final Uri taskStateUri = UriUtilities.getUri(ContentResolver.SCHEME_CONTENT, mAuthority, path, uriString);
 
         final long time = System.currentTimeMillis();
         final TaskState taskState = new TaskState(uriString, TaskStateTable.State.RUNNING, time, null);
@@ -165,7 +166,7 @@ public abstract class Task implements Runnable {
         final ContentResolver contentResolver = mContext.getContentResolver();
         final List<Uri> taskUris = getTaskUris();
         for (final Uri uri : taskUris) {
-            contentResolver.notifyChange(uri, null);
+            contentResolver.notifyChange(uri, null, false);
         }
     }
 

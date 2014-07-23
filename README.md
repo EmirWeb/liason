@@ -8,13 +8,13 @@ Introduce enterprise grade structure to your application. Liason is a great tool
 <dependency>
     <groupId>liason.mobi</groupId>
     <artifactId>loaders</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 </dependency>
 
 <dependency>
     <groupId>liason.mobi</groupId>
     <artifactId>mvvm</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
 </dependency>
 
 <dependency>
@@ -26,9 +26,8 @@ Introduce enterprise grade structure to your application. Liason is a great tool
 ### build.gradle
 ```java
 dependencies {
-
-    compile 'mobi.liason:loader:0.0.2'
-    compile 'mobi.liason:mvvm:0.0.4'
+    compile 'mobi.liason:loader:0.0.3'
+    compile 'mobi.liason:mvvm:0.0.5'
     compile 'mobi.liason:task:0.0.3'
 }
 ```

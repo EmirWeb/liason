@@ -56,10 +56,10 @@ public class ProductsTask extends Task {
         final Uri uri = getUri();
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
-        contentResolver.notifyChange(uri, null);
+        contentResolver.notifyChange(uri, null, false);
 
         final Uri productsViewModelUri = SampleUriUtilities.getUri(context, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
-        contentResolver.notifyChange(productsViewModelUri, null);
+        contentResolver.notifyChange(productsViewModelUri, null, false);
     }
 
     public static class Paths {

@@ -1,5 +1,6 @@
 package mobi.liason.loaders;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,7 +15,6 @@ import java.util.List;
  */
 public abstract class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String SCHEME = "content";
     private static final String AUTHORITY = "mobi.liason";
     private final Context mContext;
 
@@ -44,7 +44,7 @@ public abstract class DatabaseHelper extends SQLiteOpenHelper {
             final int newVersion = content.getVersion(mContext);
 
             final String contentName = content.getName(mContext);
-            final Uri uri = UriUtilities.getUri(SCHEME, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
+            final Uri uri = UriUtilities.getUri(ContentResolver.SCHEME_CONTENT, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
             final String[] projection = {ContentVersionTable.Columns.VERSION};
             final Cursor cursor = contentVersionTable.query(mContext, sqLiteDatabase, ContentVersionTable.Paths.PATH, uri, projection, null, null, null);
 
@@ -79,7 +79,7 @@ public abstract class DatabaseHelper extends SQLiteOpenHelper {
 
             final int newVersion = content.getVersion(mContext);
             final String contentName = content.getName(mContext);
-            final Uri uri = UriUtilities.getUri(SCHEME, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
+            final Uri uri = UriUtilities.getUri(ContentResolver.SCHEME_CONTENT, AUTHORITY, ContentVersionTable.Paths.PATH, contentName);
             final ContentValues contentValues = new ContentValues();
             contentValues.put(ContentVersionTable.Columns.VERSION, newVersion);
             final Uri insertUri = contentVersionTable.insert(mContext, sqLiteDatabase, ContentVersionTable.Paths.PATH, uri, contentValues);

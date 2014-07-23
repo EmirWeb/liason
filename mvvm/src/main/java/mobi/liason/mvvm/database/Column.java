@@ -6,11 +6,11 @@ import android.database.Cursor;
  * Created by Emir Hasanbegovic on 12/05/14.
  */
 public class Column {
-
     private final String mName;
     private final Type mType;
     private final String mStringType;
     private final String mSqlName;
+
 
     public Column(final String sqlName, final String name, final Type type, final String stringType) {
         mSqlName = sqlName;
@@ -25,6 +25,7 @@ public class Column {
         mType = type;
         mStringType = Type.getSqlType(type);
     }
+
 
     public String getName() {
         return mName;
@@ -47,12 +48,12 @@ public class Column {
     }
 
     public Object getValue(final Cursor cursor) {
-        if (cursor.getCount() == 0){
+        if (cursor.getCount() == 0) {
             return null;
         }
 
         final int columnIndex = cursor.getColumnIndex(mName);
-        if (columnIndex == -1){
+        if (columnIndex == -1) {
             return null;
         }
 
@@ -96,4 +97,6 @@ public class Column {
     public String toString() {
         return mName;
     }
+
+
 }

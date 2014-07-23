@@ -62,7 +62,7 @@ public class Path {
                     throw new IllegalArgumentException(message);
                 }
             } else if (isStar) {
-                final Object object = objects[objectIndex++];
+;                final Object object = objects[objectIndex++];
                 pathSegments.add(object.toString());
             } else {
                 pathSegments.add(pathSegment);

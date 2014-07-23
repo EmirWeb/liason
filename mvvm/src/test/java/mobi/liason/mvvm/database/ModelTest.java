@@ -15,6 +15,12 @@ import java.util.Set;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
+import mobi.liason.mvvm.database.annotations.ColumnDefinition;
+import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
+import mobi.liason.mvvm.database.annotations.PrimaryKey;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
+import mobi.liason.mvvm.database.annotations.Unique;
 
 
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -67,6 +73,35 @@ public class ModelTest {
     }
 
 
+    @Test
+    public void createShouldUseUniquesPrimaryKeyAndColumns(){
+        final MockAnnotationModel mockAnnotationModel = new MockAnnotationModel();
+        final String sqlCreateQuery = mockAnnotationModel.getCreate(mContext);
+        assertThat(sqlCreateQuery).isEqualTo("CREATE TABLE IF NOT EXISTS MockAnnotationModel " +
+                "(" +
+                    " MODEL_COLUMN_1 TEXT," +
+                    " MODEL_COLUMN_2 TEXT," +
+                    " MODEL_COLUMN_3 TEXT," +
+                    " UNIQUE ( MODEL_COLUMN_2 ) ON CONFLICT REPLACE," +
+                    " PRIMARY KEY ( MODEL_COLUMN_3 ) " +
+                ");");
+    }
+
+
+    @Test
+    public void annotationsShouldBuildGetColumnsAndGetUniquesAndPathsAndGetId(){
+        final MockAnnotationModel mockAnnotationModel = new MockAnnotationModel();
+
+        final List<Column> columns = mockAnnotationModel.getColumns(mContext);
+        assertThat(columns).hasSize(3);
+
+        final Set<Column> uniqueColumns = mockAnnotationModel.getUniqueColumns(mContext);
+        assertThat(uniqueColumns).hasSize(1);
+
+        final List<Path> paths = mockAnnotationModel.getPaths(mContext);
+        assertThat(paths).hasSize(1);
+
+    }
 
     public static class MockModel extends  Model {
 
@@ -107,6 +142,37 @@ public class ModelTest {
         public Set<Column> getUniqueColumns(Context context) {
             return mUniqueModelColums;
         }
+    }
+
+    public static class MockAnnotationModel extends  Model {
+
+        public static final String NAME = MockAnnotationModel.class.getSimpleName();
+
+        @Override
+        public String getName(Context context) {
+            return NAME;
+        }
+
+        @ColumnDefinitions
+        public static class Columns {
+            @ColumnDefinition
+            public static final ModelColumn MODEL_COLUMN_1 = new ModelColumn(NAME, "MODEL_COLUMN_1", Column.Type.text);
+
+            @Unique
+            @ColumnDefinition
+            public static final ModelColumn MODEL_COLUMN_2 = new ModelColumn(NAME, "MODEL_COLUMN_2", Column.Type.text);
+
+            @PrimaryKey
+            @ColumnDefinition
+            public static final ModelColumn MODEL_COLUMN_3 = new ModelColumn(NAME, "MODEL_COLUMN_3", Column.Type.text);
+        }
+
+        @PathDefinitions
+        public static class Paths {
+            @PathDefinition
+            public static final Path PATH = new Path(NAME);
+        }
+
     }
 
 }

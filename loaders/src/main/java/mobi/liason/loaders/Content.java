@@ -1,5 +1,6 @@
 package mobi.liason.loaders;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,8 +13,6 @@ import java.util.List;
  * Created by Emir Hasanbegovic on 18/04/14.
  */
 public abstract class Content {
-
-    private static final String TYPE = "content";
 
     public abstract int getVersion(final Context context);
 
@@ -41,7 +40,7 @@ public abstract class Content {
     }
 
     public String type(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri) {
-        return TYPE;
+        return ContentResolver.CURSOR_ITEM_BASE_TYPE;
     }
 
     public Uri insert(final Context context, final SQLiteDatabase sqLiteDatabase, final Path path, final Uri uri, final ContentValues values) {

@@ -11,7 +11,6 @@ import mobi.liason.loaders.Path;
  */
 public class UriUtilities {
 
-
     public static Uri getUri(final String scheme, final String authority, final Path path, final Object... objects) {
         final Uri.Builder builder = new Uri.Builder().scheme(scheme).authority(authority);
         final List<String> pathSegments = path.getPathSegments(objects);
