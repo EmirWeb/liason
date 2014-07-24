@@ -1,5 +1,6 @@
 package mobi.liason.loaders;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.google.common.collect.Lists;
@@ -104,5 +105,40 @@ public class Path {
         }
 
         return true;
+    }
+
+    public boolean matches(final Uri uri) {
+        if (uri == null){
+            return false;
+        }
+
+        final List<String> pathSegments = uri.getPathSegments();
+
+        if (mPathSegments.size() != pathSegments.size()){
+            return false;
+        }
+
+        for (int index = 0; index < mPathSegments.size(); index++){
+            final String incomingPathSegment = pathSegments.get(index);
+            final String internalPathSegment = mPathSegments.get(index);
+            if (internalPathSegment.equals("#")) {
+                if (!isNumeric(incomingPathSegment)) {
+                    return false;
+                }
+            } else if (!internalPathSegment.equals("*") && !internalPathSegment.equals(incomingPathSegment)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isNumeric(final String string){
+        try{
+            Double.parseDouble(string);
+            return true;
+        } catch (final NumberFormatException numberFormatException) {
+            return false;
+        }
     }
 }

@@ -15,6 +15,9 @@ import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModel;
 import mobi.liason.mvvm.database.ViewModelColumn;
+import mobi.liason.mvvm.database.annotations.ColumnDefinition;
+import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.sample.models.ProductTable;
 
 /**
@@ -30,18 +33,8 @@ public class ProductViewModel extends ViewModel {
     }
 
     @Override
-    public List<Column> getColumns(Context context) {
-        return Arrays.asList(Columns.COLUMNS);
-    }
-
-    @Override
     protected String getSelection(Context context) {
         return  ProductTable.TABLE_NAME;
-    }
-
-    @Override
-    public List<Path> getPaths(Context context) {
-        return Lists.newArrayList(Paths.PRODUCT_VIEW_MODEL);
     }
 
     @Override
@@ -53,15 +46,22 @@ public class ProductViewModel extends ViewModel {
         return cursor;
     }
 
+    @ColumnDefinitions
     public static class Columns {
+        @ColumnDefinition
         public static final ViewModelColumn _ID = new ViewModelColumn(VIEW_NAME, BaseColumns._ID, ProductTable.Columns.ID);
+        @ColumnDefinition
         public static final ViewModelColumn NAME = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.NAME);
+        @ColumnDefinition
         public static final ViewModelColumn IMAGE_URL = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.IMAGE_URL);
+        @ColumnDefinition
         public static final ViewModelColumn TASTING_NOTE = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.TASTING_NOTE);
-        public static final Column[] COLUMNS = new Column[]{_ID, NAME, IMAGE_URL, TASTING_NOTE};
+
     }
 
+    @PathDefinitions
     public static class Paths {
+        @PathDefinitions
         public static final Path PRODUCT_VIEW_MODEL = new Path(VIEW_NAME, "#");
     }
 

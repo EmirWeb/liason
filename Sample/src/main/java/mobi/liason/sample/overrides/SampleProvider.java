@@ -20,6 +20,6 @@ public class SampleProvider extends Provider {
 
     @Override
     protected DatabaseHelper onCreateDatabaseHelper(Context context) {
-        return SampleDatabaseHelper.getDatabaseHelper(context);
+        return new SampleDatabaseHelper(context);
     }
 }

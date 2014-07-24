@@ -38,12 +38,4 @@ public class SampleDatabaseHelper extends DatabaseHelper {
         return contentList;
     }
 
-    private static SampleDatabaseHelper sSampleDataBaseHelper;
-
-    public static synchronized DatabaseHelper getDatabaseHelper(final Context context){
-        if (sSampleDataBaseHelper == null){
-            sSampleDataBaseHelper = new SampleDatabaseHelper(context);
-        }
-        return sSampleDataBaseHelper;
-    }
 }

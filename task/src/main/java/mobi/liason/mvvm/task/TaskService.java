@@ -77,7 +77,7 @@ public abstract class TaskService extends Service {
 
     private static Task getTask(final Context context, final String authority, final Uri uri, final int code) {
         final Class klass = mCodeTaskClassMap.get(code);
-        return createTask(context, authority,uri, klass);
+        return createTask(context, authority, uri, klass);
     }
 
     @Override

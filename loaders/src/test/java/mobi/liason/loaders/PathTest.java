@@ -1,5 +1,7 @@
 package mobi.liason.loaders;
 
+import android.net.Uri;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
@@ -99,5 +101,19 @@ public class PathTest {
         }
     }
 
+    @Test
+    public void mathcingUris(){
+        final Path path = new Path("EMIR1/EMIR2/*/#");
+        final Uri uri = Uri.parse("http://www.emirweb.com/EMIR1/EMIR2/4/4");
+        final Uri uri1 = Uri.parse("http://www.emirweb.com/EMIR1/EMIR2/4/d");
+        final Uri uri2 = Uri.parse("http://www.emirweb.com/EMIR1/EMIR2/4");
+
+        assertThat(path.matches(uri)).isTrue();
+        assertThat(path.matches(uri1)).isFalse();
+        assertThat(path.matches(uri2)).isFalse();
+
+    }
+
 
 }
+
