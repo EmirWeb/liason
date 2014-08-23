@@ -6,7 +6,6 @@ import android.net.Uri;
 
 import mobi.liason.mvvm.bindings.adapters.ActivityAdapterBinding;
 import mobi.liason.mvvm.bindings.adapters.AdapterItemBinding;
-import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
 import mobi.liason.sample.overrides.SampleUriUtilities;
 import mobi.liason.sample.products.viewmodels.ProductsViewModel;
@@ -14,11 +13,9 @@ import mobi.liason.sample.products.viewmodels.ProductsViewModel;
 /**
  * Created by Emir Hasanbegovic on 15/05/14.
  */
-public class ProductsAdapterBinding extends ActivityAdapterBinding{
+public class ProductsAdapterBinding extends ActivityAdapterBinding {
 
-    private static final int ID = IdCreator.getStaticId();
-
-    public ProductsAdapterBinding(final Activity activity, final int resourceId){
+    public ProductsAdapterBinding(final Activity activity, final int resourceId) {
         super(activity, resourceId);
 
         final AdapterItemBinding adapterItemBinding = new ProductsAdapterItemBinding(R.layout.list_item_product);
@@ -31,8 +28,4 @@ public class ProductsAdapterBinding extends ActivityAdapterBinding{
         return SampleUriUtilities.getUri(context, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
     }
 
-    @Override
-    public int getId(final Context context) {
-        return ID;
-    }
 }

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import mobi.liason.mvvm.bindings.ActivityItemBinding;
-import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ProgressBarVisibilityBinder;
 import mobi.liason.sample.binders.VisibilityBinder;
@@ -21,7 +20,6 @@ import mobi.liason.sample.product.viewmodels.ProductTaskStateViewModel;
  */
 public class ProductTaskStateBinding extends ActivityItemBinding {
 
-    private static final int ID = IdCreator.getStaticId();
     private final long mId;
 
     public ProductTaskStateBinding(final Activity activity, final long id) {
@@ -45,11 +43,6 @@ public class ProductTaskStateBinding extends ActivityItemBinding {
         final Uri uri = SampleUriUtilities.getUri(context, ProductTaskStateViewModel.Paths.PRODUCT_TASK_STATE, mId);
         Log.d("onBind", "getUri uri: " + uri);
         return  uri;
-    }
-
-    @Override
-    public int getId(final Context context) {
-        return ID;
     }
 
 }

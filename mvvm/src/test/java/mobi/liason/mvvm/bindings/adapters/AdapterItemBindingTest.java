@@ -2,6 +2,7 @@ package mobi.liason.mvvm.bindings.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
+import mobi.liason.mvvm.bindings.ItemBinding;
 import mobi.liason.mvvm.bindings.TextBinder;
 import mobi.liason.mvvm.bindings.adapters.AdapterItemBinding;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
@@ -208,5 +210,6 @@ public class AdapterItemBindingTest {
         verify(mockDataBinding, times(1)).onBind(any(Context.class), any(Cursor.class));
 
     }
+
 
 }

@@ -4,6 +4,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import mobi.liason.loaders.utilities.IdCreator;
+
 /**
  * Created by Emir Hasanbegovic on 28/04/14.
  */
@@ -11,6 +16,8 @@ public abstract class BindDefinition {
 
     private final Context mContext;
     private BindingManager mBindingManager;
+    private static final Map<Class, Integer> CLASS_ID_MAP = new HashMap<Class, Integer>();
+    private static final IdCreator ID_CREATOR = new IdCreator();
 
     public BindDefinition(final Context context) {
         mContext = context;
@@ -45,17 +52,17 @@ public abstract class BindDefinition {
 
     /**
      * This is used to keep track of the loaders across Activity/Fragment life-cycles
-     * <p/>
-     * We recommend the following implementation.
-     * <p/>
-     * public static final int ID = IdCreator.getStaticId();
-     *
-     * @return Unique Id for the particular data flow
-     * @Override public int getId(){
-     * return ID;
-     * }
      */
-    public abstract int getId(final Context context);
+    public synchronized int getId(Context context) {
+        final Class thisClass = this.getClass();
+        if (CLASS_ID_MAP.containsKey(thisClass)){
+            return CLASS_ID_MAP.get(thisClass);
+        }
+
+        final int id = ID_CREATOR.getId();
+        CLASS_ID_MAP.put(thisClass, id);
+        return id;
+    }
 
     public void rebind() {
         mBindingManager.restartLoader(this);

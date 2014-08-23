@@ -1,4 +1,4 @@
-package mobi.liason.mvvm.utilities;
+package mobi.liason.loaders.utilities;
 
 /**
  * Created by Emir Hasanbegovic on 28/04/14.

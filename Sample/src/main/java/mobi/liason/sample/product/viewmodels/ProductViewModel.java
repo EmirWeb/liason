@@ -17,6 +17,7 @@ import mobi.liason.mvvm.database.ViewModel;
 import mobi.liason.mvvm.database.ViewModelColumn;
 import mobi.liason.mvvm.database.annotations.ColumnDefinition;
 import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
 import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.sample.models.ProductTable;
 
@@ -61,7 +62,7 @@ public class ProductViewModel extends ViewModel {
 
     @PathDefinitions
     public static class Paths {
-        @PathDefinitions
+        @PathDefinition
         public static final Path PRODUCT_VIEW_MODEL = new Path(VIEW_NAME, "#");
     }
 

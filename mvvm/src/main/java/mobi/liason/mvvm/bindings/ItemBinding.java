@@ -2,11 +2,14 @@ package mobi.liason.mvvm.bindings;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.View;
 
 import com.google.common.collect.Sets;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import mobi.liason.loaders.BindDefinition;
@@ -108,4 +111,5 @@ public abstract class ItemBinding extends BindDefinition {
             binding.onBindEnd(context);
         }
     }
+
 }

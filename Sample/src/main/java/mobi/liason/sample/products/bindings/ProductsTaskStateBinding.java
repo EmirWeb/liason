@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import mobi.liason.mvvm.bindings.ActivityItemBinding;
-import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ProgressBarVisibilityBinder;
 import mobi.liason.sample.binders.PulltoRefreshBinder;
@@ -18,8 +17,6 @@ import mobi.liason.sample.products.viewmodels.ProductsTaskStateViewModel;
  */
 public class ProductsTaskStateBinding extends ActivityItemBinding {
 
-    private static final int ID = IdCreator.getStaticId();
-
     public ProductsTaskStateBinding(final Activity activity) {
         super(activity);
 
@@ -28,16 +25,11 @@ public class ProductsTaskStateBinding extends ActivityItemBinding {
 
         final PulltoRefreshBinder pulltoRefreshBinder = new PulltoRefreshBinder(R.id.activity_products_pull_to_refresh_layout, ProductsTaskStateViewModel.Columns.IS_PROGRESS_BAR_VISIBLE);
         addBinding(pulltoRefreshBinder);
-  }
+    }
 
     @Override
     public Uri getUri(final Context context) {
         return SampleUriUtilities.getUri(context, ProductsTaskStateViewModel.Paths.PRODUCTS_TASK_STATE);
-    }
-
-    @Override
-    public int getId(final Context context) {
-        return ID;
     }
 
 }

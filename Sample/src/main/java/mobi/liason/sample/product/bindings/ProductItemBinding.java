@@ -7,7 +7,6 @@ import android.net.Uri;
 import mobi.liason.mvvm.bindings.ActivityItemBinding;
 import mobi.liason.mvvm.bindings.TextBinder;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
-import mobi.liason.mvvm.utilities.IdCreator;
 import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ImageBinder;
 import mobi.liason.sample.overrides.SampleUriUtilities;
@@ -17,7 +16,6 @@ import mobi.liason.sample.product.viewmodels.ProductViewModel;
  * Created by Emir Hasanbegovic on 24/05/14.
  */
 public class ProductItemBinding extends ActivityItemBinding {
-    private static final int ID = IdCreator.getStaticId();
     private final long mId;
 
     public ProductItemBinding(final Activity activity, final long id) {
@@ -37,10 +35,5 @@ public class ProductItemBinding extends ActivityItemBinding {
     @Override
     public Uri getUri(final Context context) {
         return SampleUriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, mId);
-    }
-
-    @Override
-    public int getId(final Context context) {
-        return ID;
     }
 }

@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '20.0.0'
 
     defaultConfig {
         minSdkVersion 14
@@ -27,7 +27,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.+'
     compile 'com.squareup.picasso:picasso:2.2.0'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
-    compile 'mobi.liason:loaders:0.0.4'
-    compile 'mobi.liason:mvvm:0.0.5'
-    compile 'mobi.liason:task:0.0.3'
+    compile project(':loaders')
+    compile project(':mvvm')
+    compile project(':task')
 }
