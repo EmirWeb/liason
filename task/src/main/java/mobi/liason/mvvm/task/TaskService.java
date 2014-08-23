@@ -64,11 +64,17 @@ public abstract class TaskService extends Service {
             return;
 
         final String uriString = intent.getStringExtra(EXTRAS.URI);
+        final boolean forceTask = intent.getBooleanExtra(EXTRAS.FORCE_TASK, false);
         final Uri uri = Uri.parse(uriString);
         final int code = mURIMatcher.match(uri);
         final Context context = getApplicationContext();
         final String authority = getAuthority(context);
         final Task task = getTask(context, authority, uri, code);
+        task.setForceTask(forceTask);
+        runTask(task);
+    }
+
+    public void runTask(final Task task) {
         if (task == null) {
             return;
         }
@@ -87,6 +93,7 @@ public abstract class TaskService extends Service {
 
     protected static final class EXTRAS {
         public static final String URI = "uri";
+        public static final String FORCE_TASK = "forceTask";
     }
 
     public static <T extends Task> T createTask(final Context context, final String authority, final Uri uri, final Class<T> klass) {
@@ -114,10 +121,11 @@ public abstract class TaskService extends Service {
     }
 
     public static void forceStartTask(final Context context, final Uri uri, final Class klass) {
-        final Uri forcedUri = uri.buildUpon().appendQueryParameter(Task.QueryParameters.FORCE_TASK, Boolean.toString(true)).build();
-        final String uriString = forcedUri.toString();
+        final String uriString = uri.toString();
         final Intent intent = new Intent(context, klass);
         intent.putExtra(EXTRAS.URI, uriString);
+        intent.putExtra(EXTRAS.FORCE_TASK, true);
+
         context.startService(intent);
     }
 

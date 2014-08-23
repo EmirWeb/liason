@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mobi.liason</groupId>
     <artifactId>task</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>jar</packaging>
     <name>Liason - Task extension for MVVM</name>
     <description>Task library</description>
@@ -102,6 +102,12 @@
             <artifactId>fest-android</artifactId>
             <version>1.0.7</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mobi.liason</groupId>
+            <artifactId>loaders</artifactId>
+            <version>[0.0.1,)</version>
         </dependency>
 
         <dependency>

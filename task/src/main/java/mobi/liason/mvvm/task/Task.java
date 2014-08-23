@@ -25,6 +25,7 @@ public abstract class Task implements Runnable {
     private final String mAuthority;
     private JsonObject mJsonObject;
     private boolean mHasFailed;
+    private boolean mForceTask;
 
     public Task(final Context context, final String authority, final Uri uri) {
         mContext = context;
@@ -70,7 +71,7 @@ public abstract class Task implements Runnable {
         Cursor cursor = null;
         try {
 
-            final boolean forceTask = forceNetworkRequest(mUri);
+            final boolean forceTask = forceTask();
             if (forceTask) {
                 return true;
             }
@@ -140,9 +141,12 @@ public abstract class Task implements Runnable {
         return uri != null;
     }
 
-    private boolean forceNetworkRequest(final Uri uri) {
-        final String forceRequestString = uri.getQueryParameter(QueryParameters.FORCE_TASK);
-        return forceRequestString != null && Boolean.parseBoolean(forceRequestString);
+    private boolean forceTask() {
+        return mForceTask;
+    }
+
+    void setForceTask(final boolean forceTask){
+        mForceTask = forceTask;
     }
 
     public boolean needsUpdate(final Cursor cursor) {
@@ -185,10 +189,6 @@ public abstract class Task implements Runnable {
 
     public Uri getUri() {
         return mUri;
-    }
-
-    public static final class QueryParameters {
-        public static final String FORCE_TASK = "forceTask";
     }
 
 }

@@ -57,7 +57,6 @@ public class ProductViewModel extends ViewModel {
         public static final ViewModelColumn IMAGE_URL = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.IMAGE_URL);
         @ColumnDefinition
         public static final ViewModelColumn TASTING_NOTE = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.TASTING_NOTE);
-
     }
 
     @PathDefinitions
