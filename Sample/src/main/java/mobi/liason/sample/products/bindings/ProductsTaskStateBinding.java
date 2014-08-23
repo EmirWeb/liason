@@ -9,7 +9,7 @@ import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ProgressBarVisibilityBinder;
 import mobi.liason.sample.binders.PulltoRefreshBinder;
 import mobi.liason.sample.binders.VisibilityBinder;
-import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.overrides.SampleProvider;
 import mobi.liason.sample.products.viewmodels.ProductsTaskStateViewModel;
 
 /**
@@ -29,7 +29,7 @@ public class ProductsTaskStateBinding extends ActivityItemBinding {
 
     @Override
     public Uri getUri(final Context context) {
-        return SampleUriUtilities.getUri(context, ProductsTaskStateViewModel.Paths.PRODUCTS_TASK_STATE);
+        return SampleProvider.getUri(context, ProductsTaskStateViewModel.Paths.PRODUCTS_TASK_STATE);
     }
 
 }

@@ -3,15 +3,7 @@ package mobi.liason.sample.models;
 import android.content.ContentValues;
 import android.content.Context;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import mobi.liason.loaders.Path;
-import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
 import mobi.liason.mvvm.database.annotations.ColumnDefinition;
@@ -23,9 +15,9 @@ import mobi.liason.mvvm.database.annotations.Unique;
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductTable extends Model {
+public class ProductModel extends Model {
 
-    public static final String TABLE_NAME = ProductTable.class.getSimpleName();
+    public static final String TABLE_NAME = ProductModel.class.getSimpleName();
 
     public static ContentValues getContentValues(final Product product) {
         final ContentValues contentValues = new ContentValues();
@@ -64,13 +56,11 @@ public class ProductTable extends Model {
     public static class Paths {
         @PathDefinition
         public static final Path PRODUCT_TABLE = new Path(TABLE_NAME);
-        @PathDefinition
-        public static final Path PRODUCT_TABLE_INSERT = new Path(TABLE_NAME, "#");
     }
 
     @Override
     public int getVersion(Context context) {
-        return 1;
+        return 2;
     }
 }
 

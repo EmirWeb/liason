@@ -5,11 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.google.common.collect.Lists;
-
-import java.util.Arrays;
-import java.util.List;
-
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModel;
@@ -19,7 +14,7 @@ import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
 import mobi.liason.mvvm.database.annotations.PathDefinition;
 import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.mvvm.task.TaskStateTable;
-import mobi.liason.sample.models.ProductTable;
+import mobi.liason.sample.models.ProductModel;
 import mobi.liason.sample.overrides.SampleTaskService;
 import mobi.liason.sample.product.tasks.ProductTask;
 
@@ -40,11 +35,11 @@ public class ProductTaskStateViewModel extends ViewModel {
         final String selection =
                 TaskStateTable.TABLE_NAME +
                         " LEFT JOIN " +
-                        ProductTable.TABLE_NAME +
+                        ProductModel.TABLE_NAME +
                         " ON " +
                         TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() +
                         " LIKE " +
-                        "'%' || '" + ProductTask.PRODUCTS + "/' || " + ProductTable.Columns.ID.getName() + " || '%'" +
+                        "'%' || '" + ProductTask.PRODUCTS + "/' || " + ProductModel.Columns.ID.getName() + " || '%'" +
                         " WHERE " +
                         TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() +
                         " LIKE " +
@@ -72,7 +67,7 @@ public class ProductTaskStateViewModel extends ViewModel {
         @ColumnDefinition
         public static final ViewModelColumn URI = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.URI);
         @ColumnDefinition
-        public static final ViewModelColumn ID = new ViewModelColumn(VIEW_NAME, ProductTable.Columns.ID);
+        public static final ViewModelColumn ID = new ViewModelColumn(VIEW_NAME, ProductModel.Columns.ID);
         @ColumnDefinition
         public static final ViewModelColumn STATE = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.STATE);
         @ColumnDefinition

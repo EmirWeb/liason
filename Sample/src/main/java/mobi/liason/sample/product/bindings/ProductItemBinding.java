@@ -9,7 +9,7 @@ import mobi.liason.mvvm.bindings.TextBinder;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
 import mobi.liason.sample.R;
 import mobi.liason.sample.binders.ImageBinder;
-import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.overrides.SampleProvider;
 import mobi.liason.sample.product.viewmodels.ProductViewModel;
 
 /**
@@ -34,6 +34,6 @@ public class ProductItemBinding extends ActivityItemBinding {
 
     @Override
     public Uri getUri(final Context context) {
-        return SampleUriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, mId);
+        return SampleProvider.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, mId);
     }
 }

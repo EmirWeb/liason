@@ -5,11 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.google.common.collect.Lists;
-
-import java.util.Arrays;
-import java.util.List;
-
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModel;
@@ -19,7 +14,7 @@ import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
 import mobi.liason.mvvm.database.annotations.PathDefinition;
 import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.mvvm.task.TaskStateTable;
-import mobi.liason.sample.models.ProductTable;
+import mobi.liason.sample.models.ProductModel;
 import mobi.liason.sample.overrides.SampleTaskService;
 import mobi.liason.sample.products.tasks.ProductsTask;
 
@@ -57,7 +52,7 @@ public class ProductsTaskStateViewModel extends ViewModel {
 
         public static final String DATA_SELECTION = "CASE" +
                 " WHEN " +
-                "(SELECT COUNT(*) FROM " + ProductTable.TABLE_NAME + ") > 0" +
+                "(SELECT COUNT(*) FROM " + ProductModel.TABLE_NAME + ") > 0" +
                 " THEN " +
                 "'" + Boolean.toString(true) + "'" +
                 " ELSE " +

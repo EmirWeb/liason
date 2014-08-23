@@ -28,8 +28,7 @@ public class SampleTaskService extends TaskService {
 
     @Override
     public String getAuthority(final Context context) {
-        final Resources resources = context.getResources();
-        return resources.getString(R.string.authority);
+        return SampleProvider.getProviderAuthority(context);
     }
 
     @Override

@@ -7,18 +7,16 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
+import mobi.liason.loaders.UriUtilities;
 import mobi.liason.mvvm.task.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
-import mobi.liason.sample.models.ProductTable;
-import mobi.liason.sample.overrides.SampleUriUtilities;
+import mobi.liason.sample.models.ProductModel;
+import mobi.liason.sample.overrides.SampleProvider;
 import mobi.liason.sample.product.viewmodels.ProductViewModel;
-import mobi.liason.sample.products.viewmodels.ProductsViewModel;
 import mobi.liason.sample.utilities.TaskUtilities;
 
 /**
@@ -39,26 +37,25 @@ public class ProductTask extends Task {
         final Uri uri = getUri();
         final String idString = uri.getLastPathSegment();
         final long id = Long.parseLong(idString);
-        final Uri networkUri = SampleUriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, id);
+        final Uri networkUri = UriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, id);
         final String url = networkUri.toString();
         final ProductResponse productResponse = TaskUtilities.getModel(url, ProductResponse.class);
-        final Uri tableUri = SampleUriUtilities.getUri(context, ProductTable.Paths.PRODUCT_TABLE);
+        final Uri tableUri = SampleProvider.getUri(context, ProductModel.Paths.PRODUCT_TABLE);
 
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
 
         final Product product = productResponse.getProduct();
-        final ContentValues contentValues = ProductTable.getContentValues(product);
+        final ContentValues contentValues = ProductModel.getContentValues(product);
         final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
         contentProviderOperations.add(insertContentProviderOperation);
 
-        final Resources resources = context.getResources();
-        final String authority = resources.getString(R.string.authority);
+        final String authority = SampleProvider.getProviderAuthority(context);
 
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
         contentResolver.notifyChange(uri, null, false);
 
-        final Uri productsViewModelUri = SampleUriUtilities.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, id);
+        final Uri productsViewModelUri = SampleProvider.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, id);
         contentResolver.notifyChange(productsViewModelUri, null, false);
     }
 
