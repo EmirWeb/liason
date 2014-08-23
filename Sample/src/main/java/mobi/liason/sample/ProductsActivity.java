@@ -28,6 +28,7 @@ public class ProductsActivity extends Activity implements AdapterView.OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
         mActivityBindingManager = new ActivityBindingManager(this);
+
         final AdapterView adapterView = (AdapterView) findViewById(R.id.activity_products_adapter_view);
         adapterView.setOnItemClickListener(this);
 

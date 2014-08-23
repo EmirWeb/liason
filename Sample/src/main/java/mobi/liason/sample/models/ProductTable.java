@@ -14,6 +14,11 @@ import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
+import mobi.liason.mvvm.database.annotations.ColumnDefinition;
+import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
+import mobi.liason.mvvm.database.annotations.Unique;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -38,34 +43,28 @@ public class ProductTable extends Model {
         return TABLE_NAME;
     }
 
-    @Override
-    public List<Column> getColumns(final Context context) {
-        return Arrays.asList(Columns.COLUMNS);
-    }
-
-    @Override
-    public List<Path> getPaths(Context context) {
-        return Lists.newArrayList(Paths.PRODUCT_TABLE);
-    }
-
-    @Override
-    public Set<Column> getUniqueColumns(Context context) {
-        return Sets.newHashSet(Columns.UNIQUE);
-    }
-
+    @ColumnDefinitions
     public static class Columns {
+        @ColumnDefinition
+        @Unique
         public static final ModelColumn ID = new ModelColumn(TABLE_NAME, Product.Fields.ID, ModelColumn.Type.integer);
+        @ColumnDefinition
         public static final ModelColumn NAME = new ModelColumn(TABLE_NAME, Product.Fields.NAME, ModelColumn.Type.text);
+        @ColumnDefinition
         public static final ModelColumn IMAGE_THUMB_URL = new ModelColumn(TABLE_NAME, Product.Fields.IMAGE_THUMB_URL, ModelColumn.Type.text);
+        @ColumnDefinition
         public static final ModelColumn IMAGE_URL = new ModelColumn(TABLE_NAME, Product.Fields.IMAGE_URL, ModelColumn.Type.text);
+        @ColumnDefinition
         public static final ModelColumn DESCRIPTION = new ModelColumn(TABLE_NAME, Product.Fields.DESCRIPTION, ModelColumn.Type.text);
-        public static final ModelColumn TASTING_NOTE = new ModelColumn(TABLE_NAME, Product.Fields.TASTING_NOTE + "EEE", ModelColumn.Type.text);
-        public static final Column[] COLUMNS = new Column[]{ID, NAME, IMAGE_THUMB_URL, IMAGE_URL, DESCRIPTION, TASTING_NOTE};
-        public static final Column[] UNIQUE = new Column[]{ID};
+        @ColumnDefinition
+        public static final ModelColumn TASTING_NOTE = new ModelColumn(TABLE_NAME, Product.Fields.TASTING_NOTE, ModelColumn.Type.text);
     }
 
+    @PathDefinitions
     public static class Paths {
+        @PathDefinition
         public static final Path PRODUCT_TABLE = new Path(TABLE_NAME);
+        @PathDefinition
         public static final Path PRODUCT_TABLE_INSERT = new Path(TABLE_NAME, "#");
     }
 
