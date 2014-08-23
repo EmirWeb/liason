@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.loaders.UriUtilities;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.mvvm.task.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
@@ -27,39 +29,46 @@ public class ProductTask extends Task {
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";
     public static final String PRODUCTS = "products";
+    private final long mId;
 
     public ProductTask(final Context context, final String authorty, final Uri uri) {
         super(context, authorty, uri);
+        final String idString = uri.getLastPathSegment();
+        mId = Long.parseLong(idString);
     }
 
     @Override
     protected void onExecuteTask(final Context context) throws Exception {
-        final Uri uri = getUri();
-        final String idString = uri.getLastPathSegment();
-        final long id = Long.parseLong(idString);
-        final Uri networkUri = UriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, id);
+
+        final Uri networkUri = UriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, mId);
         final String url = networkUri.toString();
         final ProductResponse productResponse = TaskUtilities.getModel(url, ProductResponse.class);
-        final Uri tableUri = SampleProvider.getUri(context, ProductModel.Paths.PRODUCT_TABLE);
 
-        final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
-
-        final Product product = productResponse.getProduct();
-        final ContentValues contentValues = ProductModel.getContentValues(product);
-        final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
-        contentProviderOperations.add(insertContentProviderOperation);
+        final ArrayList<ContentProviderOperation> contentProviderOperations = getContentProviderOperations(context, productResponse);
 
         final String authority = SampleProvider.getProviderAuthority(context);
 
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
-        contentResolver.notifyChange(uri, null, false);
 
-        final Uri productsViewModelUri = SampleProvider.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, id);
+        final Uri productsViewModelUri = SampleProvider.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, mId);
         contentResolver.notifyChange(productsViewModelUri, null, false);
     }
 
+    private ArrayList<ContentProviderOperation> getContentProviderOperations(final Context context, final ProductResponse productResponse) {
+        final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
+
+        final Uri tableUri = SampleProvider.getUri(context, ProductModel.Paths.PRODUCT_TABLE);
+        final Product product = productResponse.getProduct();
+        final ContentValues contentValues = ProductModel.getContentValues(product);
+        final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
+        contentProviderOperations.add(insertContentProviderOperation);
+        return contentProviderOperations;
+    }
+
+    @PathDefinitions
     public static class Paths {
+        @PathDefinition
         public static final Path PRODUCT = new Path(PRODUCTS, "#");
     }
 }

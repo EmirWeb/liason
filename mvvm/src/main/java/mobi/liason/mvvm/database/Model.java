@@ -39,7 +39,12 @@ public abstract class Model extends Content {
     }
 
     public void initializeAnnotations() {
-        final Class<? extends Model> columnClass = this.getClass();
+        final Class<? extends Model> klass = this.getClass();
+        initializeAnnotations(klass);
+    }
+
+    public void initializeAnnotations(final Class klass) {
+        final Class<? extends Model> columnClass = klass;
         final Class<?>[] declaredClasses = columnClass.getDeclaredClasses();
         for (final Class<?> declaredClass : declaredClasses) {
             final Annotation[] declaredClassAnnotations = declaredClass.getDeclaredAnnotations();

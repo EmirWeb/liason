@@ -16,6 +16,10 @@ import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
 import mobi.liason.loaders.UriUtilities;
+import mobi.liason.mvvm.database.annotations.ColumnDefinition;
+import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
@@ -39,16 +43,6 @@ public class TaskStateTable extends Model {
     @Override
     public String getName(final Context context) {
         return TABLE_NAME;
-    }
-
-    @Override
-    public List<Column> getColumns(final Context context) {
-        return Arrays.asList(Columns.COLUMNS);
-    }
-
-    @Override
-    public List<Path> getPaths(Context context) {
-        return Lists.newArrayList(Paths.TASK_STATE);
     }
 
     @Override
@@ -99,15 +93,21 @@ public class TaskStateTable extends Model {
         public static final String FAIL = "fail";
     }
 
+    @ColumnDefinitions
     public static class Columns {
+        @ColumnDefinition
         public static final ModelColumn URI = new ModelColumn(TABLE_NAME, TaskState.Fields.URI, ModelColumn.Type.text);
+        @ColumnDefinition
         public static final ModelColumn STATE = new ModelColumn(TABLE_NAME, TaskState.Fields.STATE, ModelColumn.Type.text);
+        @ColumnDefinition
         public static final ModelColumn TIME = new ModelColumn(TABLE_NAME, TaskState.Fields.TIME, ModelColumn.Type.integer);
+        @ColumnDefinition
         public static final ModelColumn JSON = new ModelColumn(TABLE_NAME, TaskState.Fields.JSON, ModelColumn.Type.blob);
-        public static final Column[] COLUMNS = new Column[]{URI, STATE, TIME, JSON};
     }
 
+    @PathDefinitions
     public static class Paths {
+        @PathDefinition
         public static final Path TASK_STATE = new Path(TABLE_NAME, "*");
     }
 

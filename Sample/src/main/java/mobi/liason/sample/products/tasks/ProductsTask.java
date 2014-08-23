@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.loaders.UriUtilities;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.mvvm.task.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
@@ -44,10 +46,8 @@ public class ProductsTask extends Task {
 
         final String authority = SampleProvider.getProviderAuthority(context);
 
-        final Uri uri = getUri();
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
-        contentResolver.notifyChange(uri, null, false);
 
         final Uri productsViewModelUri = SampleProvider.getUri(context, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
         contentResolver.notifyChange(productsViewModelUri, null, false);
@@ -68,7 +68,9 @@ public class ProductsTask extends Task {
         return contentProviderOperations;
     }
 
+    @PathDefinitions
     public static class Paths {
+        @PathDefinition
         public static final Path PRODUCTS = new Path(ProductsTask.PRODUCTS);
     }
 }

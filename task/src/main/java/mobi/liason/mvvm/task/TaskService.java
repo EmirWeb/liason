@@ -7,14 +7,21 @@ import android.content.UriMatcher;
 import android.net.Uri;
 import android.os.IBinder;
 
+import com.google.common.collect.Sets;
+
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import mobi.liason.loaders.Path;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
 
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.
@@ -28,7 +35,7 @@ public abstract class TaskService extends Service {
 
     public abstract String getAuthority(final Context context);
 
-    public abstract Map<Path, Class> getPathTaskMap(final Context context);
+    public abstract Set<Class> getTasks(final Context context);
 
     @Override
     public void onCreate() {
@@ -36,16 +43,21 @@ public abstract class TaskService extends Service {
         final String authority = getAuthority(context);
 
         int index = 0;
-        final Map<Path, Class> pathTaskMap = getPathTaskMap(context);
-        final Set<Path> paths = pathTaskMap.keySet();
-        for (final Path path : paths) {
-            final String mathcerPath = path.getMatcherPath();
-            final Class klass = pathTaskMap.get(path);
-            mURIMatcher.addURI(authority, mathcerPath, index);
-            mCodeTaskClassMap.put(index, klass);
-            index++;
+        final Set<Class> tasks = getTasks(context);
+        for (final Class klass : tasks) {
+            final Set<Path> paths = getPaths(klass);
+            for (final Path path : paths) {
+                final String matcherPath = path.getMatcherPath();
+                mURIMatcher.addURI(authority, matcherPath, index);
+                mCodeTaskClassMap.put(index, klass);
+                index++;
+            }
         }
         super.onCreate();
+    }
+
+    private Set<Path> getPaths(final Context context, final Task task) {
+        return getPaths(task.getClass());
     }
 
     @Override
@@ -129,5 +141,36 @@ public abstract class TaskService extends Service {
         context.startService(intent);
     }
 
+    public static Set<Path> getPaths(final Class klass) {
+        final Class<? extends Task> columnClass = klass;
+        final Class<?>[] declaredClasses = columnClass.getDeclaredClasses();
+        for (final Class<?> declaredClass : declaredClasses) {
+            final Annotation[] declaredClassAnnotations = declaredClass.getDeclaredAnnotations();
+            for (final Annotation declaredClassAnnotation : declaredClassAnnotations) {
+                if (declaredClassAnnotation instanceof PathDefinitions) {
+                    return getPathDefinitions(declaredClass);
+                }
+            }
+        }
+        return Sets.newHashSet();
+    }
+
+    public static Set<Path> getPathDefinitions(Class<?> declaredClass) {
+        final Set<Path> paths = new HashSet<Path>();
+        final Field[] declaredFields = declaredClass.getDeclaredFields();
+        for (final Field declaredField : declaredFields) {
+            final Annotation[] declaredFieldAnnotations = declaredField.getDeclaredAnnotations();
+            for (final Annotation declaredFieldAnnotation : declaredFieldAnnotations) {
+                if (declaredFieldAnnotation instanceof PathDefinition) {
+                    try {
+                        final Path path = (Path) declaredField.get(null);
+                        paths.add(path);
+                    } catch (IllegalAccessException e) {
+                    }
+                }
+            }
+        }
+        return paths;
+    }
 
 }
