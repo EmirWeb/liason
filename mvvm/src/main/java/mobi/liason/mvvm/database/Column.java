@@ -53,7 +53,7 @@ public class Column {
         }
 
         final int columnIndex = cursor.getColumnIndex(mName);
-        if ((columnIndex == -1) || (cursor.isNull(columnIndex))) {
+        if (columnIndex == -1 || cursor.isNull(columnIndex)) {
             return null;
         }
 

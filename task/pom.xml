@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mobi.liason</groupId>
     <artifactId>task</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <packaging>jar</packaging>
     <name>Liason - Task extension for MVVM</name>
     <description>Task library</description>
@@ -107,13 +107,13 @@
         <dependency>
             <groupId>mobi.liason</groupId>
             <artifactId>loaders</artifactId>
-            <version>[0.0.5,)</version>
+            <version>0.0.5</version>
         </dependency>
 
         <dependency>
             <groupId>mobi.liason</groupId>
             <artifactId>mvvm</artifactId>
-            <version>[0.0.6,)</version>
+            <version>0.0.7</version>
         </dependency>
 
         <dependency>
