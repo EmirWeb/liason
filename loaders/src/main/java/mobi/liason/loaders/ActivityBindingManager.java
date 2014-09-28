@@ -1,6 +1,8 @@
 package mobi.liason.loaders;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.common.collect.Lists;
 

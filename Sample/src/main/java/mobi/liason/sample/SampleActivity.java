@@ -3,22 +3,24 @@ package mobi.liason.sample;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import mobi.liason.loaders.ActivityBindingManager;
 import mobi.liason.loaders.BindDefinition;
+import mobi.liason.loaders.support.SupportActivityBindingManager;
 
 /**
  * Created by Emir on 2014-08-23.
  */
-public class SampleActivity extends Activity {
+public class SampleActivity extends FragmentActivity {
 
-    private ActivityBindingManager mActivityBindingManager;
+    private SupportActivityBindingManager mActivityBindingManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivityBindingManager = new ActivityBindingManager(this);
+        mActivityBindingManager = new SupportActivityBindingManager(this);
     }
     @Override
     protected void onStart() {

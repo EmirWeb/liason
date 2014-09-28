@@ -7,6 +7,7 @@ import android.net.Uri;
 import java.util.HashMap;
 import java.util.Map;
 
+import mobi.liason.loaders.support.SupportBindingManager;
 import mobi.liason.loaders.utilities.IdCreator;
 
 /**
@@ -16,8 +17,10 @@ public abstract class BindDefinition {
 
     private final Context mContext;
     private BindingManager mBindingManager;
+    private SupportBindingManager mSupportBindingManager;
     private static final Map<Class, Integer> CLASS_ID_MAP = new HashMap<Class, Integer>();
     private static final IdCreator ID_CREATOR = new IdCreator();
+
 
     public BindDefinition(final Context context) {
         mContext = context;
@@ -65,10 +68,18 @@ public abstract class BindDefinition {
     }
 
     public void rebind() {
-        mBindingManager.restartLoader(this);
+        if (mSupportBindingManager != null) {
+            mSupportBindingManager.restartLoader(this);
+        } else {
+            mBindingManager.restartLoader(this);
+        }
     }
 
     public void setManager(final BindingManager bindingManager) {
         mBindingManager = bindingManager;
+    }
+
+    public void setManager(final SupportBindingManager supportBindingManager) {
+        mSupportBindingManager = supportBindingManager;
     }
 }
