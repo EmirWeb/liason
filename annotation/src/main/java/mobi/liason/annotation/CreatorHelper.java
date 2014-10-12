@@ -30,13 +30,13 @@ public class CreatorHelper {
     public static AnnotationMirror getAnnotationMirror(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
+            if (isAnnotationOfType(Integer.class, annotationMirror)){
                 return annotationMirror;
-            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
+            } else if (isAnnotationOfType(Text.class, annotationMirror)){
                 return annotationMirror;
-            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
+            } else if (isAnnotationOfType(Real.class, annotationMirror)){
                 return annotationMirror;
-            }else if (CreatorHelper.isAnnotationOfType(Object.class, annotationMirror)){
+            }else if (isAnnotationOfType(Object.class, annotationMirror)){
                 return annotationMirror;
             }
         }
@@ -78,7 +78,7 @@ public class CreatorHelper {
     public static String getFieldType(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
+            if (isAnnotationOfType(Integer.class, annotationMirror)){
                 final Integer annotation = fieldElement.getAnnotation(Integer.class);
                 final String longString = Long.class.getSimpleName();
                 if (annotation.isArray()){
@@ -86,7 +86,7 @@ public class CreatorHelper {
                 }
 
                 return longString;
-            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
+            } else if (isAnnotationOfType(Text.class, annotationMirror)){
                 final Text annotation = fieldElement.getAnnotation(Text.class);
                 final String stringString = String.class.getSimpleName();
                 if (annotation.isArray()){
@@ -94,7 +94,7 @@ public class CreatorHelper {
                 }
 
                 return stringString;
-            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
+            } else if (isAnnotationOfType(Real.class, annotationMirror)){
                 final Real annotation = fieldElement.getAnnotation(Real.class);
                 final String doubleString = Double.class.getSimpleName();
                 if (annotation.isArray()){
@@ -102,7 +102,7 @@ public class CreatorHelper {
                 }
 
                 return doubleString;
-            }else if (CreatorHelper.isAnnotationOfType(Object.class, annotationMirror)){
+            }else if (isAnnotationOfType(Object.class, annotationMirror)){
                 final Object annotation = fieldElement.getAnnotation(Object.class);
                 final String className = getClassName(annotation);
                 if (annotation.isArray()){
@@ -130,7 +130,7 @@ public class CreatorHelper {
         for (final Element fieldElement: fieldElements) {
             final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
             for (final AnnotationMirror annotationMirror : annotationMirrors) {
-                if (CreatorHelper.isAnnotationOfType(Object.class, annotationMirror)) {
+                if (isAnnotationOfType(Object.class, annotationMirror)) {
                     final Object annotation = fieldElement.getAnnotation(Object.class);
                     final String fullClassName = getFullClassName(annotation);
                     objectAnnotationTypes.add(fullClassName);
@@ -153,11 +153,11 @@ public class CreatorHelper {
     public static Column.Type getTypeString(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
+            if (isAnnotationOfType(Integer.class, annotationMirror)){
                 return Column.Type.integer;
-            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
+            } else if (isAnnotationOfType(Text.class, annotationMirror)){
                 return Column.Type.text;
-            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
+            } else if (isAnnotationOfType(Real.class, annotationMirror)){
                 return Column.Type.real;
             }
         }
