@@ -16,53 +16,14 @@ import static com.google.testing.compile.JavaSourcesSubjectFactory.javaSources;
 import static java.util.Arrays.asList;
 import static org.truth0.Truth.ASSERT;
 
-/**
- * Created by Emir Hasanbegovic on 09/10/14.
- */
 @RunWith(JUnit4.class)
 public class ModelProcessorTest {
     static final Iterable<? extends Processor> MODEL_PROCESSORS(){
         return Collections.singletonList(new ModelProcessor());
     }
 
-
     @Test
-    public void CreatesEmptyModel() {
-        final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "@Model",
-                "public class Product {",
-                "}"));
-
-        final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
-                "import android.content.Context;",
-                "import mobi.liason.loaders.Path;",
-                "import mobi.liason.mvvm.database.Model;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
-                "public class ProductModel extends Model {",
-                "   public static final String NAME = ProductModel.class.getSimpleName();",
-                "   @Override",
-                "   public String getName(final Context context) {",
-                "       return NAME;",
-                "   }",
-                "   @PathDefinitions",
-                "   public static class Paths {",
-                "       @PathDefinition",
-                "       public static final Path PRODUCT = new Path(ProductModel.NAME);",
-                "   }",
-                "}"));
-
-        ASSERT.about(javaSources())
-                .that(asList(metaJavaFileObject))
-                .processedWith(MODEL_PROCESSORS())
-                .compilesWithoutError()
-                .and()
-                .generatesSources(expectedJavaFileObject);
-    }
-
-    @Test
-    public void CreatesJsonModelWithTextArrayMember() {
+    public void modelAnnotationCreatesJsonAndModel (){
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
                 "import mobi.liason.annotation.Model;",
@@ -73,13 +34,14 @@ public class ModelProcessorTest {
                 "   public static final String ID = \"id\";",
                 "}"));
 
-        final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
+        final JavaFileObject expectedModelJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
                 "package mobi.liason.test;",
                 "import android.content.Context;",
                 "import mobi.liason.loaders.Path;",
                 "import mobi.liason.mvvm.database.Model;",
                 "import mobi.liason.mvvm.database.annotations.PathDefinition;",
                 "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
+                "import mobi.liason.test.ProductJson;",
                 "import android.content.ContentValues;",
                 "import mobi.liason.mvvm.database.Column;",
                 "import mobi.liason.mvvm.database.ModelColumn;",
@@ -107,13 +69,59 @@ public class ModelProcessorTest {
                 "       public static final Path PRODUCT = new Path(ProductModel.NAME);",
                 "   }",
                 "}"));
+        final JavaFileObject expectedJsonJavaFileObject = JavaFileObjects.forSourceString("ProductJson", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import com.google.gson.annotations.SerializedName;",
+                "public class ProductJson {",
+                "   @SerializedName(Product.ID)\n" +
+                        "   private final String mId;",
+                "   public Product(final String id) {",
+                "       mId = id;",
+                "   }",
+                "   public String getId() {",
+                "       return mId;",
+                "   }",
+                "}"));
 
         ASSERT.about(javaSources())
                 .that(asList(metaJavaFileObject))
                 .processedWith(MODEL_PROCESSORS())
                 .compilesWithoutError()
                 .and()
-                .generatesSources(expectedJavaFileObject);
+                .generatesSources(expectedModelJavaFileObject, expectedJsonJavaFileObject);
+    }
+
+    @Test
+    public void jsonAnnotationCreatesOnlyJson(){
+        final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import mobi.liason.annotation.Json;",
+                "import mobi.liason.annotation.Text;",
+                "@Json",
+                "public class Product {",
+                "   @Text",
+                "   public static final String ID = \"id\";",
+                "}"));
+        final JavaFileObject expectedJsonJavaFileObject = JavaFileObjects.forSourceString("ProductJson", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import com.google.gson.annotations.SerializedName;",
+                "public class ProductJson {",
+                "   @SerializedName(Product.ID)\n" +
+                        "   private final String mId;",
+                "   public Product(final String id) {",
+                "       mId = id;",
+                "   }",
+                "   public String getId() {",
+                "       return mId;",
+                "   }",
+                "}"));
+
+        ASSERT.about(javaSources())
+                .that(asList(metaJavaFileObject))
+                .processedWith(MODEL_PROCESSORS())
+                .compilesWithoutError()
+                .and()
+                .generatesSources(expectedJsonJavaFileObject);
     }
 
 }

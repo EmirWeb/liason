@@ -26,7 +26,7 @@ public class ProductsViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        return ProductModel.TABLE_NAME + " ORDER BY " + Columns.NAME.getName();
+        return ProductModel.NAME + " ORDER BY " + Columns.NAME.getName();
     }
 
     @ColumnDefinitions

@@ -20,9 +20,20 @@ public class ModelProcessor extends AbstractProcessor {
 
 
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
-        final Map<Element, List<Element>> elementMappings = new HashMap<Element, List<Element>>();
+        final Map<Element, List<Element>> jsonElementMappings = getElementMappings(Json.class, annotations, roundEnvironment);
+        JsonModelCreator.processModels(processingEnv, jsonElementMappings);
 
-        final Set<? extends Element> modelElements = roundEnvironment.getElementsAnnotatedWith(Model.class);
+
+        final Map<Element, List<Element>> modelElementMappings = getElementMappings(Model.class, annotations, roundEnvironment);
+        JsonModelCreator.processModels(processingEnv, modelElementMappings);
+        ModelCreator.processModels(processingEnv, modelElementMappings);
+
+        return true;
+    }
+
+    private Map<Element, List<Element>> getElementMappings(final Class modelClass, final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
+        final Map<Element, List<Element>> elementMappings = new HashMap<Element, List<Element>>();
+        final Set<? extends Element> modelElements = roundEnvironment.getElementsAnnotatedWith(modelClass);
         for (final Element modelElement : modelElements) {
             final ElementKind elementKind = modelElement.getKind();
             if (elementKind == ElementKind.CLASS) {
@@ -63,19 +74,15 @@ public class ModelProcessor extends AbstractProcessor {
                 }
             });
         }
-
-
-        JsonModelCreator.processModels(processingEnv, elementMappings);
-        ModelCreator.processModels(processingEnv, elementMappings);
-        return true;
+        return elementMappings;
     }
-
 
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         final Set<String> supportedAnnotationTypes = new HashSet<String>();
         supportedAnnotationTypes.add(Model.class.getName());
+        supportedAnnotationTypes.add(Json.class.getName());
         return supportedAnnotationTypes;
     }
 

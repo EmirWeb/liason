@@ -23,7 +23,7 @@ import static org.truth0.Truth.ASSERT;
  * Created by Emir Hasanbegovic on 09/10/14.
  */
 @RunWith(JUnit4.class)
-public class JsonModelProcessorTest {
+public class JsonModelCreatorTest {
     static final Iterable<? extends Processor> MODEL_PROCESSORS(){
         return Collections.singletonList(new ModelProcessor());
     }

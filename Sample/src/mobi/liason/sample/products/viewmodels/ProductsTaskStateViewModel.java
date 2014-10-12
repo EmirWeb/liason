@@ -1,4 +1,4 @@
-package mobi.liason.sample.product.viewmodels;
+package mobi.liason.sample.products.viewmodels;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,14 +16,14 @@ import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.mvvm.task.TaskStateTable;
 import mobi.liason.sample.models.ProductModel;
 import mobi.liason.sample.overrides.SampleTaskService;
-import mobi.liason.sample.product.tasks.ProductTask;
+import mobi.liason.sample.products.tasks.ProductsTask;
 
 /**
  * Created by Emir Hasanbegovic on 12/05/14.
  */
-public class ProductTaskStateViewModel extends ViewModel {
+public class ProductsTaskStateViewModel extends ViewModel {
 
-    public static final String VIEW_NAME = ProductTaskStateViewModel.class.getSimpleName();
+    public static final String VIEW_NAME = ProductsTaskStateViewModel.class.getSimpleName();
 
     @Override
     public String getName(final Context context) {
@@ -32,42 +32,19 @@ public class ProductTaskStateViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        final String selection =
-                TaskStateTable.TABLE_NAME +
-                        " LEFT JOIN " +
-                        ProductModel.TABLE_NAME +
-                        " ON " +
-                        TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() +
-                        " LIKE " +
-                        "'%' || '" + ProductTask.PRODUCTS + "/' || " + ProductModel.Columns.ID.getName() + " || '%'" +
-                        " WHERE " +
-                        TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() +
-                        " LIKE " +
-                        "'%" + ProductTask.PRODUCTS + "/%'";
-        return selection;
+        return TaskStateTable.TABLE_NAME + " WHERE " + TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() + " LIKE '%" + ProductsTask.Paths.PRODUCTS.getPath() + "'";
     }
 
     @Override
     public Cursor query(Context context, SQLiteDatabase sqLiteDatabase, Path path, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        final String uriString = uri.toString();
-
-        final String overridenSelection = Columns.URI.getName() + "=?";
-        final String[] overridenSelectionArguments = {uriString};
-
-        final Cursor cursor = super.query(context, sqLiteDatabase, path, uri, projection, overridenSelection, overridenSelectionArguments, sortOrder);
-
         SampleTaskService.startTask(context, uri);
-
-        return cursor;
+        return super.query(context, sqLiteDatabase, path, uri, projection, selection, selectionArgs, sortOrder);
     }
 
     @ColumnDefinitions
     public static class Columns {
-
         @ColumnDefinition
         public static final ViewModelColumn URI = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.URI);
-        @ColumnDefinition
-        public static final ViewModelColumn ID = new ViewModelColumn(VIEW_NAME, ProductModel.Columns.ID);
         @ColumnDefinition
         public static final ViewModelColumn STATE = new ViewModelColumn(VIEW_NAME, TaskStateTable.Columns.STATE);
         @ColumnDefinition
@@ -75,7 +52,7 @@ public class ProductTaskStateViewModel extends ViewModel {
 
         public static final String DATA_SELECTION = "CASE" +
                 " WHEN " +
-                ID.getName() + " NOT NULL " +
+                "(SELECT COUNT(*) FROM " + ProductModel.NAME + ") > 0" +
                 " THEN " +
                 "'" + Boolean.toString(true) + "'" +
                 " ELSE " +
@@ -89,6 +66,7 @@ public class ProductTaskStateViewModel extends ViewModel {
                 " ELSE " +
                 "'" + Boolean.toString(false) + "'" +
                 " END ";
+
         @ColumnDefinition
         public static final ViewModelColumn IS_PROGRESS_BAR_VISIBLE = new ViewModelColumn(VIEW_NAME, "isProgressBarVisible", PROGRESS_BAR_SELECTION, Column.Type.text);
         @ColumnDefinition
@@ -98,7 +76,7 @@ public class ProductTaskStateViewModel extends ViewModel {
     @PathDefinitions
     public static class Paths {
         @PathDefinition
-        public static final Path PRODUCT_TASK_STATE = ProductTask.Paths.PRODUCT;
+        public static final Path PRODUCTS_TASK_STATE = ProductsTask.Paths.PRODUCTS;
     }
 
 }

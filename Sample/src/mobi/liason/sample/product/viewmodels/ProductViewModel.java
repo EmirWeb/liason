@@ -29,7 +29,7 @@ public class ProductViewModel extends ViewModel {
 
     @Override
     protected String getSelection(Context context) {
-        return  ProductModel.TABLE_NAME;
+        return  ProductModel.NAME;
     }
 
     @Override

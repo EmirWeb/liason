@@ -16,6 +16,8 @@ import mobi.liason.mvvm.database.annotations.PathDefinitions;
 import mobi.liason.mvvm.task.Task;
 import mobi.liason.sample.R;
 import mobi.liason.sample.models.Product;
+import mobi.liason.sample.product.tasks.ProductResponseJson;
+import mobi.liason.sample.models.ProductJson;
 import mobi.liason.sample.models.ProductModel;
 import mobi.liason.sample.overrides.SampleProvider;
 import mobi.liason.sample.product.viewmodels.ProductViewModel;
@@ -42,7 +44,7 @@ public class ProductTask extends Task {
 
         final Uri networkUri = UriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, mId);
         final String url = networkUri.toString();
-        final ProductResponse productResponse = TaskUtilities.getModel(url, ProductResponse.class);
+        final ProductResponseJson productResponse = TaskUtilities.getModel(url, ProductResponseJson.class);
 
         final ArrayList<ContentProviderOperation> contentProviderOperations = getContentProviderOperations(context, productResponse);
 
@@ -55,11 +57,11 @@ public class ProductTask extends Task {
         contentResolver.notifyChange(productsViewModelUri, null, false);
     }
 
-    private ArrayList<ContentProviderOperation> getContentProviderOperations(final Context context, final ProductResponse productResponse) {
+    private ArrayList<ContentProviderOperation> getContentProviderOperations(final Context context, final ProductResponseJson productResponse) {
         final ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
 
-        final Uri tableUri = SampleProvider.getUri(context, ProductModel.Paths.PRODUCT_TABLE);
-        final Product product = productResponse.getProduct();
+        final Uri tableUri = SampleProvider.getUri(context, ProductModel.Paths.PRODUCT);
+        final ProductJson product = productResponse.getResult();
         final ContentValues contentValues = ProductModel.getContentValues(product);
         final ContentProviderOperation insertContentProviderOperation = ContentProviderOperation.newInsert(tableUri).withValues(contentValues).build();
         contentProviderOperations.add(insertContentProviderOperation);

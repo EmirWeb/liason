@@ -13,11 +13,8 @@ import mobi.liason.sample.product.viewmodels.ProductViewModel;
 import mobi.liason.sample.products.bindings.ProductsAdapterBinding;
 import mobi.liason.sample.products.bindings.ProductsTaskStateBinding;
 import mobi.liason.sample.products.tasks.ProductsTask;
-import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
-import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class ProductsActivity extends SampleActivity implements AdapterView.OnItemClickListener, OnRefreshListener {
+public class ProductsActivity extends SampleActivity implements AdapterView.OnItemClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +25,6 @@ public class ProductsActivity extends SampleActivity implements AdapterView.OnIt
         adapterView.setOnItemClickListener(this);
 
         setBindingDefinitions();
-
-        final PullToRefreshLayout pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.activity_products_pull_to_refresh_layout);
-        ActionBarPullToRefresh.from(this).allChildrenArePullable().listener(this).setup(pullToRefreshLayout);
 
         getWindow().setBackgroundDrawable(null);
 
@@ -51,11 +45,6 @@ public class ProductsActivity extends SampleActivity implements AdapterView.OnIt
         ProductActivity.startActivity(this, productId);
     }
 
-    @Override
-    public void onRefreshStarted(View view) {
-        final Context context = getApplicationContext();
-        final Uri uri = SampleProvider.getUri(context, ProductsTask.Paths.PRODUCTS);
-        SampleTaskService.forceStartTask(this, uri);
-    }
+
 }
 

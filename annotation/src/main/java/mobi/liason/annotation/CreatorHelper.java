@@ -10,6 +10,8 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
 import mobi.liason.mvvm.database.Column;
+import mobi.liason.mvvm.database.annotations.PrimaryKey;
+import mobi.liason.mvvm.database.annotations.Unique;
 
 /**
  * Created by Emir Hasanbegovic on 11/10/14.
@@ -18,16 +20,14 @@ public class CreatorHelper {
     public static boolean hasArray(final List<Element> fieldElements){
         for (final Element fieldElement : fieldElements){
             final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
-            for (final AnnotationMirror annotationMirror : annotationMirrors) {
-                if (isArray(annotationMirror, fieldElement)){
-                    return true;
-                }
+            if (isArray(fieldElement)){
+                return true;
             }
         }
         return false;
     }
 
-    public static AnnotationMirror getAnnotationMirror(final Element fieldElement) {
+    public static AnnotationMirror getModelAnnotationMirror(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
             if (isAnnotationOfType(Integer.class, annotationMirror)){
@@ -43,7 +43,8 @@ public class CreatorHelper {
         return null;
     }
 
-    public static boolean isArray(final AnnotationMirror annotationMirror, final Element fieldElement){
+    public static boolean isArray( final Element fieldElement){
+        final AnnotationMirror annotationMirror = getModelAnnotationMirror(fieldElement);
         if (isAnnotationOfType(Integer.class, annotationMirror)) {
             final Integer annotation = fieldElement.getAnnotation(Integer.class);
             if (annotation.isArray()) {
@@ -164,4 +165,31 @@ public class CreatorHelper {
         return Column.Type.text;
     }
 
+    public static boolean isUnique(final Element fieldElement) {
+        final Unique annotation = fieldElement.getAnnotation(Unique.class);
+        return annotation != null;
+    }
+
+    public static boolean isPrimaryKey(final Element fieldElement) {
+        final PrimaryKey annotation = fieldElement.getAnnotation(PrimaryKey.class);
+        return annotation != null;
+    }
+
+    public static boolean hasUnique(final List<Element> fieldElements) {
+        for (final Element fieldElement: fieldElements){
+            if (isUnique(fieldElement)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasPrimaryKey(final List<Element> fieldElements) {
+        for (final Element fieldElement: fieldElements){
+            if (isPrimaryKey(fieldElement)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
