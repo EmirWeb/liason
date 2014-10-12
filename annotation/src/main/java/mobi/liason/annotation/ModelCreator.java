@@ -2,12 +2,11 @@ package mobi.liason.annotation;
 
 import android.content.ContentValues;
 import android.content.Context;
+
 import com.squareup.javawriter.JavaWriter;
-import com.sun.javafx.binding.StringFormatter;
 
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
 import javax.tools.JavaFileObject;
 
 import mobi.liason.loaders.Path;
@@ -102,7 +100,7 @@ public class ModelCreator {
                     javaWriter.emitStatement("%s %s %s = new %s()", Modifier.FINAL.toString(), contentValuesClassName, contentValuesVariableName , contentValuesClassName );
 
                     for (final Element fieldElement : fieldElements) {
-                        final String fieldType = getFieldType(fieldElement);
+                        final String fieldType = CreatorHelper.getFieldType(fieldElement);
                         if (fieldType != null) {
                             final AnnotationMirror annotationMirror = CreatorHelper.getAnnotationMirror(fieldElement);
                             if (!CreatorHelper.isArray(annotationMirror, fieldElement)) {
@@ -125,13 +123,13 @@ public class ModelCreator {
                     javaWriter.beginType("Columns", CLASS, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC));
 
                     for (final Element fieldElement : fieldElements) {
-                        final String fieldType = getFieldType(fieldElement);
+                        final String fieldType = CreatorHelper.getFieldType(fieldElement);
                         if (fieldType != null) {
                             final Name simpleName = fieldElement.getSimpleName();
                             final String simpleNameString = simpleName.toString();
                             javaWriter.emitAnnotation(ColumnDefinition.class);
 
-                            final Type type = getTypeString(fieldElement);
+                            final Type type = CreatorHelper.getTypeString(fieldElement);
                             final String declaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
                                 modelClassName, typeElementSimpleNameString, simpleNameString, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
                             javaWriter.emitField(ModelColumn.class.getSimpleName(), simpleNameString, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
@@ -167,35 +165,5 @@ public class ModelCreator {
             exception.printStackTrace();
         }
     }
-
-    private static Type getTypeString(final Element fieldElement) {
-        final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
-        for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
-                return Type.integer;
-            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
-                return Type.text;
-            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
-                return Type.real;
-            }
-        }
-        return Type.text;
-    }
-
-    private static String getFieldType(final Element fieldElement) {
-        final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
-        for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
-                return Long.class.getSimpleName();
-            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
-                return String.class.getSimpleName();
-            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
-                return Double.class.getSimpleName();
-            }
-
-        }
-        return null;
-    }
-
 
 }
