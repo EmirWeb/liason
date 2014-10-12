@@ -22,4 +22,8 @@ public class VariableNameHelper {
     public static String getGetMethodName(final String upperCaseUnderscore){
         return "get" + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, upperCaseUnderscore);
     }
+
+    public static String getPublicStaticNameFromClassName(final String className){
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, className);
+    }
 }

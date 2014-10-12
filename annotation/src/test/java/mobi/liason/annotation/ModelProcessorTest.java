@@ -36,12 +36,20 @@ public class ModelProcessorTest {
 
         final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
                 "import android.content.Context;",
+                "import mobi.liason.loaders.Path;",
                 "import mobi.liason.mvvm.database.Model;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
                 "public class ProductModel extends Model {",
                 "   public static final String NAME = ProductModel.class.getSimpleName();",
                 "   @Override",
                 "   public String getName(final Context context) {",
                 "       return NAME;",
+                "   }",
+                "   @PathDefinitions",
+                "   public static class Paths {",
+                "       @PathDefinition",
+                "       public static final Path PRODUCT = new Path(ProductModel.NAME);",
                 "   }",
                 "}"));
 
@@ -56,6 +64,7 @@ public class ModelProcessorTest {
     @Test
     public void CreatesJsonModelWithTextArrayMember() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "package mobi.liason.test;",
                 "import mobi.liason.annotation.Model;",
                 "import mobi.liason.annotation.Text;",
                 "@Model",
@@ -65,8 +74,12 @@ public class ModelProcessorTest {
                 "}"));
 
         final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
+                "package mobi.liason.test;",
                 "import android.content.Context;",
+                "import mobi.liason.loaders.Path;",
                 "import mobi.liason.mvvm.database.Model;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
                 "import android.content.ContentValues;",
                 "import mobi.liason.mvvm.database.Column;",
                 "import mobi.liason.mvvm.database.ModelColumn;",
@@ -87,6 +100,11 @@ public class ModelProcessorTest {
                 "   public static class Columns {",
                 "       @ColumnDefinition",
                 "       public static final ModelColumn ID = new ModelColumn(ProductModel.NAME, Product.ID, Column.Type.text);",
+                "   }",
+                "   @PathDefinitions",
+                "   public static class Paths {",
+                "       @PathDefinition",
+                "       public static final Path PRODUCT = new Path(ProductModel.NAME);",
                 "   }",
                 "}"));
 

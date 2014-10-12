@@ -22,12 +22,15 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Column.Type;
 import mobi.liason.mvvm.database.Model;
 import mobi.liason.mvvm.database.ModelColumn;
 import mobi.liason.mvvm.database.annotations.ColumnDefinition;
 import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
+import mobi.liason.mvvm.database.annotations.PathDefinition;
+import mobi.liason.mvvm.database.annotations.PathDefinitions;
 
 /**
  * Created by Emir Hasanbegovic on 11/10/14.
@@ -63,7 +66,7 @@ public class ModelCreator {
             final JavaWriter javaWriter = new JavaWriter(stringWriter);
             javaWriter.emitPackage(packageElementQualifiedName);
 
-            javaWriter.emitImports(Context.class, Model.class);
+            javaWriter.emitImports(Context.class, Model.class, PathDefinitions.class, PathDefinition.class, Path.class);
 
             if (!fieldElements.isEmpty()) {
                 javaWriter.emitImports(ContentValues.class, ColumnDefinitions.class , ColumnDefinition.class, ModelColumn.class, Column.class);
@@ -121,11 +124,6 @@ public class ModelCreator {
                     javaWriter.emitAnnotation(ColumnDefinitions.class);
                     javaWriter.beginType("Columns", CLASS, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC));
 
-                    final String decleration = Modifier.FINAL.toString() + " " + jsonClassName;
-                    final String variable = VariableNameHelper.getVariableNameFromClassName(jsonClassName);
-                    final String contentValuesClassName = ContentValues.class.getSimpleName();
-                    final String contentValuesVariableName = VariableNameHelper.getVariableNameFromClassName(contentValuesClassName);
-
                     for (final Element fieldElement : fieldElements) {
                         final String fieldType = getFieldType(fieldElement);
                         if (fieldType != null) {
@@ -136,65 +134,32 @@ public class ModelCreator {
                             final Type type = getTypeString(fieldElement);
                             final String declaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
                                 modelClassName, typeElementSimpleNameString, simpleNameString, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
-                            System.out.println(declaration);
                             javaWriter.emitField(ModelColumn.class.getSimpleName(), simpleNameString, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
                         }
                     }
-
-
-
                     javaWriter.endType();
                 }
             }
-//
-//            // Constructor
-//            {
-//                if (!fieldElements.isEmpty()) {
-//                    final List<String> constructorParameters = getConstructorParameters(fieldElements);
-//                    javaWriter.beginConstructor(EnumSet.of(Modifier.PUBLIC), constructorParameters, null);
-//
-//                    for (final Element fieldElement : fieldElements) {
-//                        final Name simpleName = fieldElement.getSimpleName();
-//                        final String simpleNameString = simpleName.toString();
-//                        final String memberVariableName = VariableNameHelper.getClassMemberVariableName(simpleNameString);
-//                        final String fieldVariableName = VariableNameHelper.getConstructorParameterVariableName(simpleNameString);
-//                        javaWriter.emitStatement(memberVariableName + " = " + fieldVariableName);
-//                    }
-//
-//                    javaWriter.endConstructor();
-//                }
-//            }
-//
-//            // Get methods
-//            {
-//
-//                for (final Element fieldElement : fieldElements) {
-//
-//                    final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
-//                    final String fieldType = getFieldType(annotationMirrors);
-//                    if (fieldType != null) {
-//
-//                        final Name simpleName = fieldElement.getSimpleName();
-//                        final String simpleNameString = simpleName.toString();
-//                        final String getMethodName = VariableNameHelper.getGetMethodName(simpleNameString);
-//                        final String classMemberVariableName = VariableNameHelper.getClassMemberVariableName(simpleNameString);
-//
-//                        javaWriter.beginMethod(fieldType, getMethodName, EnumSet.of(Modifier.PUBLIC));
-//                        javaWriter.emitStatement("return " + classMemberVariableName);
-//                        javaWriter.endMethod();
-//                    }
-//                }
-//
-//
-//            }
+
+            // Paths
+            {
+                javaWriter.emitAnnotation(PathDefinitions.class);
+                javaWriter.beginType("Paths", CLASS, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC));
+
+                javaWriter.emitAnnotation(PathDefinition.class);
+
+                final String declaration = String.format("new Path(%s.NAME)", modelClassName);
+                final String publicStaticNameFromClassName = VariableNameHelper.getPublicStaticNameFromClassName(typeElementSimpleNameString);
+                javaWriter.emitField(Path.class.getSimpleName(), publicStaticNameFromClassName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
+
+                javaWriter.endType();
+            }
 
             javaWriter.endType();
-
             javaWriter.close();
 
             final String code = stringWriter.toString();
             System.out.println(code);
-
             writer.write(code);
             writer.flush();
             writer.close();
@@ -206,41 +171,25 @@ public class ModelCreator {
     private static Type getTypeString(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (isAnnotationOfType(Integer.class, annotationMirror)){
+            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
                 return Type.integer;
-            } else if (isAnnotationOfType(Text.class, annotationMirror)){
+            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
                 return Type.text;
-            } else if (isAnnotationOfType(Real.class, annotationMirror)){
+            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
                 return Type.real;
             }
         }
         return Type.text;
     }
 
-    private static List<String> getConstructorParameters(final List<Element> fieldElements) {
-        final List<String> constructorParameters = new ArrayList<String>(fieldElements.size() * 3);
-        for (final Element fieldElement : fieldElements){
-            final String fieldType = getFieldType(fieldElement);
-            final Name name = fieldElement.getSimpleName();
-            final String nameString = name.toString();
-            final String fieldVariableName = VariableNameHelper.getConstructorParameterVariableName(nameString);
-
-            if (fieldType != null) {
-                constructorParameters.add(Modifier.FINAL.toString() + " " + fieldType);
-                constructorParameters.add(fieldVariableName);
-            }
-        }
-        return constructorParameters;
-    }
-
     private static String getFieldType(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (isAnnotationOfType(Integer.class, annotationMirror)){
+            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
                 return Long.class.getSimpleName();
-            } else if (isAnnotationOfType(Text.class, annotationMirror)){
+            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
                 return String.class.getSimpleName();
-            } else if (isAnnotationOfType(Real.class, annotationMirror)){
+            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
                 return Double.class.getSimpleName();
             }
 
@@ -248,10 +197,5 @@ public class ModelCreator {
         return null;
     }
 
-    private static boolean isAnnotationOfType(final Class<?> klass, final AnnotationMirror annotationMirror) {
-        final DeclaredType annotationType = annotationMirror.getAnnotationType();
-        final String annotationTypeString = annotationType.toString();
-        final String KlassCanonicalName = klass.getCanonicalName();
-        return annotationTypeString.equals(KlassCanonicalName);
-    }
+
 }
