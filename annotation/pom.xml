@@ -49,6 +49,11 @@
         </dependency>
         <dependency>
             <groupId>mobi.liason</groupId>
+            <artifactId>loaders</artifactId>
+            <version>0.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>mobi.liason</groupId>
             <artifactId>mvvm</artifactId>
             <version>0.0.8</version>
         </dependency>
@@ -66,6 +71,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.1.1.4</version>
+            <scope>provided</scope>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apache.commons</groupId>-->

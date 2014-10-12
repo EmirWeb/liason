@@ -1,6 +1,5 @@
 package mobi.liason.annotation;
 
-import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.annotations.Unique;
 
 /**
