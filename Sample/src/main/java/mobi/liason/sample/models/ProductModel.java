@@ -1,7 +1,7 @@
 package mobi.liason.sample.models;
 
 import android.content.ContentValues;
-import android.content.Context;
+    import android.content.Context;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Model;

@@ -53,4 +53,49 @@ public class ModelProcessorTest {
                 .generatesSources(expectedJavaFileObject);
     }
 
+    @Test
+    public void CreatesJsonModelWithTextArrayMember() {
+        final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.Text;",
+                "@Model",
+                "public class Product {",
+                "   @Text",
+                "   public static final String ID = \"id\";",
+                "}"));
+
+        final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
+                "import android.content.Context;",
+                "import mobi.liason.mvvm.database.Model;",
+                "import android.content.ContentValues;",
+                "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.ModelColumn;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "public class ProductModel extends Model {",
+                "   public static final String NAME = ProductModel.class.getSimpleName();",
+                "   @Override",
+                "   public String getName(final Context context) {",
+                "       return NAME;",
+                "   }",
+                "   public static ContentValues getContentValues(final ProductJson productJson) {",
+                "       final ContentValues contentValues = new ContentValues();",
+                "       contentValues.put(Columns.ID.getName(), productJson.getId());",
+                "       return contentValues;",
+                "   }",
+                "   @ColumnDefinitions",
+                "   public static class Columns {",
+                "       @ColumnDefinition",
+                "       public static final ModelColumn ID = new ModelColumn(ProductModel.NAME, Product.ID, Column.Type.text);",
+                "   }",
+                "}"));
+
+        ASSERT.about(javaSources())
+                .that(asList(metaJavaFileObject))
+                .processedWith(MODEL_PROCESSORS())
+                .compilesWithoutError()
+                .and()
+                .generatesSources(expectedJavaFileObject);
+    }
+
 }

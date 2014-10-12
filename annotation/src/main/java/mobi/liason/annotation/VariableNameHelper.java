@@ -11,6 +11,10 @@ public class VariableNameHelper {
         return "m" + CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, upperCaseUnderscore);
     }
 
+    public static String getVariableNameFromClassName(final String className){
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, className);
+    }
+
     public static String getConstructorParameterVariableName(final String upperCaseUnderscore){
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, upperCaseUnderscore);
     }

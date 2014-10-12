@@ -42,7 +42,7 @@ public class JsonModelCreator {
         for (final Element fieldElement: fieldElements) {
             final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
             for (final AnnotationMirror annotationMirror : annotationMirrors) {
-                if (isAnnotationOfType(Object.class, annotationMirror)) {
+                if (CreatorHelper.isAnnotationOfType(Object.class, annotationMirror)) {
                     final Object annotation = fieldElement.getAnnotation(Object.class);
                     final String fullClassName = getFullClassName(annotation);
                     objectAnnotationTypes.add(fullClassName);
@@ -52,35 +52,7 @@ public class JsonModelCreator {
         return objectAnnotationTypes;
     }
 
-    private static boolean hasArray(final List<Element> fieldElements){
-        for (final Element fieldElement : fieldElements){
-            final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
-            for (final AnnotationMirror annotationMirror : annotationMirrors) {
-                if (isAnnotationOfType(Integer.class, annotationMirror)) {
-                    final Integer annotation = fieldElement.getAnnotation(Integer.class);
-                    if (annotation.isArray()) {
-                        return true;
-                    }
-                } else if (isAnnotationOfType(Text.class, annotationMirror)) {
-                    final Text annotation = fieldElement.getAnnotation(Text.class);
-                    if (annotation.isArray()) {
-                        return true;
-                    }
-                } else if (isAnnotationOfType(Real.class, annotationMirror)) {
-                    final Real annotation = fieldElement.getAnnotation(Real.class);
-                    if (annotation.isArray()) {
-                        return true;
-                    }
-                } else if (isAnnotationOfType(Object.class, annotationMirror)) {
-                    final Object annotation = fieldElement.getAnnotation(Object.class);
-                    if (annotation.isArray()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+
 
     private static void processModel(final ProcessingEnvironment processingEnv, final Element modelElement, final List<Element> fieldElements) {
         final TypeElement typeElement = (TypeElement) modelElement;
@@ -104,7 +76,7 @@ public class JsonModelCreator {
                 javaWriter.emitImports(SerializedName.class);
             }
 
-            if (hasArray(fieldElements)) {
+            if (CreatorHelper.hasArray(fieldElements)) {
                 javaWriter.emitImports(ArrayList.class);
             }
 
@@ -199,7 +171,7 @@ public class JsonModelCreator {
     private static String getFieldType(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (isAnnotationOfType(Integer.class, annotationMirror)){
+            if (CreatorHelper.isAnnotationOfType(Integer.class, annotationMirror)){
                 final Integer annotation = fieldElement.getAnnotation(Integer.class);
                 final String longString = Long.class.getSimpleName();
                 if (annotation.isArray()){
@@ -207,7 +179,7 @@ public class JsonModelCreator {
                 }
 
                 return longString;
-            } else if (isAnnotationOfType(Text.class, annotationMirror)){
+            } else if (CreatorHelper.isAnnotationOfType(Text.class, annotationMirror)){
                 final Text annotation = fieldElement.getAnnotation(Text.class);
                 final String stringString = String.class.getSimpleName();
                 if (annotation.isArray()){
@@ -215,7 +187,7 @@ public class JsonModelCreator {
                 }
 
                 return stringString;
-            } else if (isAnnotationOfType(Real.class, annotationMirror)){
+            } else if (CreatorHelper.isAnnotationOfType(Real.class, annotationMirror)){
                 final Real annotation = fieldElement.getAnnotation(Real.class);
                 final String doubleString = Double.class.getSimpleName();
                 if (annotation.isArray()){
@@ -223,7 +195,7 @@ public class JsonModelCreator {
                 }
 
                 return doubleString;
-            }else if (isAnnotationOfType(Object.class, annotationMirror)){
+            }else if (CreatorHelper.isAnnotationOfType(Object.class, annotationMirror)){
                 final Object annotation = fieldElement.getAnnotation(Object.class);
                 final String className = getClassName(annotation);
                 if (annotation.isArray()){
@@ -256,10 +228,5 @@ public class JsonModelCreator {
         }
     }
 
-    private static boolean isAnnotationOfType(final Class<?> klass, final AnnotationMirror annotationMirror) {
-        final DeclaredType annotationType = annotationMirror.getAnnotationType();
-        final String annotationTypeString = annotationType.toString();
-        final String KlassCanonicalName = klass.getCanonicalName();
-        return annotationTypeString.equals(KlassCanonicalName);
-    }
+
 }
