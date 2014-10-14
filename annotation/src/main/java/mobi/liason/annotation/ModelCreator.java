@@ -7,6 +7,7 @@ import com.squareup.javawriter.JavaWriter;
 
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -69,22 +70,40 @@ public class ModelCreator {
             final JavaWriter javaWriter = new JavaWriter(stringWriter);
             javaWriter.emitPackage(packageElementQualifiedName);
 
-            javaWriter.emitImports(Context.class, Model.class, PathDefinitions.class, PathDefinition.class, Path.class);
+            final List<String> types = new ArrayList<String>();
+            types.add(Context.class.getCanonicalName());
+            types.add(Model.class.getCanonicalName());
+            types.add(PathDefinitions.class.getCanonicalName());
+            types.add(PathDefinition.class.getCanonicalName());
+            types.add(Path.class.getCanonicalName());
+
             if (!jsonClassNameAndPackage.equals(jsonClassName)) {
-                javaWriter.emitImports(jsonClassNameAndPackage);
+                types.add(jsonClassNameAndPackage);
             }
 
             if (!fieldElements.isEmpty()) {
-                javaWriter.emitImports(ContentValues.class, ColumnDefinitions.class , ColumnDefinition.class, ModelColumn.class, Column.class);
+                types.add(ContentValues.class.getCanonicalName());
+                types.add(ColumnDefinitions.class.getCanonicalName());
+                types.add(ColumnDefinition.class.getCanonicalName());
+                types.add(ModelColumn.class.getCanonicalName());
+                types.add(Column.class.getCanonicalName());
             }
 
             if (CreatorHelper.hasUnique(fieldElements)){
-                javaWriter.emitImports(Unique.class);
+                types.add(Unique.class.getCanonicalName());
             }
 
             if (CreatorHelper.hasPrimaryKey(fieldElements)){
-                javaWriter.emitImports(PrimaryKey.class);
+                types.add(PrimaryKey.class.getCanonicalName());
             }
+
+
+            if (!jsonClassNameAndPackage.equals(jsonClassName)) {
+                types.add(jsonClassNameAndPackage);
+            }
+
+            javaWriter.emitImports(types);
+
 
             javaWriter.beginType(modelClassName, CLASS, EnumSet.of(Modifier.PUBLIC), Model.class.getSimpleName());
 
@@ -118,7 +137,7 @@ public class ModelCreator {
                     for (final Element fieldElement : fieldElements) {
                         final String fieldType = CreatorHelper.getFieldType(fieldElement);
                         if (fieldType != null) {
-                            if (!CreatorHelper.isArray(fieldElement)) {
+                            if (!CreatorHelper.isArray(fieldElement) && CreatorHelper.isPrimitiveElement(fieldElement)) {
                                 final Name simpleName = fieldElement.getSimpleName();
                                 final String simpleNameString = simpleName.toString();
                                 javaWriter.emitStatement(contentValuesVariableName + ".put(Columns." + simpleNameString + ".getName(), " + jsonVariableName + "." + VariableNameHelper.getGetMethodName(simpleNameString) + "())");
@@ -140,7 +159,7 @@ public class ModelCreator {
                     for (final Element fieldElement : fieldElements) {
                         final String fieldType = CreatorHelper.getFieldType(fieldElement);
                         if (fieldType != null) {
-                            if (!CreatorHelper.isArray(fieldElement)) {
+                            if (!CreatorHelper.isArray(fieldElement) && CreatorHelper.isPrimitiveElement(fieldElement)) {
                                 final Name simpleName = fieldElement.getSimpleName();
                                 final String simpleNameString = simpleName.toString();
                                 javaWriter.emitAnnotation(ColumnDefinition.class);

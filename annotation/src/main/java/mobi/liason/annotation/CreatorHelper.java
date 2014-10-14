@@ -1,6 +1,9 @@
 package mobi.liason.annotation;
 
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.lang.model.element.AnnotationMirror;
@@ -118,8 +121,8 @@ public class CreatorHelper {
 
     public static String getClassName(final Object object){
         try {
-            final Class value = object.value();
-            return value.getSimpleName();
+            final String value = object.value();
+            return value;
         } catch( final MirroredTypeException mirroredTypeException) {
             final TypeMirror typeMirror = mirroredTypeException.getTypeMirror();
             return typeMirror.toString();
@@ -143,12 +146,16 @@ public class CreatorHelper {
 
     public static String getFullClassName(final Object object){
         try {
-            final Class value = object.value();
-            return value.getCanonicalName();
+            final String value = object.value();
+            return value;
         } catch( final MirroredTypeException mirroredTypeException) {
             final TypeMirror typeMirror = mirroredTypeException.getTypeMirror();
             return typeMirror.toString();
+        } catch (final AnnotationTypeMismatchException annotationTypeMismatchException){
+            System.out.println("object: " + object);
+            annotationTypeMismatchException.printStackTrace();
         }
+        return null;
     }
 
     public static Column.Type getTypeString(final Element fieldElement) {
@@ -191,5 +198,49 @@ public class CreatorHelper {
             }
         }
         return false;
+    }
+
+    public static boolean isPrimitiveElement(final Element fieldElement) {
+        if (isArray(fieldElement)){
+            return false;
+        }
+
+        final Object annotation = fieldElement.getAnnotation(Object.class);
+        if (annotation != null){
+            final String value = annotation.value();
+            if (value.equals("java.lang.String")){
+                return true;
+            } else if (value.equals("java.lang.Integer")){
+                return true;
+            } else if (value.equals("java.lang.Double")){
+                return true;
+            } else if (value.equals("java.lang.Float")){
+                return true;
+            } else if (value.equals("java.lang.Boolean")){
+                return true;
+            } else if (value.equals("java.lang.Character")){
+                return true;
+            } else if (value.equals("java.lang.Byte")){
+                return true;
+            } else if (value.equals("java.lang.Long")){
+                return true;
+            } else if (value.equals("java.lang.Short")){
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void sortElements(final List<Element> elements){
+        Collections.sort(elements, new Comparator<Element>() {
+            @Override
+            public int compare(Element o1, Element o2) {
+                final String string2 = o2.toString();
+                final String string1 = o1.toString();
+                return string1.compareToIgnoreCase(string2);
+            }
+        });
     }
 }

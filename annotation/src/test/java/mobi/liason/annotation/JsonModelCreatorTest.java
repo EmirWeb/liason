@@ -274,21 +274,6 @@ public class JsonModelCreatorTest {
                 "   public static final String URL = \"url\";",
                 "}"));
 
-        final JavaFileObject expectedImageJavaFileObject = JavaFileObjects.forSourceString("ImagesJson", Joiner.on("\n").join(
-                "package mobi.liason;",
-                "import com.google.gson.annotations.SerializedName;",
-                "public class ImagesJson {",
-                "   @SerializedName(Images.URL)",
-                "   private final String mUrl;",
-                "   public ImagesJson(final String url) {",
-                "       mUrl = url;",
-                "   }",
-                "   public String getUrl() {",
-                "       return mUrl;",
-                "   }",
-                "}"));
-
-
         final JavaFileObject productMetaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason;",
                 "import mobi.liason.annotation.Model;",
@@ -296,21 +281,21 @@ public class JsonModelCreatorTest {
                 "import mobi.liason.ImagesJson;",
                 "@Model",
                 "public class Product {",
-                "   @Object(String.class)",
+                "   @Object(\"mobi.liason.ImagesJson\")",
                 "   public static final String IMAGES = \"images\";",
                 "}"));
 
         final JavaFileObject expectedProductJavaFileObject = JavaFileObjects.forSourceString("ProductJson", Joiner.on("\n").join(
                 "package mobi.liason;",
                 "import com.google.gson.annotations.SerializedName;",
-                "import java.lang.String;",
+                "import mobi.liason.ImagesJson;",
                 "public class ProductJson {",
                 "   @SerializedName(Product.IMAGES)",
-                "   private final String mImages;",
-                "   public Product(final String images) {",
+                "   private final ImagesJson mImages;",
+                "   public Product(final ImagesJson images) {",
                 "       mImages = images;",
                 "   }",
-                "   public String getImages() {",
+                "   public ImagesJson getImages() {",
                 "       return mImages;",
                 "   }",
                 "}"));

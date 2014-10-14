@@ -41,7 +41,6 @@ public class ProductTask extends Task {
 
     @Override
     protected void onExecuteTask(final Context context) throws Exception {
-
         final Uri networkUri = UriUtilities.getUri(SCHEME, AUTHORITY, Paths.PRODUCT, mId);
         final String url = networkUri.toString();
         final ProductResponseJson productResponse = TaskUtilities.getModel(url, ProductResponseJson.class);

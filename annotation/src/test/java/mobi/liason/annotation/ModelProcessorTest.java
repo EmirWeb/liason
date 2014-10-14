@@ -27,26 +27,37 @@ public class ModelProcessorTest {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
                 "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.Object;",
                 "@Model",
                 "public class Product {",
-                "   @Text",
+                "   @Object(\"mobi.liason.ImagesJson\")",
                 "   public static final String ID = \"id\";",
                 "}"));
 
+        final JavaFileObject imageMetaJavaFileObject = JavaFileObjects.forSourceString("Images", Joiner.on("\n").join(
+                "package mobi.liason;",
+                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.Text;",
+                "@Model",
+                "public class Images {",
+                "   @Text",
+                "   public static final String URL = \"url\";",
+                "}"));
+
+
         final JavaFileObject expectedModelJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
                 "package mobi.liason.test;",
+                "import android.content.ContentValues;",
                 "import android.content.Context;",
                 "import mobi.liason.loaders.Path;",
-                "import mobi.liason.mvvm.database.Model;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
-                "import mobi.liason.test.ProductJson;",
-                "import android.content.ContentValues;",
                 "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.Model;",
                 "import mobi.liason.mvvm.database.ModelColumn;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
+                "import mobi.liason.test.ProductJson;",
                 "public class ProductModel extends Model {",
                 "   public static final String NAME = ProductModel.class.getSimpleName();",
                 "   @Override",
@@ -55,13 +66,10 @@ public class ModelProcessorTest {
                 "   }",
                 "   public static ContentValues getContentValues(final ProductJson productJson) {",
                 "       final ContentValues contentValues = new ContentValues();",
-                "       contentValues.put(Columns.ID.getName(), productJson.getId());",
                 "       return contentValues;",
                 "   }",
                 "   @ColumnDefinitions",
                 "   public static class Columns {",
-                "       @ColumnDefinition",
-                "       public static final ModelColumn ID = new ModelColumn(ProductModel.NAME, Product.ID, Column.Type.text);",
                 "   }",
                 "   @PathDefinitions",
                 "   public static class Paths {",
@@ -72,19 +80,20 @@ public class ModelProcessorTest {
         final JavaFileObject expectedJsonJavaFileObject = JavaFileObjects.forSourceString("ProductJson", Joiner.on("\n").join(
                 "package mobi.liason.test;",
                 "import com.google.gson.annotations.SerializedName;",
+                "import mobi.liason.ImagesJson;",
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)\n" +
-                        "   private final String mId;",
-                "   public Product(final String id) {",
+                        "   private final ImagesJson mId;",
+                "   public Product(final ImagesJson id) {",
                 "       mId = id;",
                 "   }",
-                "   public String getId() {",
+                "   public ImagesJson getId() {",
                 "       return mId;",
                 "   }",
                 "}"));
 
         ASSERT.about(javaSources())
-                .that(asList(metaJavaFileObject))
+                .that(asList(imageMetaJavaFileObject, metaJavaFileObject))
                 .processedWith(MODEL_PROCESSORS())
                 .compilesWithoutError()
                 .and()

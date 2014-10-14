@@ -1,5 +1,7 @@
 package mobi.liason.sample.utilities;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import org.apache.http.HttpResponse;
@@ -32,7 +34,7 @@ public class TaskUtilities {
             HttpResponse response = httpclient.execute(request);
             inputStream = response.getEntity().getContent();
             inputStreamReader = new InputStreamReader(inputStream);
-            return GSON.fromJson(inputStreamReader, model);
+            return GSON.fromJson(streamToString(inputStreamReader), model);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -50,5 +52,22 @@ public class TaskUtilities {
             }
         }
         return null;
+    }
+
+    private static final String streamToString(final InputStreamReader inputStreamReader ){
+        final int bufferSize = 1024;
+        final char[] buffer = new char[bufferSize];
+        int read;
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            while ((read = inputStreamReader.read(buffer, 0, bufferSize)) > 0) {
+                stringBuilder.append(buffer, 0, read);
+            }
+        }catch (final Exception e){
+
+        }
+        final String string = stringBuilder.toString();
+        Log.d("NetworkResponse", string);
+        return string;
     }
 }

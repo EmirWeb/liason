@@ -75,17 +75,17 @@ public class ModelCreatorTest {
 
         final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
                 "package mobi.liason.test;",
+                "import android.content.ContentValues;",
                 "import android.content.Context;",
                 "import mobi.liason.loaders.Path;",
-                "import mobi.liason.mvvm.database.Model;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
-                "import mobi.liason.test.ProductJson;",
-                "import android.content.ContentValues;",
                 "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.Model;",
                 "import mobi.liason.mvvm.database.ModelColumn;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
+                "import mobi.liason.test.ProductJson;",
                 "public class ProductModel extends Model {",
                 "   public static final String NAME = ProductModel.class.getSimpleName();",
                 "   @Override",
@@ -133,18 +133,18 @@ public class ModelCreatorTest {
 
         final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
                 "package mobi.liason.test;",
+                "import android.content.ContentValues;",
                 "import android.content.Context;",
                 "import mobi.liason.loaders.Path;",
-                "import mobi.liason.mvvm.database.Model;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
-                "import mobi.liason.test.ProductJson;",
-                "import android.content.ContentValues;",
                 "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.Model;",
                 "import mobi.liason.mvvm.database.ModelColumn;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
                 "import mobi.liason.mvvm.database.annotations.Unique;",
+                "import mobi.liason.test.ProductJson;",
                 "public class ProductModel extends Model {",
                 "   public static final String NAME = ProductModel.class.getSimpleName();",
                 "   @Override",
@@ -176,6 +176,119 @@ public class ModelCreatorTest {
                 .and()
                 .generatesSources(expectedJavaFileObject);
     }
+
+    @Test
+    public void createModelWithPrimitiveObjectVariable() {
+        final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.Object;",
+                "@Model",
+                "public class Product {",
+                "   @Object(\"java.lang.String\")",
+                "   public static final String ID = \"id\";",
+                "}"));
+
+        final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import android.content.ContentValues;",
+                "import android.content.Context;",
+                "import mobi.liason.loaders.Path;",
+                "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.Model;",
+                "import mobi.liason.mvvm.database.ModelColumn;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
+                "import mobi.liason.test.ProductJson;",
+                "public class ProductModel extends Model {",
+                "   public static final String NAME = ProductModel.class.getSimpleName();",
+                "   @Override",
+                "   public String getName(final Context context) {",
+                "       return NAME;",
+                "   }",
+                "   public static ContentValues getContentValues(final ProductJson productJson) {",
+                "       final ContentValues contentValues = new ContentValues();",
+                "       contentValues.put(Columns.ID.getName(), productJson.getId());",
+                "       return contentValues;",
+                "   }",
+                "   @ColumnDefinitions",
+                "   public static class Columns {",
+                "       @ColumnDefinition",
+                "       public static final ModelColumn ID = new ModelColumn(ProductModel.NAME, Product.ID, Column.Type.text);",
+                "   }",
+                "   @PathDefinitions",
+                "   public static class Paths {",
+                "       @PathDefinition",
+                "       public static final Path PRODUCT = new Path(ProductModel.NAME);",
+                "   }",
+                "}"));
+
+        ASSERT.about(javaSources())
+                .that(asList(metaJavaFileObject))
+                .processedWith(MODEL_PROCESSORS())
+                .compilesWithoutError()
+                .and()
+                .generatesSources(expectedJavaFileObject);
+    }
+
+    @Test
+    public void createModelWitNonPrimitiveObjectVariable() {
+        final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.Object;",
+                "@Model",
+                "public class Product {",
+                "   @Object(\"java.lang.String\")",
+                "   public static final String ID = \"id\";",
+                "}"));
+
+        final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
+                "package mobi.liason.test;",
+                "import android.content.ContentValues;",
+                "import android.content.Context;",
+                "import mobi.liason.loaders.Path;",
+                "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.Model;",
+                "import mobi.liason.mvvm.database.ModelColumn;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
+                "import mobi.liason.test.ProductJson;",
+                "public class ProductModel extends Model {",
+                "   public static final String NAME = ProductModel.class.getSimpleName();",
+                "   @Override",
+                "   public String getName(final Context context) {",
+                "       return NAME;",
+                "   }",
+                "   public static ContentValues getContentValues(final ProductJson productJson) {",
+                "       final ContentValues contentValues = new ContentValues();",
+                "       contentValues.put(Columns.ID.getName(), productJson.getId());",
+                "       return contentValues;",
+                "   }",
+                "   @ColumnDefinitions",
+                "   public static class Columns {",
+                "       @ColumnDefinition",
+                "       public static final ModelColumn ID = new ModelColumn(ProductModel.NAME, Product.ID, Column.Type.text);",
+                "   }",
+                "   @PathDefinitions",
+                "   public static class Paths {",
+                "       @PathDefinition",
+                "       public static final Path PRODUCT = new Path(ProductModel.NAME);",
+                "   }",
+                "}"));
+
+        ASSERT.about(javaSources())
+                .that(asList(metaJavaFileObject))
+                .processedWith(MODEL_PROCESSORS())
+                .compilesWithoutError()
+                .and()
+                .generatesSources(expectedJavaFileObject);
+    }
+
     @Test
     public void createModelWithPrimaryKeyTextVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
@@ -192,18 +305,18 @@ public class ModelCreatorTest {
 
         final JavaFileObject expectedJavaFileObject = JavaFileObjects.forSourceString("ProductModel", Joiner.on("\n").join(
                 "package mobi.liason.test;",
+                "import android.content.ContentValues;",
                 "import android.content.Context;",
                 "import mobi.liason.loaders.Path;",
-                "import mobi.liason.mvvm.database.Model;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
-                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
-                "import mobi.liason.test.ProductJson;",
-                "import android.content.ContentValues;",
                 "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.Model;",
                 "import mobi.liason.mvvm.database.ModelColumn;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
                 "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
                 "import mobi.liason.mvvm.database.annotations.PrimaryKey;",
+                "import mobi.liason.test.ProductJson;",
                 "public class ProductModel extends Model {",
                 "   public static final String NAME = ProductModel.class.getSimpleName();",
                 "   @Override",

@@ -61,6 +61,8 @@ public class ProductTaskStateViewModel extends ViewModel {
         return cursor;
     }
 
+
+
     @ColumnDefinitions
     public static class Columns {
 

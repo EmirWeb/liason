@@ -19,6 +19,7 @@ import mobi.liason.sample.models.Product;
 import mobi.liason.sample.models.ProductJson;
 import mobi.liason.sample.models.ProductModel;
 import mobi.liason.sample.overrides.SampleProvider;
+import mobi.liason.sample.product.tasks.ProductResponse;
 import mobi.liason.sample.products.tasks.ProductsResponseJson;
 import mobi.liason.sample.products.viewmodels.ProductsViewModel;
 import mobi.liason.sample.utilities.TaskUtilities;
@@ -50,7 +51,7 @@ public class ProductsTask extends Task {
         final ContentResolver contentResolver = context.getContentResolver();
         contentResolver.applyBatch(authority, contentProviderOperations);
 
-        final Uri productsViewModelUri = SampleProvider.getUri(context, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
+        final Uri productsViewModelUri = SampleProvider.getUri(context, ProductsViewModel.Paths.PRODUCTS);
         contentResolver.notifyChange(productsViewModelUri, null, false);
     }
 

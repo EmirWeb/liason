@@ -33,7 +33,7 @@ public class ProductsAdapterBinding extends ActivityAdapterBinding {
 
     @Override
     public Uri getUri(final Context context) {
-        return SampleProvider.getUri(context, ProductsViewModel.Paths.PRODUCTS_VIEW_MODEL);
+        return SampleProvider.getUri(context, ProductsViewModel.Paths.PRODUCTS);
     }
 
 }

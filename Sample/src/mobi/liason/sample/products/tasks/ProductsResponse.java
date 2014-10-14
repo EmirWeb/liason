@@ -20,6 +20,6 @@ import mobi.liason.sample.models.ProductJson;
 @Json
 public class ProductsResponse {
 
-    @Object(value = ProductJson.class, isArray = true)
+    @Object(value = "mobi.liason.sample.models.ProductJson", isArray = true)
     public static final String RESULT = "result";
 }
