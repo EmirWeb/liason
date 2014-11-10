@@ -14,6 +14,12 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
+import mobi.liason.annotation.annotations.Path;
+import mobi.liason.annotation.annotations.PathAction;
+import mobi.liason.annotation.annotations.Projection;
+import mobi.liason.annotation.annotations.Selection;
+import mobi.liason.annotation.annotations.mvvm.ViewModel;
+import mobi.liason.annotation.creators.ViewModelCreator;
 import mobi.liason.annotation.helpers.CreatorHelper;
 
 public class ViewModelProcessor extends AbstractProcessor {

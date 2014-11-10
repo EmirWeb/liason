@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.creators;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -22,6 +22,9 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.ViewModelStructure;
+import mobi.liason.annotation.annotations.PathAction;
+import mobi.liason.annotation.annotations.mvvm.ViewModel;
 import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.ViewModelColumn;

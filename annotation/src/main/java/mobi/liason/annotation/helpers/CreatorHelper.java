@@ -12,9 +12,11 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
-import mobi.liason.annotation.*;
-import mobi.liason.annotation.Integer;
-import mobi.liason.annotation.Object;
+import mobi.liason.annotation.annotations.types.Integer;
+import mobi.liason.annotation.annotations.types.Object;
+import mobi.liason.annotation.annotations.types.Real;
+import mobi.liason.annotation.annotations.types.Text;
+import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.annotations.PrimaryKey;
 import mobi.liason.mvvm.database.annotations.Unique;
@@ -35,7 +37,7 @@ public class CreatorHelper {
     public static AnnotationMirror getModelAnnotationMirror(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (isAnnotationOfType(mobi.liason.annotation.Integer.class, annotationMirror)){
+            if (isAnnotationOfType(Integer.class, annotationMirror)){
                 return annotationMirror;
             } else if (isAnnotationOfType(Text.class, annotationMirror)){
                 return annotationMirror;

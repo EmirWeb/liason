@@ -16,6 +16,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
+import mobi.liason.annotation.annotations.mvvm.Json;
+import mobi.liason.annotation.annotations.mvvm.Model;
+import mobi.liason.annotation.annotations.types.*;
+import mobi.liason.annotation.annotations.types.Object;
+import mobi.liason.annotation.creators.JsonModelCreator;
+import mobi.liason.annotation.creators.ModelCreator;
+
 public class ModelProcessor extends AbstractProcessor {
 
 
@@ -41,7 +48,7 @@ public class ModelProcessor extends AbstractProcessor {
             }
         }
 
-        final Set<? extends Element> integerElements = roundEnvironment.getElementsAnnotatedWith(Integer.class);
+        final Set<? extends Element> integerElements = roundEnvironment.getElementsAnnotatedWith(mobi.liason.annotation.annotations.types.Integer.class);
         final Set<? extends Element> textElements = roundEnvironment.getElementsAnnotatedWith(Text.class);
         final Set<? extends Element> realElements = roundEnvironment.getElementsAnnotatedWith(Real.class);
         final Set<? extends Element> objectElements = roundEnvironment.getElementsAnnotatedWith(Object.class);

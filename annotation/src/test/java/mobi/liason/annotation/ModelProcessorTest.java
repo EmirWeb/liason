@@ -26,8 +26,8 @@ public class ModelProcessorTest {
     public void modelAnnotationCreatesJsonAndModel (){
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Object;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Object;",
                 "@Model",
                 "public class Product {",
                 "   @Object(\"mobi.liason.ImagesJson\")",
@@ -36,8 +36,8 @@ public class ModelProcessorTest {
 
         final JavaFileObject imageMetaJavaFileObject = JavaFileObjects.forSourceString("Images", Joiner.on("\n").join(
                 "package mobi.liason;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Model",
                 "public class Images {",
                 "   @Text",
@@ -104,8 +104,8 @@ public class ModelProcessorTest {
     public void jsonAnnotationCreatesOnlyJson(){
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Json;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Json;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Json",
                 "public class Product {",
                 "   @Text",

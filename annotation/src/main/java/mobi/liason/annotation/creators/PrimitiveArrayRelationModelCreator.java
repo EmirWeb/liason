@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.creators;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,6 +15,8 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.PrimitiveArrayRelationModelDefinition;
+import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ForeignKeyModelColumn;

@@ -40,8 +40,8 @@ public class ViewModelCreatorTest {
     public void CreatesViewModelWithSelection() {
 
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.ViewModel;",
-                "import mobi.liason.annotation.Selection;",
+                "import mobi.liason.annotation.annotations.mvvm.ViewModel;",
+                "import mobi.liason.annotation.annotations.Selection;",
                 "@ViewModel",
                 "public class Product {",
                 "   @Selection",
@@ -83,9 +83,9 @@ public class ViewModelCreatorTest {
     public void CreatesViewModelWithProjection() {
 
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.ViewModel;",
-                "import mobi.liason.annotation.Selection;",
-                "import mobi.liason.annotation.Projection;",
+                "import mobi.liason.annotation.annotations.mvvm.ViewModel;",
+                "import mobi.liason.annotation.annotations.Selection;",
+                "import mobi.liason.annotation.annotations.Projection;",
                 "import mobi.liason.mvvm.database.ViewModelColumn;",
                 "import mobi.liason.mvvm.database.Column.Type;",
                 "import android.provider.BaseColumns;",
@@ -140,10 +140,10 @@ public class ViewModelCreatorTest {
     public void CreatesViewModelWithCustomPaths() {
 
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.ViewModel;",
-                "import mobi.liason.annotation.Selection;",
-                "import mobi.liason.annotation.Path;",
-                "import mobi.liason.annotation.Projection;",
+                "import mobi.liason.annotation.annotations.mvvm.ViewModel;",
+                "import mobi.liason.annotation.annotations.Selection;",
+                "import mobi.liason.annotation.annotations.Path;",
+                "import mobi.liason.annotation.annotations.Projection;",
                 "import mobi.liason.mvvm.database.ViewModelColumn;",
                 "import mobi.liason.mvvm.database.Column.Type;",
                 "import android.provider.BaseColumns;",
@@ -206,12 +206,12 @@ public class ViewModelCreatorTest {
                 "import android.database.Cursor;",
                 "import android.database.sqlite.SQLiteDatabase;",
                 "import android.net.Uri;",
-                "import mobi.liason.annotation.ViewModel;",
-                "import mobi.liason.annotation.Selection;",
-                "import mobi.liason.annotation.Path;",
-                "import mobi.liason.annotation.PathAction;",
-                "import mobi.liason.annotation.PathAction.PathType;",
-                "import mobi.liason.annotation.Projection;",
+                "import mobi.liason.annotation.annotations.mvvm.ViewModel;",
+                "import mobi.liason.annotation.annotations.Selection;",
+                "import mobi.liason.annotation.annotations.Path;",
+                "import mobi.liason.annotation.annotations.PathAction;",
+                "import mobi.liason.annotation.annotations.PathAction.PathType;",
+                "import mobi.liason.annotation.annotations.Projection;",
                 "import mobi.liason.mvvm.database.ViewModelColumn;",
                 "import mobi.liason.mvvm.database.Column.Type;",
                 "import android.provider.BaseColumns;",

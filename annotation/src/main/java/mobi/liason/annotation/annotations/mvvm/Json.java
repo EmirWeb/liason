@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.annotations.mvvm;
 
 /**
  * Created by Emir Hasanbegovic on 09/10/14.

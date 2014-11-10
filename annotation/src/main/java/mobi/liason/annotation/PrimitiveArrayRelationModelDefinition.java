@@ -7,7 +7,7 @@ import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 
-import mobi.liason.annotation.helpers.VariableNameHelper;
+import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.mvvm.database.Column;
 
 /**

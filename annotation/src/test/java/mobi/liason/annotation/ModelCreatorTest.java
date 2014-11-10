@@ -29,7 +29,7 @@ public class ModelCreatorTest {
     @Test
     public void CreatesEmptyModel() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
                 "@Model",
                 "public class Product {",
                 "}"));
@@ -65,8 +65,8 @@ public class ModelCreatorTest {
     public void createModelWithTextVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Model",
                 "public class Product {",
                 "   @Text",
@@ -121,8 +121,8 @@ public class ModelCreatorTest {
     public void createModelWithUniqueTextVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "import mobi.liason.mvvm.database.annotations.Unique;",
                 "@Model",
                 "public class Product {",
@@ -181,8 +181,8 @@ public class ModelCreatorTest {
     public void createModelWithPrimitiveObjectVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Object;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Object;",
                 "@Model",
                 "public class Product {",
                 "   @Object(\"java.lang.String\")",
@@ -237,8 +237,8 @@ public class ModelCreatorTest {
     public void createModelWitNonPrimitiveObjectVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Object;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Object;",
                 "@Model",
                 "public class Product {",
                 "   @Object(\"java.lang.String\")",
@@ -293,8 +293,8 @@ public class ModelCreatorTest {
     public void createModelWithPrimaryKeyTextVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "import mobi.liason.mvvm.database.annotations.PrimaryKey;",
                 "@Model",
                 "public class Product {",
@@ -353,9 +353,9 @@ public class ModelCreatorTest {
     public void createModelWithArrayVariable() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason.test;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Integer;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "import mobi.liason.mvvm.database.annotations.PrimaryKey;",
                 "@Model",
                 "public class Product {",

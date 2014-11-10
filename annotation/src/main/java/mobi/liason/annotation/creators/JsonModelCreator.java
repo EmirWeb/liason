@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.creators;
 
 import com.google.gson.annotations.SerializedName;
 import com.squareup.javawriter.JavaWriter;
@@ -13,13 +13,12 @@ import java.util.Map;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.elements.FieldElement;
+import mobi.liason.annotation.elements.ModelElement;
 import mobi.liason.annotation.helpers.CreatorHelper;
-import mobi.liason.annotation.helpers.VariableNameHelper;
 
 /**
  * Created by Emir Hasanbegovic on 11/10/14.

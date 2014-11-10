@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.elements;
 
 import com.google.common.base.CaseFormat;
 

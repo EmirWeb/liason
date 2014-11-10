@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.lang.model.element.Element;
 
+import mobi.liason.annotation.annotations.PathAction;
+
 public class ViewModelStructure {
     public List<Element> mProjectionElements = new ArrayList<Element>();
     public Element mSelectionElement;

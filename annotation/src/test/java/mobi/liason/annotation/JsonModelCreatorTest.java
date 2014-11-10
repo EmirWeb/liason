@@ -31,7 +31,7 @@ public class JsonModelCreatorTest {
     @Test
     public void ProcessesSimpleModel() {
         final JavaFileObject javaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
                 "@Model",
                 "public class Product {",
                 "}"));
@@ -45,7 +45,7 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesEmptyJsonParser() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
                 "@Model",
                 "public class Product {",
                 "}"));
@@ -66,7 +66,7 @@ public class JsonModelCreatorTest {
     public void CreatesEmptyJsonParserAndSamePackage() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason;",
-                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
                 "@Model",
                 "public class Product {",
                 "}"));
@@ -87,8 +87,8 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithIntegerMember() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Integer;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
                 "@Model",
                 "public class Product {",
                 "   @Integer",
@@ -119,8 +119,8 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithMultipleIntegerMembersWithoutError() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Integer;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
                 "@Model",
                 "public class Product {",
                 "   @Integer",
@@ -142,8 +142,8 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithMultipleIntegerMembers() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Integer;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
                 "@Model",
                 "public class Product {",
                 "   @Integer",
@@ -182,9 +182,9 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithMultipleMembers() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Integer;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Model",
                 "public class Product {",
                 "   @Integer",
@@ -223,8 +223,8 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithTextMember() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Model",
                 "public class Product {",
                 "   @Text",
@@ -255,8 +255,8 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithRealMember() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Real;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Real;",
                 "@Model",
                 "public class Product {",
                 "   @Real",
@@ -289,8 +289,8 @@ public class JsonModelCreatorTest {
 
         final JavaFileObject imageMetaJavaFileObject = JavaFileObjects.forSourceString("Images", Joiner.on("\n").join(
                 "package mobi.liason;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Model",
                 "public class Images {",
                 "   @Text",
@@ -299,8 +299,8 @@ public class JsonModelCreatorTest {
 
         final JavaFileObject productMetaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
                 "package mobi.liason;",
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Object;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Object;",
                 "import mobi.liason.ImagesJson;",
                 "@Model",
                 "public class Product {",
@@ -334,8 +334,8 @@ public class JsonModelCreatorTest {
     @Test
     public void CreatesJsonModelWithTextArrayMember() {
         final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
-                "import mobi.liason.annotation.Model;",
-                "import mobi.liason.annotation.Text;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Text;",
                 "@Model",
                 "public class Product {",
                 "   @Text(isArray = true)",

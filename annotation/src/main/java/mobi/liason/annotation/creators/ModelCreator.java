@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.creators;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,6 +20,8 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.PrimitiveArrayRelationModelDefinition;
+import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.annotation.helpers.CreatorHelper;
 import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.loaders.Path;
