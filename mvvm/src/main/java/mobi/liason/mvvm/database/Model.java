@@ -27,7 +27,9 @@ public abstract class Model extends Content {
     private static final String DROP = "DROP TABLE IF EXISTS %s;";
     private static final int VERSION = -1;
     private static final String UNIQUE = ", UNIQUE ( %s ) ON CONFLICT REPLACE";
+    private static final String FOREIGN = ", FOREIGN KEY ( %s ) REFERENCES %s( %s ) ON DELETE CASCADE ON UPDATE CASCADE";
     private static final String PRIMARY_KEYS = ", PRIMARY KEY ( %s )";
+    private static final String FOREIGN_KEY_ERROR = "Only allowed to reference one table for foreign keys.";;
     private final List<Column> mColumns = new ArrayList<Column>();
     private final Set<Column> mUniqueColumns = new HashSet<Column>();
     private final List<Path> mPaths = new ArrayList<Path>();
@@ -102,12 +104,28 @@ public abstract class Model extends Content {
         }
     }
 
+    private List<Column> getOrderedUniqueColumns(final Context context){
+        final Set<Column> uniqueColumns = getUniqueColumns(context);
+        if (uniqueColumns == null){
+            return null;
+        }
+        return new ArrayList<Column>(uniqueColumns);
+    }
+
+    private List<Column> getOrderedPrimaryKeyColumns(final Context context){
+        final Set<Column> primaryKeyColumns = getPrimaryKeyColumns(context);
+        if (primaryKeyColumns == null){
+            return null;
+        }
+        return new ArrayList<Column>(primaryKeyColumns);
+    }
+
     @Override
     public String getCreate(final Context context) {
         final String name = getName(context);
         final List<Column> columns = getColumns(context);
-        final Set<Column> uniqueColumns = getUniqueColumns(context);
-        final Set<Column> primaryKeyColumns = getPrimaryKeyColumns(context);
+        final List<Column> uniqueColumns = getOrderedUniqueColumns(context);
+        final List<Column> primaryKeyColumns = getOrderedPrimaryKeyColumns(context);
         final String createColumns = createColumns(columns, uniqueColumns, primaryKeyColumns);
         final String create = String.format(CREATE, name, createColumns);
         return create;
@@ -133,7 +151,7 @@ public abstract class Model extends Content {
         return mColumns;
     }
 
-    public static String createColumns(final List<Column> columns, final Set<Column> uniqueColumns, final Set<Column> primaryKeyColumns) {
+    public static String createColumns(final List<Column> columns, final List<Column> uniqueColumns, final List<Column> primaryKeyColumns) {
         final StringBuilder stringBuilder = new StringBuilder();
         final int size = columns.size();
         for (int index = 0; index < size; index++ ){
@@ -152,6 +170,9 @@ public abstract class Model extends Content {
         final String uniqueLine = getUniqueLine(uniqueColumns);
         stringBuilder.append(uniqueLine);
 
+        final String foreignKeyLine = getForeignKeyLine(new ArrayList<Column>(columns));
+        stringBuilder.append(foreignKeyLine);
+
         final String primaryKeyLine = getPrimaryKeyLine(primaryKeyColumns);
         stringBuilder.append(primaryKeyLine);
 
@@ -160,7 +181,7 @@ public abstract class Model extends Content {
 
     }
 
-    private static String getUniqueLine(final Set<Column> uniqueColumns){
+    private static String getUniqueLine(final List<Column> uniqueColumns){
         if (uniqueColumns == null || uniqueColumns.isEmpty()){
             return "";
         }
@@ -168,7 +189,27 @@ public abstract class Model extends Content {
         return String.format(UNIQUE, getCommaSeparatedColumns(uniqueColumns));
     }
 
-    private static String getPrimaryKeyLine(final Set<Column> primaryKeyColumns){
+    private static String getForeignKeyLine(final List<Column> columns){
+
+        final List<ForeignKeyModelColumn> foreignKeyModelColumns = new ArrayList<ForeignKeyModelColumn>();
+        for (final Column column : columns){
+            if (column instanceof  ForeignKeyModelColumn){
+                final ForeignKeyModelColumn foreignKeyModelColumn = (ForeignKeyModelColumn) column;
+                foreignKeyModelColumns.add(foreignKeyModelColumn);
+            }
+        }
+
+        if (foreignKeyModelColumns.isEmpty()){
+            return "";
+        }
+
+        final String commaSeparatedForeignKeyModelColumns = getCommaSeparatedForeignKeyModelColumns(foreignKeyModelColumns);
+        final String foreignKeySqlName = getForeignKeySqlName(foreignKeyModelColumns);
+        return String.format(FOREIGN, commaSeparatedForeignKeyModelColumns, foreignKeySqlName, commaSeparatedForeignKeyModelColumns);
+    }
+
+
+    private static String getPrimaryKeyLine(final List<Column> primaryKeyColumns){
         if (primaryKeyColumns == null || primaryKeyColumns.isEmpty()){
             return "";
         }
@@ -176,7 +217,27 @@ public abstract class Model extends Content {
         return String.format(PRIMARY_KEYS, getCommaSeparatedColumns(primaryKeyColumns));
     }
 
-    private static String getCommaSeparatedColumns(final Set<Column> columns) {
+    private static String getForeignKeySqlName(final List<ForeignKeyModelColumn> foreignKeyModelColumns) {
+
+        String sqlName = null;
+        for (final ForeignKeyModelColumn foreignKeyModelColumn : foreignKeyModelColumns){
+            final String foreignSqlName = foreignKeyModelColumn.getForeignSqlName();
+            if (sqlName == null){
+                sqlName = foreignSqlName;
+            } else if (!sqlName.equals(foreignSqlName)){
+                throw new IllegalArgumentException(FOREIGN_KEY_ERROR);
+            }
+        }
+
+        return sqlName;
+    }
+
+    private static String getCommaSeparatedForeignKeyModelColumns(final List<ForeignKeyModelColumn> foreignKeyModelColumns) {
+        final List<Column> columns = new ArrayList<Column>(foreignKeyModelColumns);
+        return getCommaSeparatedColumns(columns);
+    }
+
+    private static String getCommaSeparatedColumns(final List<Column> columns) {
         final StringBuilder stringBuilder = new StringBuilder();
         final int size = columns.size();
         int index = 0;

@@ -1,6 +1,5 @@
 package mobi.liason.annotation;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,18 +22,13 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.loaders.Path;
-import mobi.liason.mvvm.database.Column;
-import mobi.liason.mvvm.database.Column.Type;
-import mobi.liason.mvvm.database.Model;
-import mobi.liason.mvvm.database.ModelColumn;
 import mobi.liason.mvvm.database.ViewModelColumn;
 import mobi.liason.mvvm.database.annotations.ColumnDefinition;
 import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
 import mobi.liason.mvvm.database.annotations.PathDefinition;
 import mobi.liason.mvvm.database.annotations.PathDefinitions;
-import mobi.liason.mvvm.database.annotations.PrimaryKey;
-import mobi.liason.mvvm.database.annotations.Unique;
 
 /**
  * Created by Emir Hasanbegovic on 11/10/14.
@@ -214,8 +208,8 @@ public class ViewModelCreator {
                             final String simpleNameString = simpleName.toString();
                             final PathAction annotation = pathActionElement.getAnnotation(PathAction.class);
                             final String path = annotation.value();
-                            javaWriter.beginControlFlow("if (%s.equals(new Path(\"%s\")))", pathVariableName, path);
-                            javaWriter.emitStatement("return %s.%s(%s, %s, %s, %s, %s, %s, %s)",
+                            javaWriter.beginControlFlow("if (%s != null && %s.equals(new Path(\"%s\")))", pathVariableName, pathVariableName, path);
+                            javaWriter.emitStatement("return %s.%s(this, %s, %s, %s, %s, %s, %s, %s)",
                                     typeElementSimpleNameString, simpleNameString,
                                     contextVariableName, sqlDatabaseVariableName,
                                     uriVariableName, projectionVariableName,

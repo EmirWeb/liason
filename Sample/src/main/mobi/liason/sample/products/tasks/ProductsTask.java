@@ -27,7 +27,7 @@ import mobi.liason.sample.utilities.TaskUtilities;
 /**
  * Created by Emir Hasanbegovic on 2014-05-20.
  */
-public class ProductsTask extends Task {
+public class  ProductsTask extends Task {
 
     private static final String SCHEME = "HTTP";
     private static final String AUTHORITY = "lcboapi.com";

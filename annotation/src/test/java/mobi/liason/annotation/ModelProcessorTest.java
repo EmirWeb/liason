@@ -84,7 +84,7 @@ public class ModelProcessorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)\n" +
                         "   private final ImagesJson mId;",
-                "   public Product(final ImagesJson id) {",
+                "   public ProductJson(final ImagesJson id) {",
                 "       mId = id;",
                 "   }",
                 "   public ImagesJson getId() {",
@@ -117,7 +117,7 @@ public class ModelProcessorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)\n" +
                         "   private final String mId;",
-                "   public Product(final String id) {",
+                "   public ProductJson(final String id) {",
                 "       mId = id;",
                 "   }",
                 "   public String getId() {",

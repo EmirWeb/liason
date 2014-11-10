@@ -24,6 +24,7 @@ import mobi.liason.mvvm.database.annotations.Unique;
 
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.fail;
 
 @Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunnerWithInjection.class)
@@ -85,6 +86,30 @@ public class ModelTest {
                     " UNIQUE ( MODEL_COLUMN_2 ) ON CONFLICT REPLACE," +
                     " PRIMARY KEY ( MODEL_COLUMN_3 ) " +
                 ");");
+    }
+
+    @Test
+    public void createShouldUseForeignKeyAndColumns(){
+        final MockForeignKeyAnnotationModel mockForeignKeyAnnotationModel = new MockForeignKeyAnnotationModel();
+        final String sqlCreateQuery = mockForeignKeyAnnotationModel.getCreate(mContext);
+        assertThat(sqlCreateQuery).isEqualTo("CREATE TABLE IF NOT EXISTS MockForeignKeyAnnotationModel " +
+                "(" +
+                " MODEL_COLUMN_1 TEXT," +
+                " MODEL_COLUMN_2 TEXT," +
+                " FOREIGN KEY ( MODEL_COLUMN_1, MODEL_COLUMN_2 ) REFERENCES MockAnnotationModel( MODEL_COLUMN_1, MODEL_COLUMN_2 ) ON DELETE CASCADE ON UPDATE CASCADE " +
+                ");");
+    }
+
+    @Test
+    public void createThrowErrorForBadForeignKeyAndColumns(){
+        final MockBadForeignKeyAnnotationModel mockBadForeignKeyAnnotationModel = new MockBadForeignKeyAnnotationModel();
+        try {
+            final String sqlCreateQuery = mockBadForeignKeyAnnotationModel.getCreate(mContext);
+            fail("Expected Exception");
+        } catch (final Exception exception){
+
+        }
+
     }
 
 
@@ -165,6 +190,56 @@ public class ModelTest {
             @PrimaryKey
             @ColumnDefinition
             public static final ModelColumn MODEL_COLUMN_3 = new ModelColumn(NAME, "MODEL_COLUMN_3", Column.Type.text);
+        }
+
+        @PathDefinitions
+        public static class Paths {
+            @PathDefinition
+            public static final Path PATH = new Path(NAME);
+        }
+
+    }
+
+    public static class MockForeignKeyAnnotationModel extends  Model {
+
+        public static final String NAME = MockForeignKeyAnnotationModel.class.getSimpleName();
+
+        @Override
+        public String getName(Context context) {
+            return NAME;
+        }
+
+        @ColumnDefinitions
+        public static class Columns {
+            @ColumnDefinition
+            public static final ForeignKeyModelColumn MODEL_COLUMN_1 = new ForeignKeyModelColumn(NAME, MockAnnotationModel.Columns.MODEL_COLUMN_1);
+            @ColumnDefinition
+            public static final ForeignKeyModelColumn MODEL_COLUMN_2 = new ForeignKeyModelColumn(NAME, MockAnnotationModel.Columns.MODEL_COLUMN_2);
+        }
+
+        @PathDefinitions
+        public static class Paths {
+            @PathDefinition
+            public static final Path PATH = new Path(NAME);
+        }
+
+    }
+
+    public static class MockBadForeignKeyAnnotationModel extends  Model {
+
+        public static final String NAME = MockForeignKeyAnnotationModel.class.getSimpleName();
+
+        @Override
+        public String getName(Context context) {
+            return NAME;
+        }
+
+        @ColumnDefinitions
+        public static class Columns {
+            @ColumnDefinition
+            public static final ForeignKeyModelColumn MODEL_COLUMN_1 = new ForeignKeyModelColumn(NAME, MockAnnotationModel.Columns.MODEL_COLUMN_1);
+            @ColumnDefinition
+            public static final ForeignKeyModelColumn MODEL_COLUMN_2 = new ForeignKeyModelColumn(NAME, MockForeignKeyAnnotationModel.Columns.MODEL_COLUMN_1);
         }
 
         @PathDefinitions

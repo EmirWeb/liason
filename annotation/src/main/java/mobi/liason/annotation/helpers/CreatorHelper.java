@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.helpers;
 
 import java.lang.annotation.AnnotationTypeMismatchException;
 import java.util.ArrayList;
@@ -12,6 +12,9 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
+import mobi.liason.annotation.*;
+import mobi.liason.annotation.Integer;
+import mobi.liason.annotation.Object;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.annotations.PrimaryKey;
 import mobi.liason.mvvm.database.annotations.Unique;
@@ -20,10 +23,9 @@ import mobi.liason.mvvm.database.annotations.Unique;
  * Created by Emir Hasanbegovic on 11/10/14.
  */
 public class CreatorHelper {
-    public static boolean hasArray(final List<Element> fieldElements){
-        for (final Element fieldElement : fieldElements){
-            final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
-            if (isArray(fieldElement)){
+    public static boolean hasArray(final List<FieldElement> fieldElements){
+        for (final FieldElement fieldElement : fieldElements){
+            if (fieldElement.isArray()){
                 return true;
             }
         }
@@ -33,7 +35,7 @@ public class CreatorHelper {
     public static AnnotationMirror getModelAnnotationMirror(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
-            if (isAnnotationOfType(Integer.class, annotationMirror)){
+            if (isAnnotationOfType(mobi.liason.annotation.Integer.class, annotationMirror)){
                 return annotationMirror;
             } else if (isAnnotationOfType(Text.class, annotationMirror)){
                 return annotationMirror;
@@ -79,7 +81,38 @@ public class CreatorHelper {
         return annotationTypeString.equals(KlassCanonicalName);
     }
 
-    public static String getFieldType(final Element fieldElement) {
+    public static String getArrayListGenericJavaType(final Element fieldElement) {
+        if (!isArray(fieldElement)){
+            return null;
+        }
+        final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
+        for (final AnnotationMirror annotationMirror : annotationMirrors){
+            if (isAnnotationOfType(Integer.class, annotationMirror)){
+                final Integer annotation = fieldElement.getAnnotation(Integer.class);
+                final String longString = Long.class.getSimpleName();
+
+                return longString;
+            } else if (isAnnotationOfType(Text.class, annotationMirror)){
+                final Text annotation = fieldElement.getAnnotation(Text.class);
+                final String stringString = String.class.getSimpleName();
+
+                return stringString;
+            } else if (isAnnotationOfType(Real.class, annotationMirror)){
+                final Real annotation = fieldElement.getAnnotation(Real.class);
+                final String doubleString = Double.class.getSimpleName();
+
+                return doubleString;
+            }else if (isAnnotationOfType(Object.class, annotationMirror)){
+                final Object annotation = fieldElement.getAnnotation(Object.class);
+                final String className = getClassName(annotation);
+
+                return className;
+            }
+        }
+        return null;
+    }
+
+    public static String getJavaType(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
             if (isAnnotationOfType(Integer.class, annotationMirror)){
@@ -129,13 +162,14 @@ public class CreatorHelper {
         }
     }
 
-    public static List<String> getObjectAnnotationTypes(final List<Element> fieldElements) {
+    public static List<String> getImportsForObjectAnnotationTypes(final List<FieldElement> fieldElements) {
         final List<String> objectAnnotationTypes = new ArrayList<String>();
-        for (final Element fieldElement: fieldElements) {
-            final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
+        for (final FieldElement fieldElement: fieldElements) {
+            final Element element = fieldElement.getElement();
+            final List<? extends AnnotationMirror> annotationMirrors = element.getAnnotationMirrors();
             for (final AnnotationMirror annotationMirror : annotationMirrors) {
                 if (isAnnotationOfType(Object.class, annotationMirror)) {
-                    final Object annotation = fieldElement.getAnnotation(Object.class);
+                    final Object annotation = element.getAnnotation(Object.class);
                     final String fullClassName = getFullClassName(annotation);
                     objectAnnotationTypes.add(fullClassName);
                 }
@@ -158,7 +192,7 @@ public class CreatorHelper {
         return null;
     }
 
-    public static Column.Type getTypeString(final Element fieldElement) {
+    public static Column.Type getColumnType(final Element fieldElement) {
         final List<? extends AnnotationMirror> annotationMirrors = fieldElement.getAnnotationMirrors();
         for (final AnnotationMirror annotationMirror : annotationMirrors){
             if (isAnnotationOfType(Integer.class, annotationMirror)){
@@ -182,23 +216,41 @@ public class CreatorHelper {
         return annotation != null;
     }
 
-    public static boolean hasUnique(final List<Element> fieldElements) {
-        for (final Element fieldElement: fieldElements){
-            if (isUnique(fieldElement)){
+//    public static boolean hasUnique(final List<Element> fieldElements) {
+//        for (final Element fieldElement: fieldElements){
+//            if (isUnique(fieldElement)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
+    public static boolean hasUnique(final List<FieldElement> fieldElements) {
+        for (final FieldElement fieldElement: fieldElements){
+            if (fieldElement.isUnique()){
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean hasPrimaryKey(final List<Element> fieldElements) {
-        for (final Element fieldElement: fieldElements){
-            if (isPrimaryKey(fieldElement)){
+    public static boolean hasPrimaryKey(final List<FieldElement> fieldElements) {
+        for (final FieldElement fieldElement: fieldElements){
+            if (fieldElement.isPrimaryKey()){
                 return true;
             }
         }
         return false;
     }
+
+//    public static boolean hasPrimaryKey(final List<Element> fieldElements) {
+//        for (final Element fieldElement: fieldElements){
+//            if (isPrimaryKey(fieldElement)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean isPrimitiveElement(final Element fieldElement) {
         if (isArray(fieldElement)){
@@ -231,6 +283,27 @@ public class CreatorHelper {
         }
 
         return true;
+    }
+
+    public static boolean isPrimitiveArrayElement(final Element fieldElement) {
+        final AnnotationMirror annotationMirror = getModelAnnotationMirror(fieldElement);
+        if (isAnnotationOfType(Integer.class, annotationMirror)) {
+            final Integer annotation = fieldElement.getAnnotation(Integer.class);
+            if (annotation.isArray()) {
+                return true;
+            }
+        } else if (isAnnotationOfType(Text.class, annotationMirror)) {
+            final Text annotation = fieldElement.getAnnotation(Text.class);
+            if (annotation.isArray()) {
+                return true;
+            }
+        } else if (isAnnotationOfType(Real.class, annotationMirror)) {
+            final Real annotation = fieldElement.getAnnotation(Real.class);
+            if (annotation.isArray()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void sortElements(final List<Element> elements){

@@ -100,7 +100,7 @@ public class JsonModelCreatorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)",
                 "   private final Long mId;",
-                "   public Product(final Long id) {",
+                "   public ProductJson(final Long id) {",
                 "       mId = id;",
                 "   }",
                 "   public Long getId() {",
@@ -115,6 +115,29 @@ public class JsonModelCreatorTest {
                 .and()
                 .generatesSources(expectedJavaFileObject);
     }
+
+    @Test
+    public void CreatesJsonModelWithMultipleIntegerMembersWithoutError() {
+        final JavaFileObject metaJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "import mobi.liason.annotation.Model;",
+                "import mobi.liason.annotation.Integer;",
+                "@Model",
+                "public class Product {",
+                "   @Integer",
+                "   public static final String ID = \"id\";",
+                "   @Integer",
+                "   public static final String COUNT = \"count\";",
+                "}"));
+
+
+
+        ASSERT.about(javaSources())
+                .that(asList(metaJavaFileObject))
+                .processedWith(MODEL_PROCESSORS())
+                .compilesWithoutError()
+                ;
+    }
+
 
     @Test
     public void CreatesJsonModelWithMultipleIntegerMembers() {
@@ -136,7 +159,7 @@ public class JsonModelCreatorTest {
                 "   private final Long mCount;",
                 "   @SerializedName(Product.ID)",
                 "   private final Long mId;",
-                "   public Product(final Long count, final Long id) {",
+                "   public ProductJson(final Long count, final Long id) {",
                 "       mCount = count;",
                 "       mId = id;",
                 "   }",
@@ -177,7 +200,7 @@ public class JsonModelCreatorTest {
                 "   private final String mCount;",
                 "   @SerializedName(Product.ID)",
                 "   private final Long mId;",
-                "   public Product(final String count, final Long id) {",
+                "   public ProductJson(final String count, final Long id) {",
                 "       mCount = count;",
                 "       mId = id;",
                 "   }",
@@ -213,7 +236,7 @@ public class JsonModelCreatorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)\n" +
                 "   private final String mId;",
-                "   public Product(final String id) {",
+                "   public ProductJson(final String id) {",
                 "       mId = id;",
                 "   }",
                 "   public String getId() {",
@@ -245,7 +268,7 @@ public class JsonModelCreatorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)",
                 "   private final Double mId;",
-                "   public Product(final Double id) {",
+                "   public ProductJson(final Double id) {",
                 "       mId = id;",
                 "   }",
                 "   public Double getId() {",
@@ -292,7 +315,7 @@ public class JsonModelCreatorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.IMAGES)",
                 "   private final ImagesJson mImages;",
-                "   public Product(final ImagesJson images) {",
+                "   public ProductJson(final ImagesJson images) {",
                 "       mImages = images;",
                 "   }",
                 "   public ImagesJson getImages() {",
@@ -325,7 +348,7 @@ public class JsonModelCreatorTest {
                 "public class ProductJson {",
                 "   @SerializedName(Product.ID)\n" +
                         "   private final ArrayList<String> mId;",
-                "   public Product(final ArrayList<String> id) {",
+                "   public ProductJson(final ArrayList<String> id) {",
                 "       mId = id;",
                 "   }",
                 "   public ArrayList<String> getId() {",

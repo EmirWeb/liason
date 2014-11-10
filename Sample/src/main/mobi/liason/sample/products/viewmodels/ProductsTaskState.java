@@ -11,6 +11,9 @@ import mobi.liason.annotation.PathAction;
 import mobi.liason.annotation.Projection;
 import mobi.liason.annotation.Selection;
 
+import mobi.liason.sample.overrides.SampleProvider;
+import mobi.liason.sample.product.tasks.ProductTask;
+import mobi.liason.sample.product.viewmodels.ProductTaskStateViewModel;
 import mobi.liason.sample.products.viewmodels.ProductsTaskStateViewModel;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ViewModelColumn;
@@ -28,10 +31,11 @@ public class ProductsTaskState {
     @Selection
     public static final String SELECTION = TaskStateTable.TABLE_NAME + " WHERE " + TaskStateTable.TABLE_NAME + "." + TaskStateTable.Columns.URI.getName() + " LIKE '%" + ProductsTask.Paths.PRODUCTS.getPath() + "'";
 
-    @PathAction(value = "ProductsTaskState", pathType = PathAction.PathType.query)
-    public static Cursor query(Context context, SQLiteDatabase sqLiteDatabase, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SampleTaskService.startTask(context, uri);
-        return null;
+    @PathAction(value = "ProductsTaskStateViewModel", pathType = PathAction.PathType.query)
+    public static Cursor query(final ProductsTaskStateViewModel productsTaskStateViewModel, Context context, SQLiteDatabase sqLiteDatabase, Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        final Uri productsTaskUri = SampleProvider.getUri(context, ProductsTask.Paths.PRODUCTS);
+        SampleTaskService.startTask(context, productsTaskUri);
+        return productsTaskStateViewModel.query(context,sqLiteDatabase,null,uri,projection,selection,selectionArgs,sortOrder);
     }
 
     @Projection

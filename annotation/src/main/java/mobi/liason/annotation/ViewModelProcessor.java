@@ -14,6 +14,8 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 
+import mobi.liason.annotation.helpers.CreatorHelper;
+
 public class ViewModelProcessor extends AbstractProcessor {
 
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {

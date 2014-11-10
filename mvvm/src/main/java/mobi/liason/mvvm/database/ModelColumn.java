@@ -12,4 +12,8 @@ public class ModelColumn extends Column{
     public ModelColumn(String tableName, String name, Type type) {
         super(tableName, name, type);
     }
+
+    public ModelColumn(String tableName, final ModelColumn modelColumn) {
+        super(tableName, modelColumn.getName(), modelColumn.getType());
+    }
 }

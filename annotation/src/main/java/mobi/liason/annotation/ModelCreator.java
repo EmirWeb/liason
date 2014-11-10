@@ -20,6 +20,8 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.helpers.CreatorHelper;
+import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.Column.Type;
@@ -43,12 +45,17 @@ public class ModelCreator {
 
     public static void processModels(final ProcessingEnvironment processingEnv, final Map<Element, List<Element>> elementMappings) {
         for (final Element modelElement : elementMappings.keySet()) {
-            final List<Element> fieldElements = elementMappings.get(modelElement);
+            final List<Element> elements = elementMappings.get(modelElement);
+            final List<FieldElement> fieldElements = new ArrayList<FieldElement>(elements.size());
+            for (final Element element : elements){
+                final FieldElement fieldElement = new FieldElement(element);
+                fieldElements.add(fieldElement);
+            }
             processModel(processingEnv, modelElement, fieldElements);
         }
     }
 
-    private static void processModel(final ProcessingEnvironment processingEnv, final Element modelElement, final List<Element> fieldElements) {
+    private static void processModel(final ProcessingEnvironment processingEnv, final Element modelElement, final List<FieldElement> fieldElements) {
         final TypeElement typeElement = (TypeElement) modelElement;
         final PackageElement packageElement = (PackageElement) typeElement.getEnclosingElement();
         final Name typeElementQualifiedName = typeElement.getQualifiedName();
@@ -134,13 +141,12 @@ public class ModelCreator {
 
                     javaWriter.emitStatement("%s %s %s = new %s()", Modifier.FINAL.toString(), contentValuesClassName, contentValuesVariableName , contentValuesClassName );
 
-                    for (final Element fieldElement : fieldElements) {
-                        final String fieldType = CreatorHelper.getFieldType(fieldElement);
+                    for (final FieldElement fieldElement : fieldElements) {
+                        final String fieldType = fieldElement.getJavaType();
                         if (fieldType != null) {
-                            if (!CreatorHelper.isArray(fieldElement) && CreatorHelper.isPrimitiveElement(fieldElement)) {
-                                final Name simpleName = fieldElement.getSimpleName();
-                                final String simpleNameString = simpleName.toString();
-                                javaWriter.emitStatement(contentValuesVariableName + ".put(Columns." + simpleNameString + ".getName(), " + jsonVariableName + "." + VariableNameHelper.getGetMethodName(simpleNameString) + "())");
+                            if (!fieldElement.isArray() && fieldElement.isPrimitiveType()) {
+                                final String simpleName = fieldElement.getSimpleName();
+                                javaWriter.emitStatement(contentValuesVariableName + ".put(Columns." + simpleName + ".getName(), " + jsonVariableName + "." + VariableNameHelper.getGetMethodName(simpleName) + "())");
                             }
                         }
                     }
@@ -156,28 +162,27 @@ public class ModelCreator {
                     javaWriter.emitAnnotation(ColumnDefinitions.class);
                     javaWriter.beginType("Columns", CLASS, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC));
 
-                    for (final Element fieldElement : fieldElements) {
-                        final String fieldType = CreatorHelper.getFieldType(fieldElement);
+                    for (final FieldElement fieldElement : fieldElements) {
+                        final String fieldType = fieldElement.getJavaType();
                         if (fieldType != null) {
-                            if (!CreatorHelper.isArray(fieldElement) && CreatorHelper.isPrimitiveElement(fieldElement)) {
-                                final Name simpleName = fieldElement.getSimpleName();
-                                final String simpleNameString = simpleName.toString();
+                            if (!fieldElement.isArray() && fieldElement.isPrimitiveType()) {
+                                final String simpleName = fieldElement.getSimpleName();
                                 javaWriter.emitAnnotation(ColumnDefinition.class);
 
-                                final boolean isUnique = CreatorHelper.isUnique(fieldElement);
+                                final boolean isUnique = fieldElement.isUnique();
                                 if (isUnique){
                                     javaWriter.emitAnnotation(Unique.class);
                                 }
 
-                                final boolean isPrimaryKey = CreatorHelper.isPrimaryKey(fieldElement);
+                                final boolean isPrimaryKey = fieldElement.isPrimaryKey();
                                 if (isPrimaryKey){
                                     javaWriter.emitAnnotation(PrimaryKey.class);
                                 }
 
-                                final Type type = CreatorHelper.getTypeString(fieldElement);
+                                final Type type = fieldElement.getColumneType();
                                 final String declaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
-                                        modelClassName, typeElementSimpleNameString, simpleNameString, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
-                                javaWriter.emitField(ModelColumn.class.getSimpleName(), simpleNameString, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
+                                        modelClassName, typeElementSimpleNameString, simpleName, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
+                                javaWriter.emitField(ModelColumn.class.getSimpleName(), simpleName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
                             }
                         }
                     }
@@ -207,6 +212,23 @@ public class ModelCreator {
             writer.write(code);
             writer.flush();
             writer.close();
+
+            for (final FieldElement fieldElement : fieldElements) {
+                final String javaType = fieldElement.getJavaType();
+                if (javaType != null) {
+                    if (!fieldElement.isArray() && fieldElement.isPrimitiveType()) {
+
+                    } else if (fieldElement.isArrayWithPrimitiveType()) {
+                        final PrimitiveArrayRelationModelDefinition primitiveArrayRelationModelDefinition = new PrimitiveArrayRelationModelDefinition(fieldElement, typeElement, fieldElements);
+                        PrimitiveArrayRelationModelCreator.processModel(processingEnv, primitiveArrayRelationModelDefinition);
+                    } else if (fieldElement.isArray()) {
+
+                    } else if (fieldElement.isPrimitiveType()) {
+
+                    }
+                }
+            }
+
         } catch (final Exception exception) {
             exception.printStackTrace();
         }

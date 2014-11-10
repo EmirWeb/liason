@@ -3,6 +3,7 @@ package mobi.liason.annotation;
 import com.google.gson.annotations.SerializedName;
 import com.squareup.javawriter.JavaWriter;
 
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -17,39 +18,38 @@ import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
+import mobi.liason.annotation.helpers.CreatorHelper;
+import mobi.liason.annotation.helpers.VariableNameHelper;
+
 /**
  * Created by Emir Hasanbegovic on 11/10/14.
  */
 public class JsonModelCreator {
 
-    private static final String JSON = "Json";
     private static final String CLASS = "class";
 
     public static void processModels(final ProcessingEnvironment processingEnv, final Map<Element, List<Element>> elementMappings) {
-        for (final Element modelElement : elementMappings.keySet()) {
-            final List<Element> fieldElements = elementMappings.get(modelElement);
-            processModel(processingEnv, modelElement, fieldElements);
+        for (final Element element : elementMappings.keySet()) {
+            final List<Element> elements = elementMappings.get(element);
+            final TypeElement typeElement = (TypeElement) element;
+            final ModelElement modelElement = new ModelElement(typeElement, elements);
+            processModel(processingEnv, modelElement);
         }
     }
 
-    private static void processModel(final ProcessingEnvironment processingEnv, final Element modelElement, final List<Element> fieldElements) {
-        final TypeElement typeElement = (TypeElement) modelElement;
-        final PackageElement packageElement = (PackageElement) typeElement.getEnclosingElement();
-        final Name typeElementSimpleName = typeElement.getSimpleName();
-
-        final String typeElementQualifiedNameString = typeElementSimpleName.toString();
-
-        final String className = typeElementQualifiedNameString + JSON;
+    private static void processModel(final ProcessingEnvironment processingEnv, final ModelElement modelElement) {
 
         try {
+            final String className = modelElement.getJsonModelClassName();
             final JavaFileObject javaFileObject = processingEnv.getFiler().createSourceFile(className);
             final Writer writer = javaFileObject.openWriter();
+            final StringWriter stringWriter = new StringWriter();
+            final JavaWriter javaWriter = new JavaWriter(stringWriter);
 
-            final String packageElementQualifiedName = packageElement.getQualifiedName().toString();
+            final String packageName = modelElement.getPackageName();
+            javaWriter.emitPackage(packageName);
 
-            final JavaWriter javaWriter = new JavaWriter(writer);
-            javaWriter.emitPackage(packageElementQualifiedName);
-
+            final List<FieldElement> fieldElements = modelElement.getFieldElements();
             if (!fieldElements.isEmpty()) {
                 javaWriter.emitImports(SerializedName.class);
             }
@@ -58,22 +58,21 @@ public class JsonModelCreator {
                 javaWriter.emitImports(ArrayList.class);
             }
 
-            final List<String> objectAnnotationTypes = CreatorHelper.getObjectAnnotationTypes(fieldElements);
+            final List<String> objectAnnotationTypes = CreatorHelper.getImportsForObjectAnnotationTypes(fieldElements);
             if (!objectAnnotationTypes.isEmpty()){
                 javaWriter.emitImports(objectAnnotationTypes);
             }
 
             javaWriter.beginType(className, CLASS, EnumSet.of(Modifier.PUBLIC));
 
-            // Fields
+            // Member Variables
             {
-                for (final Element fieldElement : fieldElements) {
-                    final String fieldType = CreatorHelper.getFieldType(fieldElement);
+                for (final FieldElement fieldElement : fieldElements) {
+                    final String fieldType = fieldElement.getJavaType();
                     if (fieldType != null) {
-                        final Name simpleName = fieldElement.getSimpleName();
-                        final String simpleNameString = simpleName.toString();
-                        final String memberVariableName = VariableNameHelper.getClassMemberVariableName(simpleNameString);
-                        javaWriter.emitAnnotation(SerializedName.class, typeElementQualifiedNameString + "." + simpleName);
+                        final String simpleName = fieldElement.getSimpleName();
+                        final String memberVariableName = fieldElement.getClassMemberVariableName();
+                        javaWriter.emitAnnotation(SerializedName.class, modelElement.getSimpleName() + "." + simpleName);
                         javaWriter.emitField(fieldType, memberVariableName, EnumSet.of(Modifier.PRIVATE, Modifier.FINAL));
                     }
                 }
@@ -85,14 +84,12 @@ public class JsonModelCreator {
                     final List<String> constructorParameters = getConstructorParameters(fieldElements);
                     javaWriter.beginConstructor(EnumSet.of(Modifier.PUBLIC), constructorParameters, null);
 
-                    for (final Element fieldElement : fieldElements) {
-                        final String fieldType = CreatorHelper.getFieldType(fieldElement);
-                        if (fieldType != null) {
-                            final Name simpleName = fieldElement.getSimpleName();
-                            final String simpleNameString = simpleName.toString();
-                            final String memberVariableName = VariableNameHelper.getClassMemberVariableName(simpleNameString);
-                            final String fieldVariableName = VariableNameHelper.getConstructorParameterVariableName(simpleNameString);
-                            javaWriter.emitStatement(memberVariableName + " = " + fieldVariableName);
+                    for (final FieldElement fieldElement : fieldElements) {
+                        final String javaType = fieldElement.getJavaType();
+                        if (javaType != null) {
+                            final String classMemberVariableName = fieldElement.getClassMemberVariableName();
+                            final String parameterVariableName = fieldElement.getParameterVariableName();
+                            javaWriter.emitStatement(classMemberVariableName + " = " + parameterVariableName);
                         }
                     }
 
@@ -102,14 +99,11 @@ public class JsonModelCreator {
 
             // Get methods
             {
-                for (final Element fieldElement : fieldElements) {
-                    final String fieldType = CreatorHelper.getFieldType(fieldElement);
+                for (final FieldElement fieldElement : fieldElements) {
+                    final String fieldType = fieldElement.getJavaType();
                     if (fieldType != null) {
-
-                        final Name simpleName = fieldElement.getSimpleName();
-                        final String simpleNameString = simpleName.toString();
-                        final String getMethodName = VariableNameHelper.getGetMethodName(simpleNameString);
-                        final String classMemberVariableName = VariableNameHelper.getClassMemberVariableName(simpleNameString);
+                        final String getMethodName = fieldElement.getMethodName();
+                        final String classMemberVariableName = fieldElement.getClassMemberVariableName();
 
                         javaWriter.beginMethod(fieldType, getMethodName, EnumSet.of(Modifier.PUBLIC));
                         javaWriter.emitStatement("return " + classMemberVariableName);
@@ -124,22 +118,26 @@ public class JsonModelCreator {
 
             javaWriter.close();
 
+            final String toString = stringWriter.toString();
+            System.out.println(toString);
+            writer.write(toString);
+            writer.flush();
+            writer.close();
+
         } catch (final Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    private static List<String> getConstructorParameters(final List<Element> fieldElements) {
+    private static List<String> getConstructorParameters(final List<FieldElement> fieldElements) {
         final List<String> constructorParameters = new ArrayList<String>(fieldElements.size() * 3);
-        for (final Element fieldElement : fieldElements){
+        for (final FieldElement fieldElement : fieldElements){
 
-            final String fieldType = CreatorHelper.getFieldType(fieldElement);
-            final Name name = fieldElement.getSimpleName();
-            final String nameString = name.toString();
-            final String fieldVariableName = VariableNameHelper.getConstructorParameterVariableName(nameString);
+            final String javaType = fieldElement.getJavaType();
+            final String fieldVariableName = fieldElement.getParameterVariableName();
 
-            if (fieldType != null) {
-                constructorParameters.add(Modifier.FINAL.toString() + " " + fieldType);
+            if (javaType != null) {
+                constructorParameters.add(Modifier.FINAL.toString() + " " + javaType);
                 constructorParameters.add(fieldVariableName);
             }
         }

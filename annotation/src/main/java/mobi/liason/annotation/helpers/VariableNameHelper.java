@@ -1,4 +1,4 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.helpers;
 
 import com.google.common.base.CaseFormat;
 
@@ -15,6 +15,10 @@ public class VariableNameHelper {
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, className);
     }
 
+    public static String getVariableNameFromFieldName(final String className){
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, className);
+    }
+
     public static String getConstructorParameterVariableName(final String upperCaseUnderscore){
         return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, upperCaseUnderscore);
     }
@@ -25,5 +29,9 @@ public class VariableNameHelper {
 
     public static String getPublicStaticNameFromClassName(final String className){
         return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, className);
+    }
+
+    public static String getClassNameFromUpperCase(final String upperCaseUnderscore) {
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, upperCaseUnderscore);
     }
 }

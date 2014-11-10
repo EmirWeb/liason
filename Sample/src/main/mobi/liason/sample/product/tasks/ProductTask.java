@@ -21,6 +21,7 @@ import mobi.liason.sample.models.ProductJson;
 import mobi.liason.sample.models.ProductModel;
 import mobi.liason.sample.overrides.SampleProvider;
 import mobi.liason.sample.product.viewmodels.ProductViewModel;
+import mobi.liason.sample.products.viewmodels.ProductsTaskStateViewModel;
 import mobi.liason.sample.utilities.TaskUtilities;
 
 /**
@@ -54,6 +55,9 @@ public class ProductTask extends Task {
 
         final Uri productsViewModelUri = SampleProvider.getUri(context, ProductViewModel.Paths.PRODUCT_VIEW_MODEL, mId);
         contentResolver.notifyChange(productsViewModelUri, null, false);
+
+        final Uri productsTaskStateViewModelUri = SampleProvider.getUri(context, ProductsTaskStateViewModel.Paths.PRODUCTS_TASK_STATE);
+        contentResolver.notifyChange(productsTaskStateViewModelUri, null, false);
     }
 
     private ArrayList<ContentProviderOperation> getContentProviderOperations(final Context context, final ProductResponseJson productResponse) {
