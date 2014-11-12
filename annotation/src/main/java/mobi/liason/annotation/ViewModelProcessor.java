@@ -20,12 +20,16 @@ import mobi.liason.annotation.annotations.Projection;
 import mobi.liason.annotation.annotations.Selection;
 import mobi.liason.annotation.annotations.mvvm.ViewModel;
 import mobi.liason.annotation.creators.ViewModelCreator;
+import mobi.liason.annotation.elements.FieldElement;
+import mobi.liason.annotation.elements.PathActionElement;
+import mobi.liason.annotation.elements.PathElement;
+import mobi.liason.annotation.elements.ViewModelElement;
 import mobi.liason.annotation.helpers.CreatorHelper;
 
 public class ViewModelProcessor extends AbstractProcessor {
 
     public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
-        final Map<Element, ViewModelStructure> jsonElementMappings = getElementMappings(ViewModel.class, annotations, roundEnvironment);
+        final Map<Element, ViewModelElement> jsonElementMappings = getElementMappings(ViewModel.class, annotations, roundEnvironment);
         ViewModelCreator.processModels(processingEnv, jsonElementMappings);
 
         return true;
@@ -33,13 +37,13 @@ public class ViewModelProcessor extends AbstractProcessor {
 
 
 
-    private Map<Element, ViewModelStructure> getElementMappings(final Class modelClass, final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
-        final Map<Element, ViewModelStructure> elementMappings = new HashMap<Element, ViewModelStructure>();
+    private Map<Element, ViewModelElement> getElementMappings(final Class modelClass, final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
+        final Map<Element, ViewModelElement> elementMappings = new HashMap<Element, ViewModelElement>();
         final Set<? extends Element> viewModelElements = roundEnvironment.getElementsAnnotatedWith(modelClass);
         for (final Element viewModelElement : viewModelElements) {
             final ElementKind elementKind = viewModelElement.getKind();
             if (elementKind == ElementKind.CLASS) {
-                elementMappings.put(viewModelElement, new ViewModelStructure());
+                elementMappings.put(viewModelElement, new ViewModelElement(viewModelElement));
             }
         }
         parseProjections(roundEnvironment, elementMappings);
@@ -50,72 +54,52 @@ public class ViewModelProcessor extends AbstractProcessor {
         return elementMappings;
     }
 
-    private void parseProjections(RoundEnvironment roundEnvironment, Map<Element, ViewModelStructure> elementMappings) {
+    private void parseProjections(RoundEnvironment roundEnvironment, Map<Element, ViewModelElement> elementMappings) {
         final ArrayList<Element> projectionElements = new ArrayList<Element>(roundEnvironment.getElementsAnnotatedWith(Projection.class));
         for (final Element projectionElement : projectionElements) {
             final Element enclosingElement = projectionElement.getEnclosingElement();
             if (elementMappings.containsKey(enclosingElement)) {
-                final ViewModelStructure viewModelStructure = elementMappings.get(enclosingElement);
-                viewModelStructure.mProjectionElements.add(projectionElement);
+                final ViewModelElement viewModelElement = elementMappings.get(enclosingElement);
+                final FieldElement fieldElement = new FieldElement(projectionElement);
+                viewModelElement.addProjectionFieldElement(fieldElement);
             }
-        }
-
-        for (final ViewModelStructure viewModelStructure : elementMappings.values()) {
-            CreatorHelper.sortElements(viewModelStructure.mProjectionElements);
         }
     }
 
-    private void parseSelections(RoundEnvironment roundEnvironment, Map<Element, ViewModelStructure> elementMappings) {
+    private void parseSelections(RoundEnvironment roundEnvironment, Map<Element, ViewModelElement> elementMappings) {
         final ArrayList<Element> selectionElements = new ArrayList<Element>(roundEnvironment.getElementsAnnotatedWith(Selection.class));
         for (final Element selectionElement : selectionElements) {
             final Element enclosingElement = selectionElement.getEnclosingElement();
             if (elementMappings.containsKey(enclosingElement)) {
-                final ViewModelStructure viewModelStructure = elementMappings.get(enclosingElement);
-                viewModelStructure.mSelectionElement = selectionElement;
+                final ViewModelElement viewModelElement = elementMappings.get(enclosingElement);
+                viewModelElement.setSelectionElement(selectionElement);
             }
         }
     }
 
-    private void parsePaths(RoundEnvironment roundEnvironment, Map<Element, ViewModelStructure> elementMappings) {
-        final ArrayList<Element> pathElements = new ArrayList<Element>(roundEnvironment.getElementsAnnotatedWith(Path.class));
-        for (final Element pathElement : pathElements) {
-            final Element enclosingElement = pathElement.getEnclosingElement();
+    private void parsePaths(RoundEnvironment roundEnvironment, Map<Element, ViewModelElement> elementMappings) {
+        final ArrayList<Element> elements = new ArrayList<Element>(roundEnvironment.getElementsAnnotatedWith(Path.class));
+        for (final Element element : elements) {
+            final Element enclosingElement = element.getEnclosingElement();
             if (elementMappings.containsKey(enclosingElement)) {
-                final ViewModelStructure viewModelStructure = elementMappings.get(enclosingElement);
-                viewModelStructure.mPathElements.add(pathElement);
+                final ViewModelElement viewModelElement = elementMappings.get(enclosingElement);
+                final PathElement pathElement = new PathElement(element);
+                viewModelElement.addPathElement(pathElement);
             }
-        }
-
-        for (final ViewModelStructure viewModelStructure : elementMappings.values()) {
-            CreatorHelper.sortElements(viewModelStructure.mPathElements);
         }
     }
 
-    private void parsePathActions(RoundEnvironment roundEnvironment, Map<Element, ViewModelStructure> elementMappings) {
+    private void parsePathActions(RoundEnvironment roundEnvironment, Map<Element, ViewModelElement> elementMappings) {
         final ArrayList<Element> pathActionElements = new ArrayList<Element>(roundEnvironment.getElementsAnnotatedWith(PathAction.class));
-        for (final Element pathActionElement : pathActionElements) {
-            final Element enclosingElement = pathActionElement.getEnclosingElement();
+        for (final Element element : pathActionElements) {
+            final Element enclosingElement = element.getEnclosingElement();
             if (elementMappings.containsKey(enclosingElement)) {
-                final ViewModelStructure viewModelStructure = elementMappings.get(enclosingElement);
-                final PathAction annotation = pathActionElement.getAnnotation(PathAction.class);
-                final PathAction.PathType pathType = annotation.pathType();
+                final ViewModelElement viewModelElement = elementMappings.get(enclosingElement);
 
-                if (!viewModelStructure.mPathActionElements.containsKey(pathType)){
-                    viewModelStructure.mPathActionElements.put(pathType, new ArrayList<Element>());
-                }
 
-                final List<Element> elements = viewModelStructure.mPathActionElements.get(pathType);
-                elements.add(pathActionElement);
+                final PathActionElement pathActionElement = new PathActionElement(element);
+                viewModelElement.addPathActionElement(pathActionElement);
             }
-        }
-
-        for (final ViewModelStructure viewModelStructure : elementMappings.values()) {
-            for (final PathAction.PathType pathType: viewModelStructure.mPathActionElements.keySet()){
-                final List<Element> elements = viewModelStructure.mPathActionElements.get(pathType);
-
-                CreatorHelper.sortElements(elements);
-            }
-
         }
     }
 

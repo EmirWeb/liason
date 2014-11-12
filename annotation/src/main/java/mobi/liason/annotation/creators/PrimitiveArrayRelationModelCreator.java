@@ -87,8 +87,8 @@ public class PrimitiveArrayRelationModelCreator {
             final String localClassName = primitiveArrayRelationModelDefinition.getLocalArrayListGenericJavaType();
             final String localVariableName = primitiveArrayRelationModelDefinition.getLocalVariableName();
             final String foreignKeyClassName = primitiveArrayRelationModelDefinition.getForeignKeyClassName();
-            final String foreignKeyClassNameUpperCase = VariableNameHelper.getPublicStaticNameFromClassName(foreignKeyClassName);
-            final String foreignKeyClassNameVariableName= VariableNameHelper.getVariableNameFromClassName(foreignKeyClassName);
+            final String foreignKeyClassNameUpperCase = primitiveArrayRelationModelDefinition.getForeignKeyColumnVariableNamePrefix();
+            final String foreignKeyClassNameVariableName = primitiveArrayRelationModelDefinition.getForeignKeyParameterVariableNamePrefix();
 
 
             final Column.Type localType = primitiveArrayRelationModelDefinition.getLocalColumnType();
@@ -148,7 +148,7 @@ public class PrimitiveArrayRelationModelCreator {
                 for (final FieldElement fieldElement : primaryKeys){
                     final String simpleName = fieldElement.getSimpleName();
 
-                    final String declaration = String.format("new ForeignKeyModelColumn(%s.NAME, %sModel.Columns.%s)",
+                    final String declaration = String.format("new ForeignKeyModelColumn(%s.NAME, %s.Columns.%s)",
                             modelClassName, foreignKeyClassName, simpleName);
                     javaWriter.emitAnnotation(ColumnDefinition.class);
                     javaWriter.emitField(ForeignKeyModelColumn.class.getSimpleName(), foreignKeyClassNameUpperCase + "_" + simpleName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
@@ -156,8 +156,9 @@ public class PrimitiveArrayRelationModelCreator {
 
                 javaWriter.emitAnnotation(ColumnDefinition.class);
 
+                final String foreignKeySimpleName = primitiveArrayRelationModelDefinition.getForeignKeySimpleName();
                 final String LocalDeclaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
-                        modelClassName, foreignKeyClassName, localFieldName, Column.class.getSimpleName(), Column.Type.class.getSimpleName(), localType);
+                        modelClassName, foreignKeySimpleName, localFieldName, Column.class.getSimpleName(), Column.Type.class.getSimpleName(), localType);
                 javaWriter.emitField(ModelColumn.class.getSimpleName(), localFieldName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), LocalDeclaration);
 
                 javaWriter.emitAnnotation(ColumnDefinition.class);

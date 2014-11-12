@@ -1,13 +1,15 @@
 package mobi.liason.annotation;
 
+import com.google.common.base.CaseFormat;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
 
 import mobi.liason.annotation.elements.FieldElement;
+import mobi.liason.annotation.elements.ModelElement;
 import mobi.liason.mvvm.database.Column;
 
 /**
@@ -17,25 +19,23 @@ public class PrimitiveArrayRelationModelDefinition {
 
     private final FieldElement mFieldElement;
     private final List<FieldElement> mFieldElements;
-    private final TypeElement mTypeElement;
+    private final ModelElement mModelElement;
     private static final String RELATION_MODEL = "RelationModel";
 
-    public PrimitiveArrayRelationModelDefinition(final FieldElement fieldElement, final TypeElement typeElement, final List<FieldElement> fieldElements) {
+    public PrimitiveArrayRelationModelDefinition(final FieldElement fieldElement, final ModelElement typeElement, final List<FieldElement> fieldElements) {
         mFieldElement = fieldElement;
-        mTypeElement = typeElement;
+        mModelElement = typeElement;
         mFieldElements = fieldElements;
     }
 
     public String getClassName() {
-        final String foreignKeyClassName = getForeignKeyClassName();
+        final String foreignKeyClassName = mModelElement.getSimpleName();
         final String localClassName = getLocalClassName();
         return foreignKeyClassName + localClassName + RELATION_MODEL;
     }
 
     public String getPackageName() {
-        final PackageElement packageElement = (PackageElement) mTypeElement.getEnclosingElement();
-        final String packageElementQualifiedName = packageElement.getQualifiedName().toString();
-        return packageElementQualifiedName;
+        return mModelElement.getPackageName();
     }
 
     public String getLocalArrayListGenericJavaType() {
@@ -55,9 +55,7 @@ public class PrimitiveArrayRelationModelDefinition {
     }
 
     public String getForeignKeyClassName() {
-        final Name typeElementSimpleName = mTypeElement.getSimpleName();
-        final String typeElementClassName = typeElementSimpleName.toString();
-        return typeElementClassName;
+        return mModelElement.getModelClassName();
     }
 
     public List<FieldElement> getPrimaryKeys() {
@@ -75,5 +73,19 @@ public class PrimitiveArrayRelationModelDefinition {
 
     public String getLocalPublicStaticFinalVariableName() {
         return mFieldElement.getFinalStaticMemberVariableName();
+    }
+
+    public String getForeignKeySimpleName() {
+        return mModelElement.getSimpleName();
+    }
+
+    public String getForeignKeyParameterVariableNamePrefix() {
+        final String simpleName = mModelElement.getSimpleName();
+        return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, simpleName);
+    }
+
+    public String getForeignKeyColumnVariableNamePrefix() {
+        final String simpleName = mModelElement.getSimpleName();
+        return CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, simpleName);
     }
 }

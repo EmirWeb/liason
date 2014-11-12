@@ -109,12 +109,9 @@ public class JsonModelCreator {
                         javaWriter.endMethod();
                     }
                 }
-
-
             }
 
             javaWriter.endType();
-
             javaWriter.close();
 
             final String toString = stringWriter.toString();

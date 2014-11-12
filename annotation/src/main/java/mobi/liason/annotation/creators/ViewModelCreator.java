@@ -17,14 +17,14 @@ import java.util.Map;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
-import mobi.liason.annotation.ViewModelStructure;
+import mobi.liason.annotation.elements.PathActionElement;
+import mobi.liason.annotation.elements.PathElement;
+import mobi.liason.annotation.elements.ViewModelElement;
 import mobi.liason.annotation.annotations.PathAction;
 import mobi.liason.annotation.annotations.mvvm.ViewModel;
+import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.ViewModelColumn;
@@ -38,126 +38,101 @@ import mobi.liason.mvvm.database.annotations.PathDefinitions;
  */
 public class ViewModelCreator {
 
-    private static final String VIEW_MODEL = "ViewModel";
-    private static final String JSON = "Json";
+    private static final String NAME = "NAME";
+
+    private static final String CONTEXT_CLASS_NAME_STRING = Context.class.getSimpleName();
+    private static final String CONTEXT_DECLERATION = Modifier.FINAL.toString() + " " + CONTEXT_CLASS_NAME_STRING;
+    private static final String CONTEXT_VARIABLE_NAME = VariableNameHelper.getVariableNameFromClassName(CONTEXT_CLASS_NAME_STRING);
+
+    private static final String SQL_DATABASE_CLASS_NAME_STRING = SQLiteDatabase.class.getSimpleName();
+    private static final String SQL_DATABASE_DECLERATION = Modifier.FINAL.toString() + " " + SQL_DATABASE_CLASS_NAME_STRING;
+    private static final String SQL_DATABASE_VARIABLE_NAME = VariableNameHelper.getVariableNameFromClassName(SQL_DATABASE_CLASS_NAME_STRING);
+
+    private static final String PATH_CLASS_NAME_STRING = Path.class.getSimpleName();
+    private static final String PATH_DECLERATION = Modifier.FINAL.toString() + " " + PATH_CLASS_NAME_STRING;
+    private static final String PATH_VARIABLE_NAME = VariableNameHelper.getVariableNameFromClassName(PATH_CLASS_NAME_STRING);
+
+    private static final String URI_CLASS_NAME_STRING = Uri.class.getSimpleName();
+    private static final String URI_DECLERATION = Modifier.FINAL.toString() + " " + URI_CLASS_NAME_STRING;
+    private static final String URI_VARIABLE_NAME = VariableNameHelper.getVariableNameFromClassName(URI_CLASS_NAME_STRING);
+
+    private static final String PROJECTION_CLASS_NAME_STRING = String[].class.getSimpleName();
+    private static final String PROJECTION_DECLERATION = Modifier.FINAL.toString() + " " + PROJECTION_CLASS_NAME_STRING;
+    private static final String PROJECTION_VARIABLE_NAME = "projection";
+
+    private static final String SELECTION_CLASS_NAME_STRING = String.class.getSimpleName();
+    private static final String SELECTION_DECLERATION = Modifier.FINAL.toString() + " " + SELECTION_CLASS_NAME_STRING;
+    private static final String SELECTION_VARIABLE_NAME = "selection";
+
+    private static final String SELECTION_ARGUMENTS_CLASS_NAME_STRING = String[].class.getSimpleName();
+    private static final String SELECTION_ARGUMENTS_DECLERATION = Modifier.FINAL.toString() + " " + SELECTION_ARGUMENTS_CLASS_NAME_STRING;
+    private static final String SELECTION_ARGUMENTS_VARIABLE_NAME = "selectionArguments";
+
+    private static final String SORT_ORDER_CLASS_NAME_STRING = String.class.getSimpleName();
+    private static final String SORT_ORDER_DECLERATION = Modifier.FINAL.toString() + " " + SORT_ORDER_CLASS_NAME_STRING;
+    private static final String SORT_ORDER_VARIABLE_NAME = "sortOrder";
+
     private static final String CLASS = "class";
 
-    public static void processModels(final ProcessingEnvironment processingEnv, final Map<Element, ViewModelStructure> elementMappings) {
-        for (final Element modelElement : elementMappings.keySet()) {
-            final ViewModelStructure viewModelStructure = elementMappings.get(modelElement);
-            processModel(processingEnv, modelElement, viewModelStructure);
+    public static void processModels(final ProcessingEnvironment processingEnv, final Map<Element, ViewModelElement> elementMappings) {
+        for (final Element element : elementMappings.keySet()) {
+            final ViewModelElement viewModelElement = elementMappings.get(element);
+
+            processModel(processingEnv, viewModelElement);
         }
     }
 
-    private static void processModel(final ProcessingEnvironment processingEnv, final Element modelElement, final ViewModelStructure viewModelStructure) {
-        final TypeElement typeElement = (TypeElement) modelElement;
-        final PackageElement packageElement = (PackageElement) typeElement.getEnclosingElement();
-        final Name typeElementQualifiedName = typeElement.getQualifiedName();
-        final String typeElementQualifiedNameString = typeElementQualifiedName.toString();
-        final Name typeElementSimpleName = typeElement.getSimpleName();
-        final String typeElementSimpleNameString = typeElementSimpleName.toString();
+    private static void processModel(final ProcessingEnvironment processingEnv, final ViewModelElement viewModelElement) {
 
-        final String modelClassName = typeElementSimpleNameString + VIEW_MODEL;
-        final String jsonClassNameAndPackage = typeElementQualifiedNameString + JSON;
-
-        final String contextClassNameString = Context.class.getSimpleName();
-        final String contextDecleration = Modifier.FINAL.toString() + " " + contextClassNameString;
-        final String contextVariableName = contextClassNameString.toLowerCase();
-
-        final String sqlDatabaseClassNameString = SQLiteDatabase.class.getSimpleName();
-        final String sqlDatabaseDecleration = Modifier.FINAL.toString() + " " + sqlDatabaseClassNameString;
-        final String sqlDatabaseVariableName = VariableNameHelper.getVariableNameFromClassName(sqlDatabaseClassNameString);
-
-        final String pathClassNameString = Path.class.getSimpleName();
-        final String pathDecleration = Modifier.FINAL.toString() + " " + pathClassNameString;
-        final String pathVariableName = pathClassNameString.toLowerCase();
-
-        final String uriClassNameString = Uri.class.getSimpleName();
-        final String uriDecleration = Modifier.FINAL.toString() + " " + uriClassNameString;
-        final String uriVariableName = uriClassNameString.toLowerCase();
-
-        final String projectionClassNameString = String[].class.getSimpleName();
-        final String projectionDecleration = Modifier.FINAL.toString() + " " + projectionClassNameString;
-        final String projectionVariableName = "projection";
-
-        final String selectionClassNameString = String.class.getSimpleName();
-        final String selectionDecleration = Modifier.FINAL.toString() + " " + selectionClassNameString;
-        final String selectionVariableName = "selection";
-
-        final String selectionArgumentsClassNameString = String[].class.getSimpleName();
-        final String selectionArgumentsDecleration = Modifier.FINAL.toString() + " " + selectionArgumentsClassNameString;
-        final String selectionArgumentsVariableName = "selectionArguments";
-
-        final String sortOrderClassNameString = String.class.getSimpleName();
-        final String sortOrderDecleration = Modifier.FINAL.toString() + " " + sortOrderClassNameString;
-        final String sortOrderVariableName = "sortOrder";
+        final String metaClassName = viewModelElement.getSimpleName();
+        final String className = viewModelElement.getClassName();
 
         try {
-            final JavaFileObject javaFileObject = processingEnv.getFiler().createSourceFile(modelClassName);
+            final JavaFileObject javaFileObject = processingEnv.getFiler().createSourceFile(className);
             final Writer writer = javaFileObject.openWriter();
-            final String packageElementQualifiedName = packageElement.getQualifiedName().toString();
+            final String pacakageName = viewModelElement.getPackageName();
 
             final Writer stringWriter = new StringWriter();
             final JavaWriter javaWriter = new JavaWriter(stringWriter);
-            javaWriter.emitPackage(packageElementQualifiedName);
+            javaWriter.emitPackage(pacakageName);
 
-            final List<String> types = new ArrayList<String>();
-            types.add(Context.class.getCanonicalName());
-            types.add(mobi.liason.mvvm.database.ViewModel.class.getCanonicalName());
-            types.add(PathDefinitions.class.getCanonicalName());
-            types.add(PathDefinition.class.getCanonicalName());
-            types.add(Path.class.getCanonicalName());
+            final List<String> imports = getImports(viewModelElement);
+            javaWriter.emitImports(imports);
 
-            if (!viewModelStructure.mProjectionElements.isEmpty()) {
-                types.add(ColumnDefinition.class.getCanonicalName());
-                types.add(ColumnDefinitions.class.getCanonicalName());
-                types.add(ViewModelColumn.class.getCanonicalName());
-            }
-
-            if (!viewModelStructure.mPathActionElements.isEmpty()) {
-                types.add(SQLiteDatabase.class.getCanonicalName());
-                types.add(Uri.class.getCanonicalName());
-                types.add(Cursor.class.getCanonicalName());
-            }
-
-            javaWriter.emitImports(types);
-
-            javaWriter.beginType(modelClassName, CLASS, EnumSet.of(Modifier.PUBLIC), ViewModel.class.getSimpleName());
+            javaWriter.beginType(className, CLASS, EnumSet.of(Modifier.PUBLIC), ViewModel.class.getSimpleName());
 
             // Name
             {
-                javaWriter.emitField(String.class.getSimpleName(), "NAME", EnumSet.of(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC), modelClassName+".class.getSimpleName()");
+                javaWriter.emitField(String.class.getSimpleName(), NAME, EnumSet.of(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC), String.format("%s.class.getSimpleName()", className));
                 javaWriter.emitAnnotation(Override.class);
-                javaWriter.beginMethod(String.class.getSimpleName(), "getName", EnumSet.of(Modifier.PUBLIC), contextDecleration, contextVariableName);
-                javaWriter.emitStatement("return " + "NAME");
+                javaWriter.beginMethod(String.class.getSimpleName(), "getName", EnumSet.of(Modifier.PUBLIC), CONTEXT_DECLERATION, CONTEXT_VARIABLE_NAME);
+                javaWriter.emitStatement("return " + NAME);
                 javaWriter.endMethod();
             }
 
             // Selection
             {
-                final Name simpleName = viewModelStructure.mSelectionElement.getSimpleName();
-                final String simpleNameString = simpleName.toString();
+                final String selectionMethodName = viewModelElement.getSelectionMethodName();
 
                 javaWriter.emitAnnotation(Override.class);
-                javaWriter.beginMethod(String.class.getSimpleName(), "getSelection", EnumSet.of(Modifier.PROTECTED), contextDecleration, contextVariableName);
-                javaWriter.emitStatement("return %s.%s", typeElementSimpleNameString, simpleNameString);
+                javaWriter.beginMethod(String.class.getSimpleName(), "getSelection", EnumSet.of(Modifier.PROTECTED), CONTEXT_DECLERATION, CONTEXT_VARIABLE_NAME);
+                javaWriter.emitStatement("return %s.%s", metaClassName, selectionMethodName);
                 javaWriter.endMethod();
             }
 
             // Columns
             {
-                if (!viewModelStructure.mProjectionElements.isEmpty()) {
+                if (viewModelElement.hasProjectionFieldElements()) {
+                    final List<FieldElement> projectionFieldElements = viewModelElement.getProjectionFieldElements();
                     javaWriter.emitAnnotation(ColumnDefinitions.class);
                     javaWriter.beginType("Columns", CLASS, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC));
 
-                    for (final Element fieldElement : viewModelStructure.mProjectionElements) {
-                        final Name simpleName = fieldElement.getSimpleName();
-                        final String simpleNameString = simpleName.toString();
+                    for (final FieldElement fieldElement : projectionFieldElements) {
+                        final String simpleName = fieldElement.getSimpleName();
                         javaWriter.emitAnnotation(ColumnDefinition.class);
 
-                        final String declaration = String.format("%s.%s", typeElementSimpleNameString, fieldElement.getSimpleName());
-                        javaWriter.emitField(ViewModelColumn.class.getSimpleName(), simpleNameString, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
-
+                        final String declaration = String.format("%s.%s", metaClassName, fieldElement.getSimpleName());
+                        javaWriter.emitField(ViewModelColumn.class.getSimpleName(), simpleName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
                     }
                     javaWriter.endType();
                 }
@@ -172,18 +147,22 @@ public class ViewModelCreator {
 
                 // Default path
                 {
-                    final String declaration = String.format("new Path(%s.NAME)", modelClassName);
-                    final String publicStaticNameFromClassName = VariableNameHelper.getPublicStaticNameFromClassName(typeElementSimpleNameString);
+                    final String declaration = String.format("new Path(%s.NAME)", className);
+                    final String publicStaticNameFromClassName = VariableNameHelper.getPublicStaticNameFromClassName(metaClassName);
                     javaWriter.emitField(Path.class.getSimpleName(), publicStaticNameFromClassName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
                 }
 
-                for (final Element fieldElement : viewModelStructure.mPathElements) {
-                    final Name simpleName = fieldElement.getSimpleName();
-                    final String simpleNameString = simpleName.toString();
-                    javaWriter.emitAnnotation(PathDefinition.class);
 
-                    final String declaration = String.format("new Path(%s.%s)", typeElementSimpleNameString, fieldElement.getSimpleName());
-                    javaWriter.emitField(Path.class.getSimpleName(), simpleNameString, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
+                if (viewModelElement.hasPathElements()) {
+                    final List<PathElement> pathElements = viewModelElement.getPathElements();
+                    for (final PathElement pathElement : pathElements) {
+
+                        final String simpleName = pathElement.getSimpleName();
+                        javaWriter.emitAnnotation(PathDefinition.class);
+
+                        final String declaration = String.format("new Path(%s.%s)", metaClassName, simpleName);
+                        javaWriter.emitField(Path.class.getSimpleName(), simpleName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
+                    }
                 }
 
                 javaWriter.endType();
@@ -191,42 +170,41 @@ public class ViewModelCreator {
 
             // PathsActions
             {
-                if (!viewModelStructure.mPathActionElements.isEmpty()){
-                    if (viewModelStructure.mPathActionElements.containsKey(PathAction.PathType.query)){
-                        final List<Element> pathActionElements = viewModelStructure.mPathActionElements.get(PathAction.PathType.query);
+                if (viewModelElement.hasPathActionElements()){
+                    final List<PathActionElement> queryPathActionElements = viewModelElement.getPathActionElements(PathAction.PathType.query);
+                    if (!queryPathActionElements.isEmpty()){
+
                         javaWriter.emitAnnotation(Override.class);
                         javaWriter.beginMethod(Cursor.class.getSimpleName(), "query", EnumSet.of(Modifier.PUBLIC),
-                                contextDecleration, contextVariableName,
-                                sqlDatabaseDecleration, sqlDatabaseVariableName,
-                                pathDecleration, pathVariableName,
-                                uriDecleration, uriVariableName,
-                                projectionDecleration, projectionVariableName,
-                                selectionDecleration, selectionVariableName,
-                                selectionArgumentsDecleration, selectionArgumentsVariableName,
-                                sortOrderDecleration, sortOrderVariableName
+                                CONTEXT_DECLERATION, CONTEXT_VARIABLE_NAME,
+                                SQL_DATABASE_DECLERATION, SQL_DATABASE_VARIABLE_NAME,
+                                PATH_DECLERATION, PATH_VARIABLE_NAME,
+                                URI_DECLERATION, URI_VARIABLE_NAME,
+                                PROJECTION_DECLERATION, PROJECTION_VARIABLE_NAME,
+                                SELECTION_DECLERATION, SELECTION_VARIABLE_NAME,
+                                SELECTION_ARGUMENTS_DECLERATION, SELECTION_ARGUMENTS_VARIABLE_NAME,
+                                SORT_ORDER_DECLERATION, SORT_ORDER_VARIABLE_NAME
                         );
 
-                        for (final Element pathActionElement : pathActionElements){
-                            final Name simpleName = pathActionElement.getSimpleName();
-                            final String simpleNameString = simpleName.toString();
-                            final PathAction annotation = pathActionElement.getAnnotation(PathAction.class);
-                            final String path = annotation.value();
-                            javaWriter.beginControlFlow("if (%s != null && %s.equals(new Path(\"%s\")))", pathVariableName, pathVariableName, path);
+                        for (final PathActionElement pathActionElement : queryPathActionElements){
+                            final String simpleName = pathActionElement.getSimpleName();
+                            final String path = pathActionElement.getPathActionValue();
+                            javaWriter.beginControlFlow("if (%s != null && %s.equals(new Path(\"%s\")))", PATH_VARIABLE_NAME, PATH_VARIABLE_NAME, path);
                             javaWriter.emitStatement("return %s.%s(this, %s, %s, %s, %s, %s, %s, %s)",
-                                    typeElementSimpleNameString, simpleNameString,
-                                    contextVariableName, sqlDatabaseVariableName,
-                                    uriVariableName, projectionVariableName,
-                                    selectionVariableName, selectionArgumentsVariableName,
-                                    sortOrderVariableName
+                                    metaClassName, simpleName,
+                                    CONTEXT_VARIABLE_NAME, SQL_DATABASE_VARIABLE_NAME,
+                                    URI_VARIABLE_NAME, PROJECTION_VARIABLE_NAME,
+                                    SELECTION_VARIABLE_NAME, SELECTION_ARGUMENTS_VARIABLE_NAME,
+                                    SORT_ORDER_VARIABLE_NAME
                                     );
                             javaWriter.endControlFlow();
                         }
 
                         javaWriter.emitStatement("return super.query(%s, %s, %s, %s, %s, %s, %s, %s)",
-                                contextVariableName, sqlDatabaseVariableName,
-                                pathVariableName, uriVariableName, projectionVariableName,
-                                selectionVariableName, selectionArgumentsVariableName,
-                                sortOrderVariableName
+                                CONTEXT_VARIABLE_NAME, SQL_DATABASE_VARIABLE_NAME,
+                                PATH_VARIABLE_NAME, URI_VARIABLE_NAME, PROJECTION_VARIABLE_NAME,
+                                SELECTION_VARIABLE_NAME, SELECTION_ARGUMENTS_VARIABLE_NAME,
+                                SORT_ORDER_VARIABLE_NAME
                         );
 
                         javaWriter.endMethod();
@@ -238,6 +216,7 @@ public class ViewModelCreator {
             javaWriter.close();
 
             final String code = stringWriter.toString();
+            System.out.println(className);
             System.out.println(code);
             writer.write(code);
             writer.flush();
@@ -245,6 +224,28 @@ public class ViewModelCreator {
         } catch (final Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    private static List<String> getImports(final ViewModelElement viewModelElement) {
+        final List<String> imports = new ArrayList<String>();
+        imports.add(Context.class.getCanonicalName());
+        imports.add(mobi.liason.mvvm.database.ViewModel.class.getCanonicalName());
+        imports.add(PathDefinitions.class.getCanonicalName());
+        imports.add(PathDefinition.class.getCanonicalName());
+        imports.add(Path.class.getCanonicalName());
+
+        if (viewModelElement.hasProjectionFieldElements()) {
+            imports.add(ColumnDefinition.class.getCanonicalName());
+            imports.add(ColumnDefinitions.class.getCanonicalName());
+            imports.add(ViewModelColumn.class.getCanonicalName());
+        }
+
+        if (viewModelElement.hasPathActionElements()) {
+            imports.add(SQLiteDatabase.class.getCanonicalName());
+            imports.add(Uri.class.getCanonicalName());
+            imports.add(Cursor.class.getCanonicalName());
+        }
+        return imports;
     }
 
 }

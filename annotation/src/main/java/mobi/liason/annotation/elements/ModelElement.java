@@ -15,15 +15,18 @@ public class ModelElement {
 
     private final TypeElement mTypeElement;
     private static final String JSON_MODEL_CLASS_NAME = "%sJson";
+    private static final String JSON_MODEL_PACKAGE_NAME = "%s.%s";
     private static final String MODEL_CLASS_NAME = "%sModel";
     private final List<FieldElement> mFieldElements = new ArrayList<FieldElement>();
 
 
     public ModelElement(final TypeElement typeElement, final List<Element> elements) {
         mTypeElement = typeElement;
-        for (final Element element : elements){
-            final FieldElement fieldElement = new FieldElement(element);
-            mFieldElements.add(fieldElement);
+        if (elements != null) {
+            for (final Element element : elements) {
+                final FieldElement fieldElement = new FieldElement(element);
+                mFieldElements.add(fieldElement);
+            }
         }
     }
 
@@ -58,5 +61,17 @@ public class ModelElement {
 
     public List<FieldElement> getFieldElements() {
         return mFieldElements;
+    }
+
+    public String getJsonModelPackageName() {
+        final String packageName = getPackageName();
+
+        final String jsonModelClassName = getJsonModelClassName();
+        if (packageName == null || packageName.isEmpty()) {
+            return jsonModelClassName;
+        }
+
+        final String jsonModelPackageName = String.format(JSON_MODEL_PACKAGE_NAME, packageName, jsonModelClassName);
+        return jsonModelPackageName;
     }
 }

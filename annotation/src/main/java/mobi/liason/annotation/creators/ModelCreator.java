@@ -22,6 +22,7 @@ import javax.tools.JavaFileObject;
 
 import mobi.liason.annotation.PrimitiveArrayRelationModelDefinition;
 import mobi.liason.annotation.elements.FieldElement;
+import mobi.liason.annotation.elements.ModelElement;
 import mobi.liason.annotation.helpers.CreatorHelper;
 import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.loaders.Path;
@@ -41,43 +42,34 @@ import mobi.liason.mvvm.database.annotations.Unique;
  */
 public class ModelCreator {
 
-    private static final String MODEL = "Model";
-    private static final String JSON = "Json";
     private static final String CLASS = "class";
 
     public static void processModels(final ProcessingEnvironment processingEnv, final Map<Element, List<Element>> elementMappings) {
-        for (final Element modelElement : elementMappings.keySet()) {
-            final List<Element> elements = elementMappings.get(modelElement);
-            final List<FieldElement> fieldElements = new ArrayList<FieldElement>(elements.size());
-            for (final Element element : elements){
-                final FieldElement fieldElement = new FieldElement(element);
-                fieldElements.add(fieldElement);
-            }
-            processModel(processingEnv, modelElement, fieldElements);
+        for (final Element element : elementMappings.keySet()) {
+            final List<Element> elements = elementMappings.get(element);
+            final TypeElement typeElement = (TypeElement) element;
+            final ModelElement modelElement = new ModelElement(typeElement, elements);
+            processModel(processingEnv, modelElement);
         }
     }
 
-    private static void processModel(final ProcessingEnvironment processingEnv, final Element modelElement, final List<FieldElement> fieldElements) {
-        final TypeElement typeElement = (TypeElement) modelElement;
-        final PackageElement packageElement = (PackageElement) typeElement.getEnclosingElement();
-        final Name typeElementQualifiedName = typeElement.getQualifiedName();
-        final String typeElementQualifiedNameString = typeElementQualifiedName.toString();
-        final Name typeElementSimpleName = typeElement.getSimpleName();
-        final String typeElementSimpleNameString = typeElementSimpleName.toString();
+    private static void processModel(final ProcessingEnvironment processingEnv, final ModelElement modelElement) {
+        final List<FieldElement> fieldElements = modelElement.getFieldElements();
 
-        final String modelClassName = typeElementSimpleNameString + MODEL;
-        final String jsonClassName = typeElementSimpleNameString + JSON;
-        final String jsonClassNameAndPackage = typeElementQualifiedNameString + JSON;
 
+        final String modelSimpleName = modelElement.getSimpleName();
+        final String modelClassName = modelElement.getModelClassName();
+        final String jsonModelClassName = modelElement.getJsonModelClassName();
+        final String jsonModelPackageName = modelElement.getJsonModelPackageName();
 
         try {
             final JavaFileObject javaFileObject = processingEnv.getFiler().createSourceFile(modelClassName);
             final Writer writer = javaFileObject.openWriter();
-            final String packageElementQualifiedName = packageElement.getQualifiedName().toString();
+            final String packageName = modelElement.getPackageName();
 
             final Writer stringWriter = new StringWriter();
             final JavaWriter javaWriter = new JavaWriter(stringWriter);
-            javaWriter.emitPackage(packageElementQualifiedName);
+            javaWriter.emitPackage(packageName);
 
             final List<String> types = new ArrayList<String>();
             types.add(Context.class.getCanonicalName());
@@ -86,8 +78,8 @@ public class ModelCreator {
             types.add(PathDefinition.class.getCanonicalName());
             types.add(Path.class.getCanonicalName());
 
-            if (!jsonClassNameAndPackage.equals(jsonClassName)) {
-                types.add(jsonClassNameAndPackage);
+            if (!jsonModelPackageName.equals(jsonModelClassName)) {
+                types.add(jsonModelPackageName);
             }
 
             if (!fieldElements.isEmpty()) {
@@ -104,11 +96,6 @@ public class ModelCreator {
 
             if (CreatorHelper.hasPrimaryKey(fieldElements)){
                 types.add(PrimaryKey.class.getCanonicalName());
-            }
-
-
-            if (!jsonClassNameAndPackage.equals(jsonClassName)) {
-                types.add(jsonClassNameAndPackage);
             }
 
             javaWriter.emitImports(types);
@@ -134,8 +121,8 @@ public class ModelCreator {
             {
                 if (!fieldElements.isEmpty()) {
 
-                    final String decleration = Modifier.FINAL.toString() + " " + jsonClassName;
-                    final String jsonVariableName = VariableNameHelper.getVariableNameFromClassName(jsonClassName);
+                    final String decleration = Modifier.FINAL.toString() + " " + jsonModelClassName;
+                    final String jsonVariableName = VariableNameHelper.getVariableNameFromClassName(jsonModelClassName);
                     final String contentValuesClassName = ContentValues.class.getSimpleName();
                     final String contentValuesVariableName = VariableNameHelper.getVariableNameFromClassName(contentValuesClassName);
 
@@ -183,7 +170,7 @@ public class ModelCreator {
 
                                 final Type type = fieldElement.getColumneType();
                                 final String declaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
-                                        modelClassName, typeElementSimpleNameString, simpleName, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
+                                        modelClassName, modelSimpleName, simpleName, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
                                 javaWriter.emitField(ModelColumn.class.getSimpleName(), simpleName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
                             }
                         }
@@ -200,7 +187,7 @@ public class ModelCreator {
                 javaWriter.emitAnnotation(PathDefinition.class);
 
                 final String declaration = String.format("new Path(%s.NAME)", modelClassName);
-                final String publicStaticNameFromClassName = VariableNameHelper.getPublicStaticNameFromClassName(typeElementSimpleNameString);
+                final String publicStaticNameFromClassName = VariableNameHelper.getPublicStaticNameFromClassName(modelSimpleName);
                 javaWriter.emitField(Path.class.getSimpleName(), publicStaticNameFromClassName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
 
                 javaWriter.endType();
@@ -221,7 +208,7 @@ public class ModelCreator {
                     if (!fieldElement.isArray() && fieldElement.isPrimitiveType()) {
 
                     } else if (fieldElement.isArrayWithPrimitiveType()) {
-                        final PrimitiveArrayRelationModelDefinition primitiveArrayRelationModelDefinition = new PrimitiveArrayRelationModelDefinition(fieldElement, typeElement, fieldElements);
+                        final PrimitiveArrayRelationModelDefinition primitiveArrayRelationModelDefinition = new PrimitiveArrayRelationModelDefinition(fieldElement, modelElement, fieldElements);
                         PrimitiveArrayRelationModelCreator.processModel(processingEnv, primitiveArrayRelationModelDefinition);
                     } else if (fieldElement.isArray()) {
 

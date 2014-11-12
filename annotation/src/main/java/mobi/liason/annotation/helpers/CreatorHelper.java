@@ -17,6 +17,8 @@ import mobi.liason.annotation.annotations.types.Object;
 import mobi.liason.annotation.annotations.types.Real;
 import mobi.liason.annotation.annotations.types.Text;
 import mobi.liason.annotation.elements.FieldElement;
+import mobi.liason.annotation.elements.PathActionElement;
+import mobi.liason.annotation.elements.PathElement;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.annotations.PrimaryKey;
 import mobi.liason.mvvm.database.annotations.Unique;
@@ -312,6 +314,39 @@ public class CreatorHelper {
         Collections.sort(elements, new Comparator<Element>() {
             @Override
             public int compare(Element o1, Element o2) {
+                final String string2 = o2.toString();
+                final String string1 = o1.toString();
+                return string1.compareToIgnoreCase(string2);
+            }
+        });
+    }
+
+    public static void sortFieldElements(final List<FieldElement> elements){
+        Collections.sort(elements, new Comparator<FieldElement>() {
+            @Override
+            public int compare(FieldElement o1, FieldElement o2) {
+                final String string2 = o2.toString();
+                final String string1 = o1.toString();
+                return string1.compareToIgnoreCase(string2);
+            }
+        });
+    }
+
+    public static void sortPathElements(final ArrayList<PathElement> pathElements) {
+        Collections.sort(pathElements, new Comparator<PathElement>() {
+            @Override
+            public int compare(PathElement o1, PathElement o2) {
+                final String string2 = o2.toString();
+                final String string1 = o1.toString();
+                return string1.compareToIgnoreCase(string2);
+            }
+        });
+    }
+
+    public static void sortPathActionElements(final List<PathActionElement> pathActionElements) {
+        Collections.sort(pathActionElements, new Comparator<PathActionElement>() {
+            @Override
+            public int compare(PathActionElement o1, PathActionElement o2) {
                 final String string2 = o2.toString();
                 final String string1 = o1.toString();
                 return string1.compareToIgnoreCase(string2);
