@@ -6,9 +6,9 @@ import javax.lang.model.element.Name;
 /**
  * Created by Emir on 14-11-12.
  */
-public class PathElement extends BaseElement{
+public class SelectionElement extends BaseElement{
 
-    public PathElement(final Element element) {
+    public SelectionElement(final Element element) {
         super(element);
     }
 

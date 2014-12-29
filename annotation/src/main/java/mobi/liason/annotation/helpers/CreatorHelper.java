@@ -1,6 +1,8 @@
 package mobi.liason.annotation.helpers;
 
+import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationTypeMismatchException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,6 +18,7 @@ import mobi.liason.annotation.annotations.types.Integer;
 import mobi.liason.annotation.annotations.types.Object;
 import mobi.liason.annotation.annotations.types.Real;
 import mobi.liason.annotation.annotations.types.Text;
+import mobi.liason.annotation.elements.BaseElement;
 import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.annotation.elements.PathActionElement;
 import mobi.liason.annotation.elements.PathElement;
@@ -123,7 +126,7 @@ public class CreatorHelper {
                 final Integer annotation = fieldElement.getAnnotation(Integer.class);
                 final String longString = Long.class.getSimpleName();
                 if (annotation.isArray()){
-                    return ArrayList.class.getSimpleName() + "<" + longString + ">";
+                    return toArrayNotation(longString);
                 }
 
                 return longString;
@@ -131,7 +134,7 @@ public class CreatorHelper {
                 final Text annotation = fieldElement.getAnnotation(Text.class);
                 final String stringString = String.class.getSimpleName();
                 if (annotation.isArray()){
-                    return ArrayList.class.getSimpleName() + "<" + stringString + ">";
+                    return toArrayNotation(stringString);
                 }
 
                 return stringString;
@@ -139,7 +142,7 @@ public class CreatorHelper {
                 final Real annotation = fieldElement.getAnnotation(Real.class);
                 final String doubleString = Double.class.getSimpleName();
                 if (annotation.isArray()){
-                    return ArrayList.class.getSimpleName() + "<" + doubleString + ">";
+                    return toArrayNotation(doubleString);
                 }
 
                 return doubleString;
@@ -147,7 +150,7 @@ public class CreatorHelper {
                 final Object annotation = fieldElement.getAnnotation(Object.class);
                 final String className = getClassName(annotation);
                 if (annotation.isArray()){
-                    return ArrayList.class.getSimpleName() + "<" + className + ">";
+                    return toArrayNotation(className);
                 }
 
                 return className;
@@ -204,6 +207,21 @@ public class CreatorHelper {
             } else if (isAnnotationOfType(Text.class, annotationMirror)){
                 return Column.Type.text;
             } else if (isAnnotationOfType(Real.class, annotationMirror)){
+                return Column.Type.real;
+            }
+        }
+        return Column.Type.text;
+    }
+
+    public static Column.Type getColumnType(final Field field) {
+        final Annotation[] declaredAnnotations = field.getDeclaredAnnotations();
+
+        for (final Annotation annotation : declaredAnnotations){
+            if (annotation instanceof Integer) {
+                return Column.Type.integer;
+            } else if (annotation instanceof Integer) {
+                return Column.Type.text;
+            } else if (annotation instanceof Integer){
                 return Column.Type.real;
             }
         }
@@ -310,10 +328,10 @@ public class CreatorHelper {
         return false;
     }
 
-    public static void sortElements(final List<Element> elements){
-        Collections.sort(elements, new Comparator<Element>() {
+    public static void sortBaseElements(final List<? extends BaseElement> elements){
+        Collections.sort(elements, new Comparator<BaseElement>() {
             @Override
-            public int compare(Element o1, Element o2) {
+            public int compare(BaseElement o1, BaseElement o2) {
                 final String string2 = o2.toString();
                 final String string1 = o1.toString();
                 return string1.compareToIgnoreCase(string2);
@@ -321,36 +339,50 @@ public class CreatorHelper {
         });
     }
 
-    public static void sortFieldElements(final List<FieldElement> elements){
-        Collections.sort(elements, new Comparator<FieldElement>() {
-            @Override
-            public int compare(FieldElement o1, FieldElement o2) {
-                final String string2 = o2.toString();
-                final String string1 = o1.toString();
-                return string1.compareToIgnoreCase(string2);
+    public static String getJavaType(final Field field) {
+        final Annotation[] declaredAnnotations = field.getDeclaredAnnotations();
+
+        for (final Annotation annotation : declaredAnnotations){
+            if (annotation instanceof Integer){
+                final Integer integerAnnotation = (Integer) annotation;
+                final String longString = Long.class.getSimpleName();
+                if (integerAnnotation.isArray()){
+                    return toArrayNotation(longString);
+                }
+
+                return longString;
+            } else if (annotation instanceof Text){
+                final Text textAnnotation = (Text) annotation;
+                final String stringString = String.class.getSimpleName();
+                if (textAnnotation.isArray()){
+                    return toArrayNotation(stringString);
+                }
+
+                return stringString;
+            } else if (annotation instanceof Real){
+                final Real realAnnotation = (Real) annotation;
+                final String doubleString = Double.class.getSimpleName();
+                if (realAnnotation.isArray()){
+                    return toArrayNotation(doubleString);
+                }
+
+                return doubleString;
+            }else if (annotation instanceof Object){
+                final Object objectAnnotation = (Object) annotation;
+                final String className = getClassName(objectAnnotation);
+                if (objectAnnotation.isArray()){
+                    return toArrayNotation(className);
+                }
+
+                return className;
             }
-        });
+        }
+        return null;
     }
 
-    public static void sortPathElements(final ArrayList<PathElement> pathElements) {
-        Collections.sort(pathElements, new Comparator<PathElement>() {
-            @Override
-            public int compare(PathElement o1, PathElement o2) {
-                final String string2 = o2.toString();
-                final String string1 = o1.toString();
-                return string1.compareToIgnoreCase(string2);
-            }
-        });
-    }
+    private static final String ARRAY_LIST_WITH_GENERIC = ArrayList.class.getSimpleName() + "<%s>";
 
-    public static void sortPathActionElements(final List<PathActionElement> pathActionElements) {
-        Collections.sort(pathActionElements, new Comparator<PathActionElement>() {
-            @Override
-            public int compare(PathActionElement o1, PathActionElement o2) {
-                final String string2 = o2.toString();
-                final String string1 = o1.toString();
-                return string1.compareToIgnoreCase(string2);
-            }
-        });
+    private static String toArrayNotation(final String string) {
+        return String.format(ARRAY_LIST_WITH_GENERIC, string);
     }
 }

@@ -1,15 +1,14 @@
 package mobi.liason.annotation.elements;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Name;
 
 import mobi.liason.annotation.annotations.PathAction;
 
 /**
  * Created by Emir on 14-11-12.
  */
-public class PathActionElement extends FieldElement{
-
-
+public class PathActionElement extends BaseElement{
 
     public PathActionElement(final Element element) {
         super(element);

@@ -1,28 +1,23 @@
-package mobi.liason.annotation;
+package mobi.liason.annotation.elements;
 
 import com.google.common.base.CaseFormat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.lang.model.element.Name;
-import javax.lang.model.element.PackageElement;
-
-import mobi.liason.annotation.elements.FieldElement;
-import mobi.liason.annotation.elements.ModelElement;
 import mobi.liason.mvvm.database.Column;
 
 /**
  * Created by Emir on 14-11-01.
  */
-public class PrimitiveArrayRelationModelDefinition {
+public class ModelArrayRelationModelElement {
 
     private final FieldElement mFieldElement;
     private final List<FieldElement> mFieldElements;
     private final ModelElement mModelElement;
     private static final String RELATION_MODEL = "RelationModel";
 
-    public PrimitiveArrayRelationModelDefinition(final FieldElement fieldElement, final ModelElement typeElement, final List<FieldElement> fieldElements) {
+    public ModelArrayRelationModelElement(final FieldElement fieldElement, final ModelElement typeElement, final List<FieldElement> fieldElements) {
         mFieldElement = fieldElement;
         mModelElement = typeElement;
         mFieldElements = fieldElements;
@@ -51,7 +46,7 @@ public class PrimitiveArrayRelationModelDefinition {
     }
 
     public Column.Type getLocalColumnType() {
-        return mFieldElement.getColumneType();
+        return mFieldElement.getColumnType();
     }
 
     public String getForeignKeyClassName() {

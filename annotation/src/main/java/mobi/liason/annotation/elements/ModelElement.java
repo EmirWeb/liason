@@ -11,7 +11,7 @@ import javax.lang.model.element.TypeElement;
 /**
  * Created by Emir on 14-11-09.
  */
-public class ModelElement {
+public class ModelElement extends BaseElement{
 
     private final TypeElement mTypeElement;
     private static final String JSON_MODEL_CLASS_NAME = "%sJson";
@@ -19,8 +19,8 @@ public class ModelElement {
     private static final String MODEL_CLASS_NAME = "%sModel";
     private final List<FieldElement> mFieldElements = new ArrayList<FieldElement>();
 
-
     public ModelElement(final TypeElement typeElement, final List<Element> elements) {
+        super(typeElement);
         mTypeElement = typeElement;
         if (elements != null) {
             for (final Element element : elements) {
@@ -51,12 +51,6 @@ public class ModelElement {
     public String getModelClassName() {
         final String simpleName = getSimpleName();
         return String.format(MODEL_CLASS_NAME, simpleName);
-    }
-
-    public String getSimpleName() {
-        final Name simpleName = mTypeElement.getSimpleName();
-        final String simpleNameString = simpleName.toString();
-        return simpleNameString;
     }
 
     public List<FieldElement> getFieldElements() {

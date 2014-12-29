@@ -23,6 +23,7 @@ import mobi.liason.annotation.creators.ViewModelCreator;
 import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.annotation.elements.PathActionElement;
 import mobi.liason.annotation.elements.PathElement;
+import mobi.liason.annotation.elements.SelectionElement;
 import mobi.liason.annotation.elements.ViewModelElement;
 import mobi.liason.annotation.helpers.CreatorHelper;
 
@@ -34,8 +35,6 @@ public class ViewModelProcessor extends AbstractProcessor {
 
         return true;
     }
-
-
 
     private Map<Element, ViewModelElement> getElementMappings(final Class modelClass, final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnvironment) {
         final Map<Element, ViewModelElement> elementMappings = new HashMap<Element, ViewModelElement>();
@@ -68,10 +67,11 @@ public class ViewModelProcessor extends AbstractProcessor {
 
     private void parseSelections(RoundEnvironment roundEnvironment, Map<Element, ViewModelElement> elementMappings) {
         final ArrayList<Element> selectionElements = new ArrayList<Element>(roundEnvironment.getElementsAnnotatedWith(Selection.class));
-        for (final Element selectionElement : selectionElements) {
-            final Element enclosingElement = selectionElement.getEnclosingElement();
+        for (final Element element : selectionElements) {
+            final Element enclosingElement = element.getEnclosingElement();
             if (elementMappings.containsKey(enclosingElement)) {
                 final ViewModelElement viewModelElement = elementMappings.get(enclosingElement);
+                final SelectionElement selectionElement = new SelectionElement(element);
                 viewModelElement.setSelectionElement(selectionElement);
             }
         }
@@ -95,8 +95,6 @@ public class ViewModelProcessor extends AbstractProcessor {
             final Element enclosingElement = element.getEnclosingElement();
             if (elementMappings.containsKey(enclosingElement)) {
                 final ViewModelElement viewModelElement = elementMappings.get(enclosingElement);
-
-
                 final PathActionElement pathActionElement = new PathActionElement(element);
                 viewModelElement.addPathActionElement(pathActionElement);
             }

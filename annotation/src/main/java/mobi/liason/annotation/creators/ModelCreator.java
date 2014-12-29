@@ -15,12 +15,12 @@ import java.util.Map;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 
-import mobi.liason.annotation.PrimitiveArrayRelationModelDefinition;
+import mobi.liason.annotation.elements.ModelArrayRelationModelElement;
+import mobi.liason.annotation.elements.ModelRelationModelElement;
+import mobi.liason.annotation.elements.PrimitiveArrayRelationModelElement;
 import mobi.liason.annotation.elements.FieldElement;
 import mobi.liason.annotation.elements.ModelElement;
 import mobi.liason.annotation.helpers.CreatorHelper;
@@ -168,7 +168,7 @@ public class ModelCreator {
                                     javaWriter.emitAnnotation(PrimaryKey.class);
                                 }
 
-                                final Type type = fieldElement.getColumneType();
+                                final Type type = fieldElement.getColumnType();
                                 final String declaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
                                         modelClassName, modelSimpleName, simpleName, Column.class.getSimpleName(), Type.class.getSimpleName(), type.toString());
                                 javaWriter.emitField(ModelColumn.class.getSimpleName(), simpleName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), declaration);
@@ -208,12 +208,14 @@ public class ModelCreator {
                     if (!fieldElement.isArray() && fieldElement.isPrimitiveType()) {
 
                     } else if (fieldElement.isArrayWithPrimitiveType()) {
-                        final PrimitiveArrayRelationModelDefinition primitiveArrayRelationModelDefinition = new PrimitiveArrayRelationModelDefinition(fieldElement, modelElement, fieldElements);
-                        PrimitiveArrayRelationModelCreator.processModel(processingEnv, primitiveArrayRelationModelDefinition);
+                        final PrimitiveArrayRelationModelElement primitiveArrayRelationModelElement = new PrimitiveArrayRelationModelElement(fieldElement, modelElement, fieldElements);
+                        PrimitiveArrayRelationModelCreator.processModel(processingEnv, primitiveArrayRelationModelElement);
                     } else if (fieldElement.isArray()) {
-
-                    } else if (fieldElement.isPrimitiveType()) {
-
+                        final ModelArrayRelationModelElement modelArrayRelationModelElement = new ModelArrayRelationModelElement(fieldElement, modelElement, fieldElements);
+                        ModelArrayRelationModelCreator.processModel(processingEnv, modelArrayRelationModelElement);
+                    } else {
+                        final ModelRelationModelElement modelArrayRelationModelElement = new ModelRelationModelElement(fieldElement, modelElement, fieldElements);
+                        ModelRelationModelCreator.processModel(processingEnv, modelArrayRelationModelElement);
                     }
                 }
             }

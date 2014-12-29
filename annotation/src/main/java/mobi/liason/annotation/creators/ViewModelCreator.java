@@ -168,7 +168,7 @@ public class ViewModelCreator {
                 javaWriter.endType();
             }
 
-            // PathsActions
+            // PathActions
             {
                 if (viewModelElement.hasPathActionElements()){
                     final List<PathActionElement> queryPathActionElements = viewModelElement.getPathActionElements(PathAction.PathType.query);

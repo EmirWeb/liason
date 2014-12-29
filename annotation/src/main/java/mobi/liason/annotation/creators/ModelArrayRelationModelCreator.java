@@ -15,8 +15,9 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Modifier;
 import javax.tools.JavaFileObject;
 
-import mobi.liason.annotation.elements.PrimitiveArrayRelationModelElement;
 import mobi.liason.annotation.elements.FieldElement;
+import mobi.liason.annotation.elements.ModelArrayRelationModelElement;
+import mobi.liason.annotation.elements.PrimitiveArrayRelationModelElement;
 import mobi.liason.annotation.helpers.VariableNameHelper;
 import mobi.liason.mvvm.database.Column;
 import mobi.liason.mvvm.database.ForeignKeyModelColumn;
@@ -29,18 +30,18 @@ import mobi.liason.mvvm.database.annotations.PathDefinitions;
 /**
  * Created by Emir on 14-11-01.
  */
-public class PrimitiveArrayRelationModelCreator {
+public class ModelArrayRelationModelCreator {
 
     private static final String CLASS = "class";
 
-    public static void processModel(final ProcessingEnvironment processingEnv, final PrimitiveArrayRelationModelElement primitiveArrayRelationModelElement) {
+    public static void processModel(final ProcessingEnvironment processingEnv, final ModelArrayRelationModelElement modelArrayRelationModelElement) {
 
-        final String modelClassName = primitiveArrayRelationModelElement.getClassName();
+        final String modelClassName = modelArrayRelationModelElement.getClassName();
 
         try {
             final JavaFileObject javaFileObject = processingEnv.getFiler().createSourceFile(modelClassName);
             final Writer writer = javaFileObject.openWriter();
-            final String getPackageName = primitiveArrayRelationModelElement.getPackageName();
+            final String getPackageName = modelArrayRelationModelElement.getPackageName();
 
             final Writer stringWriter = new StringWriter();
             final JavaWriter javaWriter = new JavaWriter(stringWriter);
@@ -81,19 +82,19 @@ public class PrimitiveArrayRelationModelCreator {
 
             final String indexSimpleName = "INDEX";
             final String indexVariableName = "index";
-            final String localFieldName = primitiveArrayRelationModelElement.getLocalPublicStaticFinalVariableName();
+            final String localFieldName = modelArrayRelationModelElement.getLocalPublicStaticFinalVariableName();
 
-            final String localClassName = primitiveArrayRelationModelElement.getLocalArrayListGenericJavaType();
-            final String localVariableName = primitiveArrayRelationModelElement.getLocalVariableName();
-            final String foreignKeyClassName = primitiveArrayRelationModelElement.getForeignKeyClassName();
-            final String foreignKeyClassNameUpperCase = primitiveArrayRelationModelElement.getForeignKeyColumnVariableNamePrefix();
-            final String foreignKeyClassNameVariableName = primitiveArrayRelationModelElement.getForeignKeyParameterVariableNamePrefix();
-
-
-            final Column.Type localType = primitiveArrayRelationModelElement.getLocalColumnType();
+            final String localClassName = modelArrayRelationModelElement.getLocalArrayListGenericJavaType();
+            final String localVariableName = modelArrayRelationModelElement.getLocalVariableName();
+            final String foreignKeyClassName = modelArrayRelationModelElement.getForeignKeyClassName();
+            final String foreignKeyClassNameUpperCase = modelArrayRelationModelElement.getForeignKeyColumnVariableNamePrefix();
+            final String foreignKeyClassNameVariableName = modelArrayRelationModelElement.getForeignKeyParameterVariableNamePrefix();
 
 
-            final List<FieldElement> primaryKeys = primitiveArrayRelationModelElement.getPrimaryKeys();
+            final Column.Type localType = modelArrayRelationModelElement.getLocalColumnType();
+
+
+            final List<FieldElement> primaryKeys = modelArrayRelationModelElement.getPrimaryKeys();
 
             // ContentValues
             {
@@ -153,7 +154,7 @@ public class PrimitiveArrayRelationModelCreator {
 
                 javaWriter.emitAnnotation(ColumnDefinition.class);
 
-                final String foreignKeySimpleName = primitiveArrayRelationModelElement.getForeignKeySimpleName();
+                final String foreignKeySimpleName = modelArrayRelationModelElement.getForeignKeySimpleName();
                 final String LocalDeclaration = String.format("new ModelColumn(%s.NAME, %s.%s, %s.%s.%s)",
                         modelClassName, foreignKeySimpleName, localFieldName, Column.class.getSimpleName(), Column.Type.class.getSimpleName(), localType);
                 javaWriter.emitField(ModelColumn.class.getSimpleName(), localFieldName, EnumSet.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL), LocalDeclaration);

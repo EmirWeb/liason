@@ -23,25 +23,24 @@ import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
 import mobi.liason.mvvm.database.annotations.PathDefinition;
 import mobi.liason.mvvm.database.annotations.PathDefinitions;
 
-public class ViewModelElement {
+public class ViewModelElement extends BaseElement{
 
     private static final String VIEW_MODEL = "%sViewModel";
 
     private final List<FieldElement> mProjectionElements = new ArrayList<FieldElement>();
     private final List<PathElement> mPathElements = new ArrayList<PathElement>();
     private final Map<PathAction.PathType, List<PathActionElement>> mPathActionElements = new HashMap<PathAction.PathType, List<PathActionElement>>();
-    private Element mSelectionElement;
-    private final Element mElement;
+    private SelectionElement mSelectionElement;
 
     public ViewModelElement(final Element element) {
-        mElement = element;
+        super(element);
     }
 
-    public void setSelectionElement(final Element element) {
-        mSelectionElement = element;
+    public void setSelectionElement(final SelectionElement selectionElement) {
+        mSelectionElement = selectionElement;
     }
 
-    public Element getSelectionelement() {
+    public SelectionElement getSelectionElement() {
         return mSelectionElement;
     }
 
@@ -51,7 +50,7 @@ public class ViewModelElement {
 
     public List<FieldElement> getProjectionFieldElements(){
         final ArrayList<FieldElement> fieldElements = new ArrayList<FieldElement>(mProjectionElements);
-        CreatorHelper.sortFieldElements(fieldElements);
+        CreatorHelper.sortBaseElements(fieldElements);
         return fieldElements;
     }
 
@@ -61,7 +60,7 @@ public class ViewModelElement {
 
     public List<PathElement> getPathElements(){
         final ArrayList<PathElement> elements = new ArrayList<PathElement>(mPathElements);
-        CreatorHelper.sortPathElements(elements);
+        CreatorHelper.sortBaseElements(elements);
         return elements;
     }
 
@@ -81,12 +80,12 @@ public class ViewModelElement {
         }
         final List<PathActionElement> pathActionElements = mPathActionElements.get(pathType);
         final ArrayList<PathActionElement> sortedPathActionElementsCopy = new ArrayList<PathActionElement>(pathActionElements);
-        CreatorHelper.sortPathActionElements(sortedPathActionElementsCopy);
+        CreatorHelper.sortBaseElements(sortedPathActionElementsCopy);
         return pathActionElements;
     }
 
     public String getClassName() {
-        final Name simpleName = mElement.getSimpleName();
+        final String simpleName = getSimpleName();
         return String.format(VIEW_MODEL, simpleName);
     }
 
@@ -99,7 +98,8 @@ public class ViewModelElement {
     }
 
     public String getPackageName() {
-        final PackageElement packageElement = (PackageElement) mElement.getEnclosingElement();
+        final Element element = getElement();
+        final PackageElement packageElement = (PackageElement) element.getEnclosingElement();
         if (packageElement == null) {
             return null;
         }
@@ -111,17 +111,11 @@ public class ViewModelElement {
         return packageName;
     }
 
-    public String getSimpleName() {
-        final Name simpleName = mElement.getSimpleName();
-        return simpleName.toString();
-    }
-
     public boolean hasPathElements() {
         return !mPathElements.isEmpty();
     }
 
     public String getSelectionMethodName() {
-        final Name simpleName = mSelectionElement.getSimpleName();
-        return simpleName.toString();
+        return mSelectionElement.getSimpleName();
     }
 }

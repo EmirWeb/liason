@@ -464,4 +464,92 @@ public class ModelCreatorTest {
                 .generatesSources(expectedJavaFileObject, expectedRelationModelJavaFileObject);
     }
 
+    @Test
+    public void createModelWithNonPrimitiveObject() {
+        final JavaFileObject metaProductJavaFileObject = JavaFileObjects.forSourceString("Product", Joiner.on("\n").join(
+                "package mobi.liason.annotation.meta;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
+                "import mobi.liason.annotation.annotations.types.Object;",
+                "import mobi.liason.mvvm.database.annotations.PrimaryKey;",
+                "@Model",
+                "public class Product {",
+                "   @PrimaryKey",
+                "   @Integer",
+                "   public static final String ID = \"id\";",
+                "   @Object(value = \"mobi.liason.annotation.meta.ImageJson\", metaModel = \"mobi.liason.annotation.meta.Image\")",
+                "   public static final String NAME = \"name\";",
+                "}"));
+
+        final JavaFileObject metaImageJavaFileObject = JavaFileObjects.forSourceString("Image", Joiner.on("\n").join(
+                "package mobi.liason.annotation.meta;",
+                "import mobi.liason.annotation.annotations.mvvm.Model;",
+                "import mobi.liason.annotation.annotations.types.Integer;",
+                "import mobi.liason.annotation.annotations.types.Text;",
+                "import mobi.liason.mvvm.database.annotations.PrimaryKey;",
+                "@Model",
+                "public class Image {",
+                "   @Integer",
+                "   @PrimaryKey",
+                "   public static final String ID = \"id\";",
+                "   @Integer",
+                "   @PrimaryKey",
+                "   public static final String ID2 = \"id2\";",
+                "   @Text",
+                "   public static final String URL = \"url\";",
+                "}"));
+
+
+        final JavaFileObject expectedRelationModelJavaFileObject = JavaFileObjects.forSourceString("ProductNameRelationModel", Joiner.on("\n").join(
+                "package mobi.liason.annotation.meta;",
+                "import android.content.ContentValues;",
+                "import android.content.Context;",
+                "import mobi.liason.loaders.Path;",
+                "import mobi.liason.mvvm.database.Column;",
+                "import mobi.liason.mvvm.database.ForeignKeyModelColumn;",
+                "import mobi.liason.mvvm.database.Model;",
+                "import mobi.liason.mvvm.database.ModelColumn;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinition;",
+                "import mobi.liason.mvvm.database.annotations.ColumnDefinitions;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinition;",
+                "import mobi.liason.mvvm.database.annotations.PathDefinitions;",
+                "public class ProductNameRelationModel extends Model {",
+                "   public static final String NAME = ProductNameRelationModel.class.getSimpleName();",
+                "   @Override",
+                "   public String getName(final Context context) {",
+                "       return NAME;",
+                "   }",
+                "   public static ContentValues getContentValues(final Long productId, final Long nameId, final Long nameId2) {",
+                "       final ContentValues contentValues = new ContentValues();",
+                "       contentValues.put(Columns.PRODUCT_ID.getName(), productId);",
+                "       contentValues.put(Columns.NAME_ID.getName(), nameId);",
+                "       contentValues.put(Columns.NAME_ID2.getName(), nameId2);",
+                "       return contentValues;",
+                "   }",
+                "   @ColumnDefinitions",
+                "   public static class Columns {",
+                "       @PrimaryKey",
+                "       @ColumnDefinition",
+                "       public static final ForeignKeyModelColumn PRODUCT_ID = new ForeignKeyModelColumn(ProductNameRelationModel.NAME, ProductModel.Columns.ID);",
+                "       @PrimaryKey",
+                "       @ColumnDefinition",
+                "       public static final ModelColumn NAME_ID = new ModelColumn(ProductNameRelationModel.NAME, ImageModel.Columns.ID2);",
+                "       @PrimaryKey",
+                "       @ColumnDefinition",
+                "       public static final ModelColumn NAME_ID2 = new ModelColumn(ProductNameRelationModel.NAME, Image.ID, Column.Type.integer);",
+                "   }",
+                "   @PathDefinitions",
+                "   public static class Paths {",
+                "       @PathDefinition",
+                "       public static final Path PRODUCT_NAME_RELATION_MODEL = new Path(ProductNameRelationModel.NAME);",
+                "   }",
+                "}"));
+
+        ASSERT.about(javaSources())
+                .that(asList(metaImageJavaFileObject, metaProductJavaFileObject))
+                .processedWith(MODEL_PROCESSORS())
+                .compilesWithoutError()
+                .and()
+                .generatesSources(expectedRelationModelJavaFileObject);
+    }
 }
