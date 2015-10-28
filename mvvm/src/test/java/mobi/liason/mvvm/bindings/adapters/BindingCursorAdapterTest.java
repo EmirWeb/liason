@@ -10,7 +10,7 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
@@ -31,7 +31,7 @@ public class BindingCursorAdapterTest {
 
     @Test
     public void newViewOptimizesTags(){
-        final Context context = Robolectric.getShadowApplication().getApplicationContext();
+        final Context context = RuntimeEnvironment.application.getBaseContext();
         final AdapterItemBinding mockAdapterItemBinding = mock(AdapterItemBinding.class);
         when(mockAdapterItemBinding.getResourceIds()).thenReturn(Sets.newHashSet(1,2));
 
@@ -61,7 +61,7 @@ public class BindingCursorAdapterTest {
 
     @Test
     public void newViewInflatesCorrectView(){
-        final Context context = Robolectric.getShadowApplication().getApplicationContext();
+        final Context context = RuntimeEnvironment.application.getBaseContext();
 
         final AdapterItemBinding mockAdapterItemBinding1 = mock(AdapterItemBinding.class);
         when(mockAdapterItemBinding1.getResourceIds()).thenReturn(Sets.newHashSet(0));

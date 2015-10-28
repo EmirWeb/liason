@@ -9,7 +9,7 @@ import android.os.Bundle;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import static org.mockito.Matchers.any;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 public class BindingManagerTest {
 
     public LoaderManager mLoaderManager;
-    public Context mContext = Robolectric.getShadowApplication().getApplicationContext();
+    public Context mContext = RuntimeEnvironment.application.getBaseContext();
     private BindingManager mBindingManager;
 
 

@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
@@ -19,14 +19,13 @@ import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
 import mobi.liason.mvvm.database.annotations.PrimaryKey;
 import mobi.liason.mvvm.database.annotations.Unique;
 
-
 import static org.fest.assertions.api.Assertions.assertThat;
 
 @Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class ViewModelTest {
 
-    private Context mContext = Robolectric.getShadowApplication().getApplicationContext();
+    private Context mContext = RuntimeEnvironment.application.getBaseContext();
 
     @Test
     public void getCreateWithOneViewModelColumn_returnsCorrectCreateAndDrop(){

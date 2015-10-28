@@ -1,31 +1,25 @@
 package mobi.liason.mvvm.task;
 
-import android.app.LoaderManager;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
 
 import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.database.Column;
-import mobi.liason.mvvm.task.TaskStateTable;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @Config(manifest = "/src/main/AndroidManifest.xml")
 @RunWith(RobolectricTestRunner.class)
 public class TaskStateTableTest {
 
-    public Context mContext = Robolectric.getShadowApplication().getApplicationContext();
+    public Context mContext = RuntimeEnvironment.application.getBaseContext();
 
 
     @Test

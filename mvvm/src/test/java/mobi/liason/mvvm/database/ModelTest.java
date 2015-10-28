@@ -7,7 +7,7 @@ import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
@@ -17,11 +17,10 @@ import mobi.liason.loaders.Path;
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
 import mobi.liason.mvvm.database.annotations.ColumnDefinition;
 import mobi.liason.mvvm.database.annotations.ColumnDefinitions;
-import mobi.liason.mvvm.database.annotations.PrimaryKey;
 import mobi.liason.mvvm.database.annotations.PathDefinition;
 import mobi.liason.mvvm.database.annotations.PathDefinitions;
+import mobi.liason.mvvm.database.annotations.PrimaryKey;
 import mobi.liason.mvvm.database.annotations.Unique;
-
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
@@ -29,7 +28,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class ModelTest {
 
-    public final Context mContext = Robolectric.getShadowApplication().getApplicationContext();
+    public final Context mContext = RuntimeEnvironment.application.getBaseContext();
 
     @Test
     public void getCreateWithOneParameter_returnsCorrectSqlTableCreationAndDrop(){

@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunnerWithInjection.class)
 public class ProviderTest {
 
-    public final Context mContext = Robolectric.getShadowApplication().getApplicationContext();
+    public final Context mContext = RuntimeEnvironment.application.getBaseContext();
     public final MockDatabaseHelper mMockDatabaseHelper = new MockDatabaseHelper(mContext, "DB_NAME", 1);
 
     @Test

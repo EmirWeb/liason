@@ -2,26 +2,22 @@ package mobi.liason.mvvm.bindings.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import mobi.liason.mvvm.RobolectricTestRunnerWithInjection;
-import mobi.liason.mvvm.bindings.ItemBinding;
 import mobi.liason.mvvm.bindings.TextBinder;
-import mobi.liason.mvvm.bindings.adapters.AdapterItemBinding;
 import mobi.liason.mvvm.bindings.interfaces.Binding;
 import mobi.liason.mvvm.bindings.interfaces.ColumnBinding;
 import mobi.liason.mvvm.bindings.interfaces.ColumnResourceBinding;
@@ -98,7 +94,7 @@ public class AdapterItemBindingTest {
 
     @Test
     public void bindCallsAllCallbacksForColumnResourceBinding(){
-        final Context context = Robolectric.getShadowApplication().getApplicationContext();
+        final Context context = RuntimeEnvironment.application.getBaseContext();
         final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ColumnResourceBinding mockColumnResourceBinding = mock(ColumnResourceBinding.class);
 
@@ -135,7 +131,7 @@ public class AdapterItemBindingTest {
 
     @Test
     public void bindCallsAllCallbacksForColumnBinding(){
-        final Context context = Robolectric.getShadowApplication().getApplicationContext();
+        final Context context = RuntimeEnvironment.application.getBaseContext();
         final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ColumnBinding mockColumnBinding = mock(ColumnBinding.class);
 
@@ -163,7 +159,7 @@ public class AdapterItemBindingTest {
 
     @Test
     public void bindCallsAllCallbacksForResourceBinding(){
-        final Context context = Robolectric.getShadowApplication().getApplicationContext();
+        final Context context = RuntimeEnvironment.application.getBaseContext();
         final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final ResourceBinding resourceBinding = mock(ResourceBinding.class);
 
@@ -189,7 +185,7 @@ public class AdapterItemBindingTest {
 
     @Test
     public void bindCallsAllCallbacksForDataBinding(){
-        final Context context = Robolectric.getShadowApplication().getApplicationContext();
+        final Context context = RuntimeEnvironment.application.getBaseContext();
         final AdapterItemBinding adapterItemBinding = new AdapterItemBinding(2);
         final DataBinding mockDataBinding = mock(DataBinding.class);
 

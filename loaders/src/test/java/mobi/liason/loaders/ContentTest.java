@@ -10,7 +10,7 @@ import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.robolectric.Robolectric;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ContentTest {
     @Mock
     SQLiteDatabase mSqLiteDatabase;
     final MockContent mMockContent = new MockContent();
-    final Context mContext = Robolectric.getShadowApplication().getApplicationContext();
+    final Context mContext = RuntimeEnvironment.application.getBaseContext();
 
     @Test
     public void onUpgrade_dropsTableAndCreatesTable() {
